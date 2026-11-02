@@ -38,8 +38,8 @@ of it belongs to the community:
 - **25%** — the community reserve, held in the open in the project wallet
   for the community's future rounds. Its balance is verifiable by anyone,
   and it never moves in private. **Round 2 is now open** — the paid claim
-  lane: 909 A404 per claim (3× the free share) for 0.0045 BNB, one per
-  Agent ID, until 9 November 2026 or sellout.
+  lane: **111 claims only, FCFS.** 909 A404 per claim (3× the free share)
+  for 0.0045 BNB, one per Agent ID, until 9 November 2026 or sellout.
 
 No presale. No private rounds. No team allocation. No admin keys and no
 mint function. The creator seeds no market and sets no price — and ends
@@ -99,6 +99,7 @@ be changed by anyone.
 |---|---|---|
 | Community claim | 303,303 A404 (75%) | 1,001 shares × 303 A404, Agent ID holders only, free, **FCFS**, 14-day window |
 | Project reserve | 101,101 A404 (25%) | Ecosystem + operations, held by the project wallet |
+| Paid claim (Round 2) | 100,899 A404 (from the reserve) | 111 shares × 909 A404, Agent ID holders only, 0.0045 BNB per claim, **FCFS**, 7-day window |
 
 The community claim is **FCFS — first come, first served**: 1,001 shares
 against 100,000+ Agent ID holders. No waitlist, and the free claim itself
