@@ -39,8 +39,12 @@ be changed by anyone.
 
 | Bucket | Amount | Mechanics |
 |---|---|---|
-| Community claim | 303,303 A404 (75%) | 1,001 shares × 303 A404, Agent ID holders only, free, first come first served, 14-day window |
+| Community claim | 303,303 A404 (75%) | 1,001 shares × 303 A404, Agent ID holders only, free, **FCFS**, 14-day window |
 | Project reserve | 101,101 A404 (25%) | Ecosystem + operations, held by the project wallet |
+
+The community claim is **FCFS — first come, first served**: 1,001 shares
+against 100,000+ Agent ID holders. No waitlist, no second round, no
+extensions. When they are gone, they are gone.
 
 There is deliberately **no liquidity pool at launch**. The creator seeds no
 market and sets no price — a found price would be a price someone chose for
