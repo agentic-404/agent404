@@ -14,6 +14,10 @@
   <img src="https://img.shields.io/badge/License-MIT-black?style=flat-square" alt="License: MIT">
 </p>
 
+<p align="center">
+  Official channel: <a href="https://x.com/Agent4040">@Agent4040</a> on X — the only one. Every other account is a scam.
+</p>
+
 AGENT404 (A404) is an anonymous DN-404 token on BNB Smart Chain, built for the
 Binance Agentic Wallet / Agent ID ecosystem. To our knowledge it is the first
 DN-404 native to that ecosystem: nobody else gives the badge side of a hybrid
