@@ -101,8 +101,8 @@ be changed by anyone.
 | Project reserve | 101,101 A404 (25%) | Ecosystem + operations, held by the project wallet |
 
 The community claim is **FCFS — first come, first served**: 1,001 shares
-against 100,000+ Agent ID holders. No waitlist, no second round, no
-extensions. When they are gone, they are gone.
+against 100,000+ Agent ID holders. No waitlist, and the free claim itself
+is never extended or repeated. When they are gone, they are gone.
 
 There is deliberately **no liquidity pool at launch**. The creator seeds no
 market and sets no price — a found price would be a price someone chose for
