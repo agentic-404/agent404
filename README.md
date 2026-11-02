@@ -92,9 +92,9 @@ permissionlessly, like everything else here.
 
 | Contract | Address |
 |---|---|
-| Token (A404) | `<TOKEN>` |
-| Mirror (badges) | `<MIRROR>` |
-| Community claim | `<CLAIM>` |
+| Token (A404) | `0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725` |
+| Mirror (badges) | `0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07` |
+| Community claim | `0xbc520775Ba4ce3760eD631c439929E8B19556c94` |
 | Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 
 Full source is in [`contracts/`](contracts/). The DN-404 core
