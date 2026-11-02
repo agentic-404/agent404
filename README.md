@@ -28,6 +28,23 @@ and vanished — like the name says: **404**.
 
 ---
 
+## 100% to the community — a fair launch
+
+The entire supply of 404,404 A404 was minted once, at deployment, and all
+of it belongs to the community:
+
+- **75%** — a free airdrop: 1,001 claim shares of 303 A404, first come
+  first served, one per Binance Agent ID holder.
+- **25%** — the community reserve, held in the open in the project wallet
+  for the community's future rounds. Its balance is verifiable by anyone,
+  and it never moves in private.
+
+No presale. No private rounds. No team allocation. No admin keys and no
+mint function. The creator seeds no market and sets no price — and ends
+with zero.
+
+---
+
 ## ERC-404 → DN-404, briefly
 
 **ERC-404** — popularized by Pandora in early 2024 — was the first
