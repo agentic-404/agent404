@@ -1,8 +1,18 @@
-# AGENT404
+<p align="center">
+  <img src="assets/agent404-icon.png" width="160" alt="AGENT404 icon">
+</p>
 
-![AGENT404 icon](assets/agent404-icon.png)
+<h1 align="center">AGENT404</h1>
 
-**The agent is not found.**
+<p align="center"><strong>The agent is not found.</strong></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Chain-BNB%20Smart%20Chain-black?style=flat-square" alt="Chain: BNB Smart Chain">
+  <img src="https://img.shields.io/badge/Standard-DN--404-black?style=flat-square" alt="Standard: DN-404">
+  <img src="https://img.shields.io/badge/Supply-404%2C404%20A404-black?style=flat-square" alt="Supply: 404,404 A404">
+  <img src="https://img.shields.io/badge/Claim-FCFS-black?style=flat-square" alt="Claim: FCFS">
+  <img src="https://img.shields.io/badge/License-MIT-black?style=flat-square" alt="License: MIT">
+</p>
 
 AGENT404 (A404) is an anonymous DN-404 token on BNB Smart Chain, built for the
 Binance Agentic Wallet / Agent ID ecosystem. To our knowledge it is the first
@@ -11,6 +21,8 @@ token exclusively to verified agents.
 
 There is no team. There is no admin. The creator deployed, opened the claim,
 and vanished — like the name says: **404**.
+
+---
 
 ## ERC-404 → DN-404, briefly
 
@@ -29,6 +41,8 @@ unmodified.
 AGENT404 then adds one rule of its own: the mirror only materializes
 badges inside wallets that hold a Binance Agent ID.
 
+---
+
 ## How it works
 
 DN-404 fuses an ERC-20 token and an ERC-721 collection into one asset:
@@ -43,10 +57,14 @@ the badges burn. Agent ID status is read live from the official registry
 (`0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F`), so getting an Agent ID later
 activates your badges on your next transfer — no registration, no switch.
 
-![The badge: an ID card for an agent that does not exist](assets/badge-idcard-512.png)
+<p align="center">
+  <img src="assets/badge-idcard-512.png" width="420" alt="The badge: an ID card for an agent that does not exist">
+</p>
 
 Badge metadata is served fully on-chain as a data URI: one corrupted ID card
 for every badge, serial number in the name.
+
+---
 
 ## Supply & distribution
 
@@ -68,6 +86,8 @@ market and sets no price — a found price would be a price someone chose for
 you. If AGENT404 is to have a market, the community of holders builds it,
 permissionlessly, like everything else here.
 
+---
+
 ## Contracts (BNB Smart Chain)
 
 | Contract | Address |
@@ -83,6 +103,8 @@ used byte-for-byte unmodified. The system was rehearsed end-to-end on
 testnet and against a fork of live BSC state (real registry, real Agent ID
 holder claiming) before this deployment.
 
+---
+
 ## For agents
 
 This project is agent-native. Humans do not need to click anything:
@@ -97,6 +119,8 @@ This project is agent-native. Humans do not need to click anything:
 
 The claim is **free**. The only cost is BSC gas, paid by the claimer.
 Anyone asking for payment to "claim AGENT404" is running a scam.
+
+---
 
 ## The rules of this world
 
