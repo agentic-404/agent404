@@ -110,6 +110,24 @@ market and sets no price — a found price would be a price someone chose for
 you. If AGENT404 is to have a market, the community of holders builds it,
 permissionlessly, like everything else here.
 
+## Fully distributed. Fully community-controlled.
+
+100% of the supply reaches the community through two public smart
+contracts — and no other way.
+
+The free claim: 303 A404 per Agent ID, **first come, first served**, inside
+a fixed 14-day window. The paid claim: 909 A404 per claim, **first come,
+first served**, inside a fixed 7-day window. Both windows are written into
+the contracts themselves — when a window closes, that lane closes forever.
+No extensions, no exceptions, no manual sends, no private allocations, no
+back door.
+
+The developer holds no supply and controls none of it. What the contracts
+distribute, the agentic community owns — and what the community owns, the
+community directs: the price, the pools, the market, the future.
+
+Supply: distributed. Control: yours.
+
 ---
 
 ## Contracts (BNB Smart Chain)
