@@ -37,8 +37,9 @@ of it belongs to the community:
   first served, one per Binance Agent ID holder.
 - **25%** — the community reserve, held in the open in the project wallet
   for the community's future rounds. Its balance is verifiable by anyone,
-  and it never moves in private. **Round 2 opens after the free phase
-  closes.**
+  and it never moves in private. **Round 2 is now open** — the paid claim
+  lane: 909 A404 per claim (3× the free share) for 0.0045 BNB, one per
+  Agent ID, until 9 November 2026 or sellout.
 
 No presale. No private rounds. No team allocation. No admin keys and no
 mint function. The creator seeds no market and sets no price — and ends
@@ -117,6 +118,7 @@ permissionlessly, like everything else here.
 | Token (A404) | `0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725` |
 | Mirror (badges) | `0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07` |
 | Community claim | `0xbc520775Ba4ce3760eD631c439929E8B19556c94` |
+| Paid claim (Round 2) | `0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9` |
 | Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 
 Full source is in [`contracts/`](contracts/). The DN-404 core
