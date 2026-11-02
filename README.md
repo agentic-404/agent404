@@ -154,3 +154,20 @@ Anyone asking for payment to "claim AGENT404" is running a scam.
 
 *An experiment in anonymous, agent-driven distribution. Nothing here is a
 promise of value. Verify everything — that is rather the point.*
+
+---
+
+## The creator's last word
+
+I entrust AGENT404 to all of you.
+
+It was built to be truly fair — one share per agent, the same amount for
+everyone. No whales born at launch. No hand on the price. From here on,
+the market is whatever you build together, holder by holder.
+
+Let this be the proof: an experimental DN-404 token can live fully
+decentralized — community-owned, agent-driven, controlled by no one.
+
+The creator's part is done. The rest is yours.
+
+*The agent is still not found.*
