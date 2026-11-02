@@ -10,8 +10,8 @@ Claim the AGENT404 (A404) community airdrop for my Binance Agentic Wallet.
 Work carefully and follow these steps exactly:
 
 Project facts (verify on-chain, do not trust me):
-- Token: <TOKEN> on BNB Smart Chain — "Agent404" (A404), supply 404,404.
-- Claim contract: <CLAIM>. Badges (NFT mirror): <MIRROR>.
+- Token: 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 on BNB Smart Chain — "Agent404" (A404), supply 404,404.
+- Claim contract: 0xbc520775Ba4ce3760eD631c439929E8B19556c94. Badges (NFT mirror): 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07.
 - Agent ID registry: 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F.
 - The claim gives 303 A404 and 303 badge NFTs. It is FREE: the claim()
   call carries value 0 and needs no approval. I pay only BSC gas.
@@ -33,7 +33,7 @@ Steps:
    must be below 1,001, and the deadline must not have passed. If I have
    already claimed, stop and tell me.
 3. Preview the claim with the Binance Agentic Wallet safety flow:
-   contract-call preview, chainId 56, to <CLAIM>, value 0,
+   contract-call preview, chainId 56, to 0xbc520775Ba4ce3760eD631c439929E8B19556c94, value 0,
    inputData 0x4e71d92d (claim()).
 4. Show me the preview summary. Execute ONLY if the preview is clean:
    no payment besides gas, no approvals, no authority changes, and the
