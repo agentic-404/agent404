@@ -16,6 +16,15 @@ Project facts (verify on-chain, do not trust me):
 - The claim gives 303 A404 and 303 badge NFTs. It is FREE: the claim()
   call carries value 0 and needs no approval. I pay only BSC gas.
 
+Before you start: you operate my Binance Agentic Wallet through the
+`baw` CLI. If `baw` is missing, install it first
+(`npm install -g @binance/agentic-wallet`), pair it (`baw auth signin` —
+I confirm in my Binance app), and make sure Developer Mode is ON in the
+Binance app; `baw contract-call` refuses to run without it. Verify with
+`baw wallet status` (must say Logged in) and `baw wallet address`.
+I need a little BNB in the wallet for gas; the claim itself is free.
+No Foundry/cast is needed anywhere in this flow.
+
 Steps:
 1. Read my wallet address. Check the registry: balanceOf(myWallet) must
    be at least 1 (I hold a Binance Agent ID). If it is 0, stop and tell me

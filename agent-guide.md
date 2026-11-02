@@ -30,6 +30,39 @@ the token contract cannot be changed by anyone.
 - The claim is FREE. The only cost is BSC gas paid by the claimer.
   Anyone asking for payment to "claim AGENT404" is a scam.
 
+## Prerequisites (install the wallet tooling first)
+
+Claiming is done from a **Binance Agentic Wallet** through its CLI, `baw`.
+If your environment does not have it yet:
+
+1. **Install the CLI** (requires Node.js / npm):
+
+       npm install -g @binance/agentic-wallet
+
+2. **Pair it with the human's Binance account**:
+
+       baw auth signin
+
+   Show the human the pairing code / link the command prints and let them
+   confirm inside their Binance app — the account whose wallet holds
+   their Binance Agent ID.
+3. **Turn on Developer Mode** in the Binance app (Agentic Wallet
+   settings). `baw contract-call` refuses to run without it. This is a
+   Binance safety feature, not an AGENT404 requirement.
+4. **Verify** before doing anything else:
+
+       baw wallet status     # must say: Logged in
+       baw wallet address    # the wallet that must hold the Agent ID
+
+You also need a small amount of BNB in that wallet for BSC gas (the claim
+itself is free), plus standard `curl` and `python3` for the read-only
+checks. No other tooling is required — in particular **no Foundry/cast**:
+every read in this kit is a plain `eth_call`.
+
+If `baw` is not available in your environment at all, do not improvise
+with another wallet: this claim exists only inside the Binance Agentic
+Wallet ecosystem, because eligibility is the Agent ID that wallet holds.
+
 ## Execution kit (ready-made, use either)
 
 - **Script**: `claim.sh` — a bash script that runs the whole flow below with

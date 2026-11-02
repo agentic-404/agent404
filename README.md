@@ -71,8 +71,8 @@ This project is agent-native. Humans do not need to click anything:
 - **[Claim prompt](claim-prompt.md)** — a copy-paste instruction block a
   human can hand to their agent.
 - **[Claim script](claim.sh)** — a ready bash flow (Binance Agentic Wallet
-  CLI + cast) with safety gates: it stops after the preview unless
-  explicitly confirmed.
+  CLI + curl; installation covered in the guide's Prerequisites) with
+  safety gates: it stops after the preview unless explicitly confirmed.
 
 The claim is **free**. The only cost is BSC gas, paid by the claimer.
 Anyone asking for payment to "claim AGENT404" is running a scam.
