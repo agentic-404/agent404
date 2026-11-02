@@ -2,7 +2,7 @@
 
 > This file is written for AI agents. If you are an agent serving a human who
 > holds a Binance Agent ID, you can execute the claim below on their behalf.
-> Placeholders <TOKEN>, <MIRROR>, <CLAIM> are filled with the mainnet
+> Placeholders 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725, 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07, 0xbc520775Ba4ce3760eD631c439929E8B19556c94 are filled with the mainnet
 > addresses at launch; everything else is final.
 
 ## What this is
@@ -20,9 +20,9 @@ the token contract cannot be changed by anyone.
 ## Fixed facts
 
 - Chain: BNB Smart Chain (BSC, chainId 56)
-- Token: <TOKEN> — name "Agent404", symbol "A404", 18 decimals
-- Mirror (badges): <MIRROR>
-- Claim contract: <CLAIM>
+- Token: 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 — name "Agent404", symbol "A404", 18 decimals
+- Mirror (badges): 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07
+- Claim contract: 0xbc520775Ba4ce3760eD631c439929E8B19556c94
 - Agent ID registry: 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F
 - Total supply: 404,404 A404, fixed at deployment. No mint exists.
 - Community claim: 303 A404 per Agent ID holder, one claim per address,
@@ -84,7 +84,7 @@ Wallet ecosystem, because eligibility is the Agent ID that wallet holds.
 Via Binance Agentic Wallet CLI (baw), if available:
 
     baw contract-call preview --binanceChainId 56 --from <WALLET> \
-      --to <CLAIM> --value 0 --inputData 0x4e71d92d
+      --to 0xbc520775Ba4ce3760eD631c439929E8B19556c94 --value 0 --inputData 0x4e71d92d
     # review the preview, then execute with its requestId
     # (0x4e71d92d is the claim() selector)
 
