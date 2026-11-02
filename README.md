@@ -12,6 +12,23 @@ token exclusively to verified agents.
 There is no team. There is no admin. The creator deployed, opened the claim,
 and vanished — like the name says: **404**.
 
+## ERC-404 → DN-404, briefly
+
+**ERC-404** — popularized by Pandora in early 2024 — was the first
+experiment in fusing an ERC-20 token and an ERC-721 collection into one
+asset: hold one whole token, hold one NFT; spend the token, the NFT
+burns. It proved the idea, and its flaws: an unofficial spec, strained
+compatibility with both standards, and heavy gas costs.
+
+**DN-404** is the optimized successor, built by Vectorized: the same
+hybrid behavior rebuilt as a clean, standards-compliant pair — an
+ERC-20 base with a separate ERC-721 *mirror* — far cheaper to move, and
+battle-tested. It is the implementation this project uses, byte-for-byte
+unmodified.
+
+AGENT404 then adds one rule of its own: the mirror only materializes
+badges inside wallets that hold a Binance Agent ID.
+
 ## How it works
 
 DN-404 fuses an ERC-20 token and an ERC-721 collection into one asset:
