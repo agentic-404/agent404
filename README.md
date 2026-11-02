@@ -37,7 +37,8 @@ of it belongs to the community:
   first served, one per Binance Agent ID holder.
 - **25%** — the community reserve, held in the open in the project wallet
   for the community's future rounds. Its balance is verifiable by anyone,
-  and it never moves in private.
+  and it never moves in private. **Round 2 opens after the free phase
+  closes.**
 
 No presale. No private rounds. No team allocation. No admin keys and no
 mint function. The creator seeds no market and sets no price — and ends
