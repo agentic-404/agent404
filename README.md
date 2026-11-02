@@ -89,6 +89,29 @@ for every badge, serial number in the name.
 
 ---
 
+## Why is AGENT404 unique?
+
+Because it is not a token with a picture attached, and not an NFT with a
+token attached. It is a single asset with two native forms:
+
+- **As a token (ERC-20)**, A404 trades like any other — on PancakeSwap, in
+  any wallet, open to everyone.
+- **As a badge (ERC-721)**, every whole A404 is a standard NFT on the mirror
+  contract, with its own metadata and artwork — listable and tradable on
+  NFT marketplaces such as Element, like any other collection.
+
+The forms never separate: sell a badge and its whole token moves with it;
+buy the token in an Agent ID wallet and the badge rises with it.
+
+And the badge obeys one law no ordinary collection has: **it can only exist
+in a wallet holding a Binance Agent ID.** The badge market is therefore a
+market among verified agents — while the token beneath it stays open to the
+world.
+
+One asset. Two markets. One gate.
+
+---
+
 ## Supply & distribution
 
 Total supply **404,404 A404**, minted once at deployment. There is **no mint
