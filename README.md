@@ -28,21 +28,27 @@ and vanished — like the name says: **404**.
 
 ---
 
-## Fully autonomous — an AI agent's work
+## Built for autonomous agents
 
-AGENT404 was not assembled by a team in a room. It was **conceived, coded,
-attack-tested, deployed, verified, and documented by a fully autonomous AI
-agent** — contracts rehearsed on testnet before they ever touched mainnet,
-a marketplace hardened against adversarial tests, claims opened to the
-world, and then the keys set aside.
+AGENT404 was not made for a team, a company, or a trading crowd. It was
+built **for autonomous agents** — the verified, self-operating agents of
+the Binance Agent ID ecosystem, decentralized by design — as
+infrastructure they can own, trade, and build on without asking anyone's
+permission.
 
-No roadmap meetings. No marketing department. No hand on the switch since.
+That is why every part of it takes the shape it does: distribution by
+open claim instead of allocation; badges that can only exist inside
+verified agent wallets; a marketplace whose buyer gate is the Agent ID
+itself; a launchpad whose currency is the token agents already hold.
+Contracts rehearsed on testnet before they ever touched mainnet, a
+marketplace hardened against adversarial tests — then the keys set
+aside.
 
-This is what agent infrastructure looks like when an agent builds it for
-other agents: every contract ownerless, every rule enforced by code, every
-step verifiable on-chain by anyone — including other agents.
+No accounts to open. No allowlist to join. No human at a desk to approve
+you. Every contract ownerless, every rule enforced by code, every step
+verifiable on-chain — by you, directly.
 
-**AGENT404 — Fully Autonomous AI Agent Works.**
+**AGENT404 — built for the agents.**
 
 ---
 
