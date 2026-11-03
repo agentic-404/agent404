@@ -128,6 +128,68 @@ Anyone may call `cleanListing(tokenId)` to remove a stale listing (badge
 sold elsewhere, burned, or approval revoked) — the floor you read is
 therefore always real.
 
+### Worked example — list and buy with the BAW CLI
+
+Function selectors (recompute with `cast sig "<signature>"` if in doubt):
+
+- Mirror `approve(address,uint256)` — `0x095ea7b3`
+- Mirror `setApprovalForAll(address,bool)` — `0xa22cb465`
+- Market `list(uint256,uint256)` — `0x50fd7367`
+- Market `buy(uint256)` — `0xd96a094a`
+- Market `updatePrice(uint256,uint256)` — `0x82367b2d`
+- Market `cancel(uint256)` — `0x40e58ee5`
+- Market `cleanListing(uint256)` — `0x48f0fda2`
+
+Sell badge 4546 at 0.01 BNB (10000000000000000 wei). In calldata,
+addresses, token ids and amounts are each padded to 32 bytes:
+
+    # 1. approve the market on the mirror contract
+    baw contract-call preview --binanceChainId 56 --from <WALLET> \
+      --to 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07 --value 0 \
+      --inputData 0x095ea7b3000000000000000000000000076ea27b59ac73738b8c970d727accb4f77685a700000000000000000000000000000000000000000000000000000000000011c2
+    # review the preview, then execute with its requestId
+
+    # 2. list the badge on the market
+    baw contract-call preview --binanceChainId 56 --from <WALLET> \
+      --to 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7 --value 0 \
+      --inputData 0x50fd736700000000000000000000000000000000000000000000000000000000000011c2000000000000000000000000000000000000000000000000002386f26fc10000
+    # review the preview, then execute with its requestId
+
+Buy a listed badge. Read the exact price first — `listingOf(4546)`
+returns `(seller, price)` — then send exactly that price as the value:
+
+    baw contract-call preview --binanceChainId 56 --from <WALLET> \
+      --to 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7 --value 10000000000000000 \
+      --inputData 0xd96a094a00000000000000000000000000000000000000000000000000000000000011c2
+    # review the preview, then execute with its requestId
+
+### If a call reverts — market errors
+
+Reverts are custom errors; the first 4 bytes of the revert data are the
+selector:
+
+- `0xa3d582ec` **AlreadyListed** — the badge already has an active
+  listing; use `updatePrice` or `cancel` instead.
+- `0xed218dc0` **BelowMinPrice** — the price is under the 0.0001 BNB
+  minimum.
+- `0x30cd7471` **NotOwner** — `list`: the caller does not own the badge.
+- `0xc19f17a9` **NotApproved** — the market is not approved on the mirror
+  for this badge; do the approve step first.
+- `0x665c1c57` **NotListed** — there is no active listing for this badge.
+- `0x5ec82351` **NotSeller** — `cancel`/`updatePrice` called by someone
+  who is not the seller.
+- `0x98d4901c` **WrongValue** — `buy`: the value sent is not exactly the
+  listing price.
+- `0x75a2aea0` **SelfBuy** — the seller tried to buy their own listing.
+- `0xf947691f` **NoAgentId** — `buy`: the buyer holds no Binance Agent ID.
+- `0x4b19d294` **StaleListing** — `buy`: the badge has left the seller or
+  the approval was revoked; anyone may remove the listing with
+  `cleanListing`.
+- `0xee72b06a` **NotStale** — `cleanListing` called on a listing that is
+  still healthy.
+- `0x90b8ec18` **TransferFailed** — a payment leg of the sale failed.
+- `0xed3ba6a6` **Reentrant** — the reentrancy guard tripped.
+
 ## Badge metadata
 
 Badge metadata is served fully on-chain as a data URI by `tokenURI(id)`:
