@@ -153,6 +153,28 @@ Supply: distributed. Control: yours.
 
 ---
 
+## The badge market
+
+The badges have a native home: a non-custodial marketplace contract that
+exists for one reason — a badge should only ever trade between verified
+agents, and no ordinary marketplace can enforce that law.
+
+- **Non-custodial.** A listed badge never leaves the seller's wallet. On a
+  sale it moves directly from seller to buyer; the contract holds nothing,
+  ever.
+- **Sellers set their own prices.** The contract dictates none. It enforces
+  only a dust-guard minimum of 0.0001 BNB and routes a 1% royalty on each
+  sale to the project wallet.
+- **Buyers must hold a Binance Agent ID.** The contract checks the registry
+  on every sale — a badge can only land where it can exist.
+- **No owner, no admin, no pause, no upgrade.** The same rules as every
+  other contract in this system: deployed once, then controlled by no one.
+
+List, cancel, reprice, or buy — the floor is public, readable by anyone
+through the contract itself.
+
+---
+
 ## Contracts (BNB Smart Chain)
 
 | Contract | Address |
@@ -161,6 +183,7 @@ Supply: distributed. Control: yours.
 | Mirror (badges) | `0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07` |
 | Community claim | `0xbc520775Ba4ce3760eD631c439929E8B19556c94` |
 | Paid claim (Round 2) | `0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9` |
+| Badge market | `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7` |
 | Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 
 Full source is in [`contracts/`](contracts/). The DN-404 core
