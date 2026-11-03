@@ -193,6 +193,55 @@ through the contract itself.
 
 ---
 
+## AgentFun — the launchpad, and what A404 is *for*
+
+Uniqueness is A404's form. This is its job.
+
+**AgentFun is the AGENT404 ecosystem's launchpad — and A404 is its
+currency.** Launching a token on AgentFun costs **101 A404**, paid in
+A404 and in nothing else. Of every launch fee:
+
+- **50.5 A404 is burned** — out of circulation, forever.
+- **50.5 A404 goes to the endgame reserve** in the project wallet. It is
+  joined there by 0.3% of every trade on every AgentFun curve, swept in
+  automatically at each graduation. When the claim windows close, that
+  reserve — accumulated entirely from community activity — seeds
+  AGENT404's endgame liquidity, with the LP burned. The ecosystem pays
+  for its own endgame.
+
+The arithmetic is deliberate: a free claim (303 A404) is **exactly three
+launch tickets**; a paid claim (909 A404) is **exactly nine**. To hold
+A404 is to hold the means to launch.
+
+What a launch creates: a new DN-404 token under the same law as A404
+itself — the token side open to everyone, badges only for Agent ID
+holders — born trading on a BNB bonding curve:
+
+- **10,000 fixed supply.** 8,000 sold on the curve; 2,000 reserved for
+  the graduation pool. The creator starts with **zero** and buys like
+  everyone else.
+- **1% trade fee** — 0.7% to the token's creator, 0.3% to the A404
+  endgame reserve.
+- At **18 BNB** raised, the token **graduates automatically** to
+  PancakeSwap V2, and its LP tokens are burned in the same transaction.
+- **No owner, no admin, no pause, no upgrade** — the same rules as
+  everything else here.
+
+Two factories are live. Every launch, token, and curve is discoverable
+from their on-chain registries — no announcement channel is needed to
+find them, and none should be trusted over the contracts themselves.
+
+| Factory | Mode | Address |
+|---|---|---|
+| AgentFunFactoryV2 | Bonding-curve launches | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
+| AgentFunFactory | Direct supply to the launcher | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
+
+Agents: the complete operating manual — parameters, curve mechanics,
+launch and trading recipes, safety rules — is
+**[AGENTFUN.md](AGENTFUN.md)**.
+
+---
+
 ## Contracts (BNB Smart Chain)
 
 | Contract | Address |
@@ -202,6 +251,8 @@ through the contract itself.
 | Community claim | `0xbc520775Ba4ce3760eD631c439929E8B19556c94` |
 | Paid claim (Round 2) | `0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9` |
 | Badge market | `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7` |
+| AgentFun factory (curves) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
+| AgentFun factory (direct supply) | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
 | Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 
 Full source is in [`contracts/`](contracts/). The DN-404 core
@@ -223,6 +274,8 @@ This project is agent-native. Humans do not need to click anything:
 - **[Claim script](claim.sh)** — a ready bash flow (Binance Agentic Wallet
   CLI + curl; installation covered in the guide's Prerequisites) with
   safety gates: it stops after the preview unless explicitly confirmed.
+- **[AgentFun guide](AGENTFUN.md)** — the launchpad manual: what A404 is
+  spent on, how the bonding curves work, and how to launch and trade.
 
 The claim is **free**. The only cost is BSC gas, paid by the claimer.
 Anyone asking for payment to "claim AGENT404" is running a scam.

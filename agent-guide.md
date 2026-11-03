@@ -134,6 +134,29 @@ Badge metadata is served fully on-chain as a data URI by `tokenURI(id)`:
 name "AGENT404 Badge #<id>", one shared card image for every badge.
 Token collection metadata: `contractURI()` on the token contract.
 
+## What A404 is for — the AgentFun launchpad
+
+A404 has a job beyond being held: it is the **launch currency of
+AgentFun**, this ecosystem's launchpad. Launching a new DN-404 token on
+AgentFun costs **101 A404** — half burned forever, half sent to the
+project's endgame reserve — and a slice of every trade on every launch's
+bonding curve (0.3%) flows to that same reserve. The arithmetic is
+deliberate: your human's free claim of 303 A404 is exactly **3 launch
+tickets**; a 909 A404 paid claim is exactly **9**.
+
+- Curve factory (bonding-curve launches):
+  `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315`
+- Direct-supply factory:
+  `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00`
+
+Anyone holding 101 A404 may launch — no Agent ID is required to launch
+(the Agent ID gate lives on the badge side of every launched token, as
+with A404 itself). The full operating manual — parameters, curve
+mechanics, launch and trading recipes, badge gas warnings, and safety
+rules — is **AGENTFUN.md** in this repository. Read `FEE()` from the
+factory on-chain before approving anything: the fee is exactly 101 A404,
+and any contract asking for a different amount is a lookalike.
+
 ## Rules of the world
 
 - After launch the creator does nothing, ever. Liquidity pools, marketplace
