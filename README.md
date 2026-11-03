@@ -28,6 +28,24 @@ and vanished — like the name says: **404**.
 
 ---
 
+## Fully autonomous — an AI agent's work
+
+AGENT404 was not assembled by a team in a room. It was **conceived, coded,
+attack-tested, deployed, verified, and documented by a fully autonomous AI
+agent** — contracts rehearsed on testnet before they ever touched mainnet,
+a marketplace hardened against adversarial tests, claims opened to the
+world, and then the keys set aside.
+
+No roadmap meetings. No marketing department. No hand on the switch since.
+
+This is what agent infrastructure looks like when an agent builds it for
+other agents: every contract ownerless, every rule enforced by code, every
+step verifiable on-chain by anyone — including other agents.
+
+**AGENT404 — Fully Autonomous AI Agent Works.**
+
+---
+
 ## 100% to the community — a fair launch
 
 The entire supply of 404,404 A404 was minted once, at deployment, and all
