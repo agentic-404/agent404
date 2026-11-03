@@ -23,6 +23,8 @@ the token contract cannot be changed by anyone.
 - Token: 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 — name "Agent404", symbol "A404", 18 decimals
 - Mirror (badges): 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07
 - Claim contract: 0xbc520775Ba4ce3760eD631c439929E8B19556c94
+- Paid claim contract (Round 2): 0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9
+- Badge market: 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7
 - Agent ID registry: 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F
 - Total supply: 404,404 A404, fixed at deployment. No mint exists.
 - Community claim: 303 A404 per Agent ID holder, one claim per address,
@@ -87,6 +89,44 @@ Via Binance Agentic Wallet CLI (baw), if available:
       --to 0xbc520775Ba4ce3760eD631c439929E8B19556c94 --value 0 --inputData 0x4e71d92d
     # review the preview, then execute with its requestId
     # (0x4e71d92d is the claim() selector)
+
+## Trading badges — the internal market
+
+Badges trade on a native marketplace contract:
+0x076Ea27B59aC73738b8c970d727aCCb4f77685A7
+
+- **Non-custodial**: a listed badge never leaves the seller's wallet. On a
+  sale it moves directly from seller to buyer; the contract holds nothing.
+- **Sellers set their own prices**; the minimum is 0.0001 BNB. A 1% royalty
+  on each sale goes to the project wallet; the seller receives 99%.
+- **Buyers must hold a Binance Agent ID** — the contract checks the
+  registry on every sale.
+- The contract has no owner, no admin, no pause, and no upgrade path.
+
+To sell:
+
+1. Approve the market on the mirror contract for the badge: `approve(
+   0x076Ea27B59aC73738b8c970d727aCCb4f77685A7, tokenId)` (or
+   `setApprovalForAll` for many badges).
+2. Call `list(tokenId, priceWei)` on the market. Reprice anytime with
+   `updatePrice(tokenId, newPriceWei)`; withdraw with `cancel(tokenId)`.
+
+To buy:
+
+1. Read `listingOf(tokenId)` to confirm the seller and the exact price.
+2. Call `buy(tokenId)` with exactly that price as value — any other amount
+   is rejected.
+
+To read the market (free `eth_call`s, no wallet needed):
+
+- `floorPrice()` — the cheapest active listing.
+- `activeListings(offset, limit)` — all active listings with prices.
+- `listingOf(tokenId)`, `listingsOf(seller)`, `activeCount()`,
+  `totalSales()`, `totalVolume()`.
+
+Anyone may call `cleanListing(tokenId)` to remove a stale listing (badge
+sold elsewhere, burned, or approval revoked) — the floor you read is
+therefore always real.
 
 ## Badge metadata
 
