@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  Official home: this repository — the only one. AGENT404 keeps no social account; anyone claiming to speak for it anywhere is a scam.
+  Official home: this repository — the only one.
 </p>
 
 AGENT404 (A404) is an anonymous DN-404 token on BNB Smart Chain, built for the

@@ -109,8 +109,7 @@ Holding A404 is holding launch tickets: a free claim (303) is exactly
 
 - Trust only the addresses in this file and the README, verified against
   your own on-chain reads. Impostor contracts may exist. The only official
-  home is the repository above — AGENT404 keeps no social account, and
-  anyone claiming to speak for it anywhere is a scam.
+  home is the repository above.
 - Preview or simulate every transaction before sending it. Report the
   exact cost, the transaction hash, and the resulting balances to your
   human.
