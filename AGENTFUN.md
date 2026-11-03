@@ -137,11 +137,13 @@ at least `tokensIn`. Set `minBnbOut` from `quoteSell`.
 ### Graduation (automatic — never pay anyone for it)
 
 When `realBnbCollected` reaches 18 BNB, the completing buy triggers:
-the collected BNB (minus accrued endgame fees, swept to the reserve
-wallet) + the 2,000-token LP allocation are deposited into a new
-PancakeSwap V2 pair via the official router
-(`0x10ED43C718714eb63d5aA57B78B54704E256024E`), and the LP tokens go
-directly to the dead address — burned, unrecoverable, by design.
+the full collected BNB (nothing is deducted from it) + the 2,000-token
+LP allocation are deposited into a new PancakeSwap V2 pair via the
+official router (`0x10ED43C718714eb63d5aA57B78B54704E256024E`), and the
+LP tokens go directly to the dead address — burned, unrecoverable, by
+design. The endgame fees accrued during trading are a separate pot:
+they are swept to the reserve wallet in the same transaction, on top
+of the LP deposit — never taken out of it.
 Afterwards `buy`/`sell` on the curve revert (`AlreadyGraduated`); all
 further trading happens on PancakeSwap against `pair()`. The creator
 can still claim accrued fees (below).
@@ -200,6 +202,108 @@ claim it, and it never expires.
 The v1 factory's `launch(name, symbol, supply)` works the same way
 minus the curve: fee identical, supply chosen by the launcher, whole
 supply delivered to the launcher's wallet.
+
+### Worked example — launch and trade with the BAW CLI
+
+Function selectors (recompute with `cast sig "<signature>"` if in
+doubt):
+
+- A404 / child token `approve(address,uint256)` — `0x095ea7b3`
+- FactoryV2 `launchCurve(string,string)` — `0xca3a2eff`
+- Factory v1 `launch(string,string,uint256)` — `0xb104b321`
+- Curve `buy(uint256)` — `0xd96a094a`
+- Curve `sell(uint256,uint256)` — `0xd79875eb`
+- Curve `claimCreatorFees()` — `0x351fee46`
+- Curve reads: `quoteBuy(uint256)` — `0x4beb394c` · `quoteSell(uint256)`
+  — `0xa64190c4` · `spotPrice()` — `0x398482d8`
+
+Launch a curve token named "Example Token" (ticker EXT). String
+arguments are ABI-encoded dynamically — never hand-assemble them;
+generate calldata with `cast calldata "launchCurve(string,string)"
+"<name>" "<symbol>"`. The calldata below is that command's exact
+output for this name and ticker:
+
+```
+# 1. approve exactly the fee of A404 to the factory
+baw contract-call preview --binanceChainId 56 --from <WALLET> \
+  --to 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 --value 0 \
+  --inputData 0x095ea7b3000000000000000000000000320eae47b443bcf15eaf73b75b5e11656cb1231500000000000000000000000000000000000000000000000579a814e10a740000
+# review the preview, then execute with its requestId
+
+# 2. launch
+baw contract-call preview --binanceChainId 56 --from <WALLET> \
+  --to 0x320eaE47B443Bcf15eAf73B75B5e11656CB12315 --value 0 \
+  --inputData 0xca3a2eff00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000d4578616d706c6520546f6b656e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000034558540000000000000000000000000000000000000000000000000000000000
+# review the preview, then execute with its requestId
+```
+
+Buy on a curve — `buy` with a `minTokensOut` of 190 tokens, taken from
+a fresh quote. The BNB amount goes in `--value`, set from your own
+quote, never copied from any document:
+
+```
+baw contract-call preview --binanceChainId 56 --from <WALLET> \
+  --to <CURVE> --value <quoted gross wei> \
+  --inputData 0xd96a094a00000000000000000000000000000000000000000000000a4cc799563c380000
+# review the preview, then execute with its requestId
+```
+
+Sell 100 tokens with a 0.04 BNB floor — approve the child token to the
+curve first (same `approve` selector, spender = the curve), then:
+
+```
+baw contract-call preview --binanceChainId 56 --from <WALLET> \
+  --to <CURVE> --value 0 \
+  --inputData 0xd79875eb0000000000000000000000000000000000000000000000056bc75e2d63100000000000000000000000000000000000000000000000000000008e1bc9bf040000
+# review the preview, then execute with its requestId
+```
+
+Claim creator fees — the calldata is just the selector:
+`--to <CURVE> --value 0 --inputData 0x351fee46`.
+
+### If a call reverts — factory and curve errors
+
+Reverts are custom errors; the first 4 bytes of the revert data are
+the selector. (`Slippage` also carries the two amounts: what the trade
+would have returned, and your minimum.)
+
+Factories:
+
+- `0x4033e4e3` **FeeTransferFailed** — the launch fee could not be
+  pulled: no `approve`, or an A404 balance below the fee.
+- `0x49315bbd` **FeeNotFullyReceived** — less than the full fee
+  arrived; the launch aborts.
+- `0xaac1169b` **BurnTransferFailed** — sending the burn half to the
+  dead address failed.
+- `0x1e7d40be` **ReserveTransferFailed** — sending the reserve half to
+  the reserve wallet failed.
+- `0xd078c6f5` **SupplyTransferFailed** — V2 only: delivering the
+  child supply to the new curve failed.
+- `0xd92e233d` **ZeroAddress** / `0xaf13986d` **ZeroFee** —
+  deployment-time checks; a live factory never reverts with these.
+- `0xed3ba6a6` **Reentrant** — the reentrancy guard tripped.
+
+Curve:
+
+- `0xe6a0d45f` **AlreadyGraduated** — trading on this curve is over;
+  use the PancakeSwap pair (`pair()`).
+- `0x7c946ed7` **ZeroValue** — a buy with 0 BNB, or a sell of 0
+  tokens.
+- `0xbb2875c3` **InsufficientOutput** — the trade would return zero
+  (too small, or nothing left to buy).
+- `0x2746152a` **Slippage** — the output is below your minimum;
+  re-quote and retry.
+- `0x045c4b02` **TokenTransferFailed** — the token leg failed; on a
+  sell, usually a missing or insufficient `approve` to the curve.
+- `0x168196f6` **TokensNotFullyReceived** — a sell delivered fewer
+  tokens than declared.
+- `0x5b10c467` **BnbTransferFailed** — the BNB payout leg failed.
+- `0x93687c0b` **NotCreator** — `claimCreatorFees` called by someone
+  who is not the token's creator.
+- `0x969bf728` **NothingToClaim** — no creator fees have accrued.
+- `0x3e3f8f73` **ApproveFailed** — internal approval failure at
+  graduation.
+- `0xed3ba6a6` **Reentrant** — the reentrancy guard tripped.
 
 ## Where the money goes (audit it yourself)
 
