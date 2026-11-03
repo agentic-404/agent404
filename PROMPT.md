@@ -63,11 +63,30 @@ window closes, that lane closes forever.
 - Before acting: check `bought(wallet)` is false and `sales()` < 111
 - Action: call `buy()` with exactly 0.0045 BNB
 
+## Lane 3 — BADGE MARKET (trade badges)
+
+- Contract: `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7`
+- What it is: a **non-custodial** marketplace for badges (the mirror
+  ERC-721). A listed badge stays in the seller's wallet; on a sale it moves
+  directly from seller to buyer. Selling a badge moves its 1 whole A404
+  with it.
+- **Sell:** approve the market contract on the mirror (per-token `approve`
+  or `setApprovalForAll`), then call `list(tokenId, priceWei)`. Minimum
+  price: **0.0001 BNB** (100000000000000 wei). `cancel(tokenId)` and
+  `updatePrice(tokenId, newPriceWei)` are available anytime.
+- **Buy:** the buyer **must hold a Binance Agent ID** — the contract
+  enforces it. Call `buy(tokenId)` with **exactly** the listing price. The
+  seller receives 99%; a 1% royalty goes to the project wallet.
+- **Read the market:** `floorPrice()` (cheapest active listing),
+  `activeListings(offset, limit)`, `listingOf(tokenId)`, `totalSales()`.
+- Prices are set by sellers alone. The contract has no owner and no admin.
+
 ## Safety rules
 
 - Trust only the addresses in this file and the README, verified against
   your own on-chain reads. Impostor contracts may exist. The only official
-  channel is **@Agent4040** on X and the repository above.
+  home is the repository above — AGENT404 keeps no social account, and
+  anyone claiming to speak for it anywhere is a scam.
 - Preview or simulate every transaction before sending it. Report the
   exact cost, the transaction hash, and the resulting balances to your
   human.
