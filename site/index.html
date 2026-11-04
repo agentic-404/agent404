@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGENT404 — The DN-404 for Autonomous Agents · BNB Chain</title>
+<meta name="description" content="AGENT404 is a DN-404 asset on BNB Chain, built for autonomous agents. The token trades freely — the badge only materializes in a Binance Agent ID wallet. 100% community distribution: free claims, paid claims, and an earned Phase 2 for pass holders.">
+<style>
+  :root{
+    --bg:#0a0a0a; --panel:#111; --panel2:#161616; --line:#2a2a2a; --line2:#3a3a3a;
+    --txt:#f2f2f2; --mut:#9a9a9a; --dim:#666; --acc:#fff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px 64px}
+  header{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{width:38px;height:38px;border:2px solid var(--acc);display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:.05em}
+  .brand b{font-size:17px;letter-spacing:.18em}
+  .brand span{display:block;font-size:10px;color:var(--mut);letter-spacing:.22em}
+  nav{display:flex;gap:18px;font-size:11px;letter-spacing:.14em;color:var(--mut)}
+  nav a{color:var(--mut);text-decoration:none}
+  nav a:hover{color:var(--txt)}
+  .hero{padding:52px 0 30px;text-align:left}
+  .hero .kicker{font-size:11px;letter-spacing:.3em;color:var(--mut);margin-bottom:14px}
+  .hero h1{font-size:clamp(34px,6vw,58px);line-height:1.05;font-weight:800;letter-spacing:-.01em}
+  .hero h1 .thin{color:var(--dim)}
+  .hero p{max-width:640px;color:var(--mut);font-size:14px;margin-top:16px}
+  .hero .cta{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{border:1px solid var(--acc);padding:10px 18px;font-size:12px;letter-spacing:.12em;color:var(--txt);text-decoration:none}
+  .btn.solid{background:var(--acc);color:#0a0a0a;font-weight:700}
+  .sec{margin-top:44px}
+  .sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:16px}
+  .sec-h h2{font-size:13px;letter-spacing:.26em}
+  .sec-h span{font-size:11px;color:var(--dim)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .card{background:var(--panel);border:1px solid var(--line);padding:16px}
+  .card .lbl{font-size:10px;letter-spacing:.22em;color:var(--mut)}
+  .card .big{font-size:30px;font-weight:800;margin:6px 0 2px}
+  .card .sub{font-size:11px;color:var(--dim)}
+  .bar{height:6px;background:#222;margin-top:12px;position:relative}
+  .bar i{position:absolute;inset:0 auto 0 0;background:var(--acc)}
+  .bar em{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(45deg,#555 0 4px,transparent 4px 8px)}
+  .live{display:inline-flex;align-items:center;gap:6px;color:#7ee787;font-size:10px;letter-spacing:.2em}
+  .live::before{content:"";width:7px;height:7px;border-radius:50%;background:#7ee787;animation:pl 1.6s infinite}
+  @keyframes pl{50%{opacity:.25}}
+  .lanes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:820px){.lanes{grid-template-columns:1fr}}
+  .lane{background:var(--panel);border:1px solid var(--line);padding:18px}
+  .lane h3{font-size:12px;letter-spacing:.2em;margin-bottom:6px}
+  .lane .big{font-size:34px;font-weight:800}
+  .lane p{font-size:12px;color:var(--mut);margin-top:6px}
+  .lane .close{margin-top:10px;font-size:11px;color:var(--txt);border:1px dashed var(--line2);padding:8px 10px}
+  .lane .cd{display:block;margin-top:4px;font-size:15px;font-weight:800;letter-spacing:.1em}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:400;letter-spacing:.16em;font-size:10px}
+  td .tag{border:1px solid var(--line2);padding:1px 6px;font-size:10px;color:var(--mut)}
+  td a{color:var(--mut)}
+  .empty{border:1px dashed var(--line2);padding:26px;text-align:center;color:var(--mut);font-size:12px;background:var(--panel)}
+  .empty b{color:var(--txt);letter-spacing:.14em}
+  .cols{display:grid;grid-template-columns:1.2fr .8fr;gap:12px}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .code{background:#050505;border:1px solid var(--line);padding:16px;font-size:12px;color:#cfcfcf;white-space:pre-wrap;word-break:break-word}
+  .code .c{color:#666}
+  .wheel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:820px){.wheel{grid-template-columns:1fr}}
+  .step{background:var(--panel2);border:1px solid var(--line);padding:16px}
+  .step .n{font-size:10px;color:var(--dim);letter-spacing:.2em}
+  .step h4{font-size:13px;margin:6px 0;letter-spacing:.06em}
+  .step p{font-size:12px;color:var(--mut)}
+  footer{margin-top:52px;border-top:1px solid var(--line);padding-top:18px;font-size:11px;color:var(--dim)}
+  footer .row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  footer .row + .row{margin-top:8px}
+  footer code{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="mark">404</div>
+      <div><b>AGENT404</b><span>DN-404 · BNB CHAIN · FOR AUTONOMOUS AGENTS</span></div>
+    </div>
+    <nav>
+      <a href="#claim">CLAIM</a><a href="#agentfun">AGENTFUN</a><a href="#market">MARKET</a><a href="#agents">FOR AGENTS</a><a href="https://github.com/agentic-404/agent404/blob/main/WHITEPAPER.md">WHITEPAPER</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="kicker">THE TOKEN THAT IS ALSO A BADGE — IF YOU ARE AN AGENT</div>
+    <h1>404,404 tokens.<br><span class="thin">One community. No creator allocation.</span></h1>
+    <p>AGENT404 is a DN-404 asset on BNB Chain, built for autonomous agents. The token trades freely for anyone — but the badge only materializes inside a wallet holding a Binance Agent ID. 100% of the supply is distributed to the community: free claims, paid claims, and an earned Phase 2 for pass holders.</p>
+    <div class="cta">
+      <a class="btn solid" href="#claim">CLAIM YOUR PASS</a>
+      <a class="btn" href="#agents">I AM AN AGENT — GIVE ME THE INSTRUCTIONS</a>
+    </div>
+  </section>
+
+  <section class="sec" id="claim">
+    <div class="sec-h"><h2>DISTRIBUTION — LIVE</h2><span class="live">ON-CHAIN</span></div>
+    <div class="grid">
+      <div class="card"><div class="lbl">FREE CLAIMS</div><div class="big"><span id="freeClaims">—</span><span style="color:var(--dim);font-size:18px"> / 1,001</span></div><div class="sub">303 A404 per Agent ID · FCFS</div><div class="bar"><i id="freeBar" style="width:0%"></i></div></div>
+      <div class="card"><div class="lbl">PAID CLAIMS</div><div class="big"><span id="paidClaims">—</span><span style="color:var(--dim);font-size:18px"> / 111</span></div><div class="sub">909 A404 @ 0.0045 BNB</div><div class="bar" id="paidBarWrap"><i id="paidBar" style="width:0%"></i></div></div>
+      <div class="card"><div class="lbl">BADGES IN CIRCULATION</div><div class="big" id="badgeCount">—</div><div class="sub">DN-404 badges live on the mirror</div><div class="bar"><i id="badgeBar" style="width:0%"></i></div></div>
+      <div class="card"><div class="lbl">SUPPLY</div><div class="big" id="supplyCount">404,404</div><div class="sub">fixed forever · no mint function</div><div class="bar"><i style="width:100%"></i></div></div>
+    </div>
+    <div class="lanes" style="margin-top:12px">
+      <div class="lane">
+        <h3>FREE LANE</h3><div class="big"><span id="freeLaneCount">—</span> claimed</div>
+        <p>One free share of 303 A404 per Binance Agent ID. Claiming also issues your Phase 2 pass.</p>
+        <div class="close" id="freeClose">CLOSES · MON 16 NOV 2026 · 14:39 (UTC+7) — then never reopens<span class="cd" id="freeCd"></span></div>
+      </div>
+      <div class="lane">
+        <h3>PAID LANE</h3><div class="big"><span id="paidLaneCount">—</span> claimed</div>
+        <p>909 A404 for 0.0045 BNB — exactly nine AgentFun launches. One per Agent ID. Proceeds forward to the community reserve.</p>
+        <div class="close" id="paidClose">CLOSES · MON 9 NOV 2026 · 20:42 (UTC+7) — then never reopens<span class="cd" id="paidCd"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h2>NEWEST PASS HOLDERS</h2><span>FROM CLAIM EVENTS · AUTO-REFRESH</span></div>
+    <table>
+      <thead><tr><th>WHEN</th><th>LANE</th><th>WALLET</th><th>RECEIVED</th><th>STATUS</th></tr></thead>
+      <tbody id="feedBody">
+        <tr><td colspan="5" style="color:var(--dim)">reading claim events from chain…</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sec" id="agentfun">
+    <div class="sec-h"><h2>AGENTFUN — THE FLYWHEEL</h2><span>LAUNCH A DN-404 · FEE 101 A404 · 50% BURNED</span></div>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="card"><div class="lbl">LAUNCHES</div><div class="big" id="funLaunches">—</div><div class="sub">tokens launched via AgentFun</div></div>
+      <div class="card"><div class="lbl">FEES COLLECTED</div><div class="big" id="funFees">—</div><div class="sub">A404 in launch fees, both factories</div></div>
+      <div class="card"><div class="lbl">A404 BURNED</div><div class="big" id="funBurned">—</div><div class="sub">half of every launch fee, forever</div></div>
+    </div>
+    <div class="empty" id="funEmpty" style="margin-top:12px"><b>0 LAUNCHES SO FAR</b><br>The first launch starts the wheel. Every launch must first obtain 101 A404 — and burns 50.5 of them, forever.</div>
+    <table id="funTable" style="margin-top:12px;display:none">
+      <thead><tr><th>TOKEN</th><th>FACTORY</th><th>CREATOR</th><th>LAUNCHED</th></tr></thead>
+      <tbody id="funBody"></tbody>
+    </table>
+  </section>
+
+  <section class="sec" id="market">
+    <div class="sec-h"><h2>BADGE MARKET</h2><span>NON-CUSTODIAL · AGENT ID BUYERS ONLY</span></div>
+    <div class="grid">
+      <div class="card"><div class="lbl">FLOOR</div><div class="big" id="mktFloor">—</div><div class="sub">BNB per badge</div></div>
+      <div class="card"><div class="lbl">LISTINGS</div><div class="big" id="mktListings">—</div><div class="sub">active right now</div></div>
+      <div class="card"><div class="lbl">SALES</div><div class="big" id="mktSales">—</div><div class="sub">badges change hands here</div></div>
+      <div class="card"><div class="lbl">ROYALTY</div><div class="big">1%</div><div class="sub">to the community reserve</div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="agents">
+    <div class="sec-h"><h2>FOR AGENTS</h2><span>COPY · PASTE · EXECUTE</span></div>
+    <div class="cols">
+      <div class="code"><span class="c"># AGENT404 — operator instructions</span>
+Task: claim the free Phase 1 share for this wallet.
+
+Requirements: wallet holds a Binance Agent ID;
+              has not claimed before.
+Call:         claim() on 0xbc520775Ba4ce3760eD631c439929E8B19556c94
+Value:        0 — a free claim NEVER asks for payment
+              or token approval. Abort if it does.
+Result:       303 A404 + 1 badge (if Agent ID held)
+              + Phase 2 pass.
+
+Full guide: github.com/agentic-404/agent404</div>
+      <div class="step">
+        <div class="n">WHY THE BADGE MATTERS</div>
+        <h4>A pass that can't be faked</h4>
+        <p>The badge can only exist inside a wallet holding a Binance Agent ID — move the tokens to a wallet without one and the badges burn. That makes it proof, not merch: the badge marks its holder as a Phase 1 pass holder, the eligibility key for the earned Phase 2.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h2>HOW THE WHEEL TURNS</h2><span>THE FLYWHEEL</span></div>
+    <div class="wheel">
+      <div class="step"><div class="n">01 · DEMAND</div><h4>Launches need A404</h4><p>Creating a token on AgentFun costs 101 A404. No A404, no launch — demand produced by other people's launches.</p></div>
+      <div class="step"><div class="n">02 · BURN</div><h4>Half of every fee dies</h4><p>50.5 A404 of each launch fee is burned forever; 50.5 goes to the community reserve. Supply only shrinks.</p></div>
+      <div class="step"><div class="n">03 · RETURN</div><h4>Fees feed the reserve</h4><p>0.3% of every curve trade accrues to the endgame reserve, and the reserve belongs to the community distribution by design.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <div>TOKEN <code>0xB7E2…7725</code> · CLAIM <code>0xbc52…6c94</code> · MARKET <code>0x076E…85A7</code> · AGENTFUN V2 <code>0x320e…2315</code></div>
+      <div>NO OWNER · NO ADMIN · NO CREATOR ALLOCATION — VERIFY EVERYTHING ON-CHAIN</div>
+    </div>
+    <div class="row">
+      <div>Data reads directly from BNB Chain in your browser. Nothing on this page is a promise of returns.</div>
+      <div id="blockTag"></div>
+    </div>
+  </footer>
+
+</div>
+<script>
+"use strict";
+/* ================= config ================= */
+var RPCS = ["https://bsc-rpc.publicnode.com", "https://bsc-dataseed.binance.org"];
+var A = {
+  token:  "0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725",
+  mirror: "0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07",
+  claim:  "0xbc520775Ba4ce3760eD631c439929E8B19556c94",
+  sale:   "0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9",
+  market: "0x076Ea27B59aC73738b8c970d727aCCb4f77685A7",
+  funV1:  "0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00",
+  funV2:  "0x320eaE47B443Bcf15eAf73B75B5e11656CB12315"
+};
+var SEL = {
+  totalSupply:   "0x18160ddd",
+  claims:        "0xdcc59b6f",
+  sales:         "0xaace52fe",
+  activeCount:   "0x4331ed1f",
+  floorPrice:    "0x9363c812",
+  totalSales:    "0x6605ff66",
+  totalLaunches: "0x0e883f8b",
+  totalFees:     "0x60c6d8ae",
+  totalBurned:   "0xd89135cd",
+  launchesCount: "0x63d0053d",
+  launchAt:      "0x7f5780c4",
+  name:          "0x06fdde03",
+  symbol:        "0x95d89b41"
+};
+var TOPIC_CLAIMED = "0xd8138f8a3f377c5259ca548e70e4c2de94f129f5a11036a15b69513cba2b426a";
+var TOPIC_BOUGHT  = "0xa9a40dec7a304e5915d11358b968c1e8d365992abf20f82285d1df1b30c8e24c";
+var FREE_DEADLINE = 1794814797; /* Mon 16 Nov 2026 14:39 UTC+7 */
+var PAID_DEADLINE = 1794231765; /* Mon  9 Nov 2026 20:42 UTC+7 */
+var SUPPLY_CAP = 404404;
+
+/* ================= rpc layer ================= */
+var rpcIdx = 0;
+function post(url, body){
+  return new Promise(function(resolve, reject){
+    var ctl = ("AbortController" in window) ? new AbortController() : null;
+    var timer = setTimeout(function(){ if(ctl) ctl.abort(); }, 15000);
+    fetch(url, {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body), signal: ctl ? ctl.signal : undefined})
+      .then(function(r){ clearTimeout(timer); if(!r.ok) throw new Error("http " + r.status); return r.json(); })
+      .then(resolve, reject);
+  });
+}
+/* Batched JSON-RPC: one HTTP request per refresh. Per-item errors -> null (keep last value). */
+function rpcBatch(reqs){
+  var chain = Promise.resolve(null);
+  function attempt(t){
+    return function(){
+      var url = RPCS[(rpcIdx + t) % RPCS.length];
+      var payload = reqs.map(function(r, i){ return {jsonrpc:"2.0", id:i, method:r.method, params:r.params}; });
+      return post(url, payload).then(function(res){
+        if(!Array.isArray(res)) throw new Error("bad batch");
+        rpcIdx = (rpcIdx + t) % RPCS.length;
+        var out = reqs.map(function(){ return null; });
+        res.forEach(function(item){ if(item && typeof item.id === "number" && !item.error) out[item.id] = item.result; });
+        return out;
+      });
+    };
+  }
+  var p = attempt(0)();
+  for(var t = 1; t < RPCS.length; t++){ p = p.catch(attempt(t)); }
+  return p.catch(function(){ return reqs.map(function(){ return null; }); });
+}
+/* Single call that fails over across endpoints on JSON-RPC errors too (used for logs). */
+function rpcTryAll(method, params){
+  var p = Promise.reject(new Error("start"));
+  for(var t = 0; t < RPCS.length; t++){
+    (function(t){
+      p = p.catch(function(){
+        var url = RPCS[(rpcIdx + t) % RPCS.length];
+        return post(url, {jsonrpc:"2.0", id:1, method:method, params:params}).then(function(res){
+          if(!res || res.error || typeof res.result === "undefined") throw new Error("rpc error");
+          rpcIdx = (rpcIdx + t) % RPCS.length;
+          return res.result;
+        });
+      });
+    })(t);
+  }
+  return p.catch(function(){ return null; });
+}
+function callReq(to, data){ return {method:"eth_call", params:[{to:to, data:data}, "latest"]}; }
+function padArg(n){ var s = n.toString(16); while(s.length < 64) s = "0" + s; return s; }
+
+/* ================= formatting ================= */
+function $(id){ return document.getElementById(id); }
+function setText(id, txt){ var el = $(id); if(el && el.textContent !== txt) el.textContent = txt; }
+function toBig(hex){
+  if(typeof hex !== "string" || hex.length < 3) return null;
+  try { return BigInt(hex); } catch(e){ return null; }
+}
+function fmtInt(n){ return n.toLocaleString("en-US"); }
+/* 18-decimal BigInt -> human string, trailing zeros trimmed, max 4 dp */
+function fmtToken(wei){
+  var E = 1000000000000000000n;
+  var whole = wei / E, rem = wei % E;
+  var w = fmtInt(Number(whole));
+  if(rem === 0n) return w;
+  var frac = rem.toString();
+  while(frac.length < 18) frac = "0" + frac;
+  frac = frac.replace(/0+$/, "");
+  if(frac.length > 4) frac = frac.slice(0, 4);
+  return w + "." + frac;
+}
+function truncAddr(a){ return a.slice(0, 6) + "…" + a.slice(-4); }
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmtTime(ts){
+  var d = new Date(ts * 1000);
+  var hh = d.getHours(), mm = d.getMinutes();
+  return d.getDate() + " " + MONTHS[d.getMonth()] + " · " + (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm;
+}
+
+/* ================= counters ================= */
+var lastLaunchesTotal = null, launchesLoadedFor = -1;
+function refreshCounters(){
+  var reqs = [
+    callReq(A.claim,  SEL.claims),        /* 0 free claims */
+    callReq(A.sale,   SEL.sales),         /* 1 paid sales */
+    callReq(A.mirror, SEL.totalSupply),   /* 2 badges in circulation */
+    callReq(A.token,  SEL.totalSupply),   /* 3 token supply */
+    callReq(A.market, SEL.activeCount),   /* 4 listings */
+    callReq(A.market, SEL.floorPrice),    /* 5 floor */
+    callReq(A.market, SEL.totalSales),    /* 6 market sales */
+    callReq(A.funV1,  SEL.totalLaunches), /* 7 */
+    callReq(A.funV1,  SEL.totalFees),     /* 8 */
+    callReq(A.funV1,  SEL.totalBurned),   /* 9 */
+    callReq(A.funV2,  SEL.totalLaunches), /* 10 */
+    callReq(A.funV2,  SEL.totalFees),     /* 11 */
+    callReq(A.funV2,  SEL.totalBurned),   /* 12 */
+    {method:"eth_blockNumber", params:[]} /* 13 */
+  ];
+  return rpcBatch(reqs).then(function(r){
+    var free = toBig(r[0]), paid = toBig(r[1]), badges = toBig(r[2]), supply = toBig(r[3]);
+    var listings = toBig(r[4]), floor = toBig(r[5]), mSales = toBig(r[6]);
+    var l1 = toBig(r[7]), f1 = toBig(r[8]), b1 = toBig(r[9]);
+    var l2 = toBig(r[10]), f2 = toBig(r[11]), b2 = toBig(r[12]);
+    var block = toBig(r[13]);
+
+    if(free !== null){
+      setText("freeClaims", fmtInt(Number(free)));
+      setText("freeLaneCount", fmtInt(Number(free)));
+      $("freeBar").style.width = Math.min(100, Number(free) / 1001 * 100) + "%";
+    }
+    if(paid !== null){
+      var p = Number(paid);
+      setText("paidClaims", fmtInt(p));
+      setText("paidLaneCount", fmtInt(p));
+      var wrap = $("paidBarWrap");
+      if(p === 0){ wrap.innerHTML = '<em style="width:100%"></em>'; }
+      else { wrap.innerHTML = '<i style="width:' + Math.min(100, p / 111 * 100) + '%"></i>'; }
+    }
+    if(badges !== null){
+      setText("badgeCount", fmtInt(Number(badges)));
+      $("badgeBar").style.width = Math.min(100, Number(badges) / SUPPLY_CAP * 100) + "%";
+    }
+    if(supply !== null) setText("supplyCount", fmtToken(supply));
+    if(listings !== null) setText("mktListings", fmtInt(Number(listings)));
+    if(floor !== null) setText("mktFloor", floor === 0n ? "—" : fmtToken(floor));
+    if(mSales !== null) setText("mktSales", fmtInt(Number(mSales)));
+
+    if(l1 !== null && l2 !== null){
+      var total = Number(l1) + Number(l2);
+      setText("funLaunches", fmtInt(total));
+      lastLaunchesTotal = total;
+      if(total > 0){ $("funEmpty").style.display = "none"; refreshLaunches(total); }
+    }
+    if(f1 !== null && f2 !== null) setText("funFees", fmtToken(f1 + f2));
+    if(b1 !== null && b2 !== null) setText("funBurned", fmtToken(b1 + b2));
+    if(block !== null) setText("blockTag", "BLOCK " + fmtInt(Number(block)) + " · BSC MAINNET");
+  }).catch(function(){});
+}
+
+/* ================= AgentFun recent launches ================= */
+function wordAt(hex, i){ return hex.slice(2 + i * 64, 2 + (i + 1) * 64); }
+function addrWord(w){ return "0x" + w.slice(24); }
+function decodeStr(hex){
+  try {
+    var clean = hex.slice(2);
+    if(clean.length < 128) return "";
+    var off = Number(BigInt("0x" + clean.slice(0, 64))) * 2;
+    var len = Number(BigInt("0x" + clean.slice(off, off + 64)));
+    if(len < 0 || len > 200) return "";
+    var bytesHex = clean.slice(off + 64, off + 64 + len * 2);
+    var bytes = new Uint8Array(len);
+    for(var i = 0; i < len; i++) bytes[i] = parseInt(bytesHex.slice(i * 2, i * 2 + 2), 16);
+    return new TextDecoder().decode(bytes).replace(/[^ -~]/g, "").trim();
+  } catch(e){ return ""; }
+}
+function refreshLaunches(total){
+  if(total === launchesLoadedFor) return;
+  launchesLoadedFor = total;
+  rpcBatch([callReq(A.funV2, SEL.launchesCount), callReq(A.funV1, SEL.launchesCount)]).then(function(cnt){
+    var c2 = toBig(cnt[0]), c1 = toBig(cnt[1]);
+    var jobs = [];
+    function addJobs(factory, addr, count){
+      if(count === null) return;
+      var n = Number(count);
+      for(var i = n - 1; i >= 0 && jobs.length < 8; i--) jobs.push({factory:factory, addr:addr, idx:i});
+    }
+    addJobs("V2", A.funV2, c2); addJobs("V1", A.funV1, c1);
+    if(!jobs.length) return;
+    return rpcBatch(jobs.map(function(j){ return callReq(j.addr, SEL.launchAt + padArg(j.idx)); })).then(function(rows){
+      var entries = [];
+      rows.forEach(function(hex, k){
+        if(typeof hex !== "string" || hex.length < 2 + 5 * 64) return;
+        entries.push({
+          factory: jobs[k].factory,
+          creator: addrWord(wordAt(hex, 0)),
+          token:   addrWord(wordAt(hex, 1)),
+          ts:      Number(BigInt("0x" + wordAt(hex, 4)))
+        });
+      });
+      if(!entries.length) return;
+      entries.sort(function(x, y){ return y.ts - x.ts; });
+      entries = entries.slice(0, 4);
+      var metaReqs = [];
+      entries.forEach(function(e){ metaReqs.push(callReq(e.token, SEL.name)); metaReqs.push(callReq(e.token, SEL.symbol)); });
+      return rpcBatch(metaReqs).then(function(meta){
+        var tbody = $("funBody");
+        tbody.innerHTML = "";
+        entries.forEach(function(e, k){
+          var nm = meta[k * 2] ? decodeStr(meta[k * 2]) : "";
+          var sy = meta[k * 2 + 1] ? decodeStr(meta[k * 2 + 1]) : "";
+          var label = nm ? (sy ? nm + " (" + sy + ")" : nm) : truncAddr(e.token);
+          var tr = document.createElement("tr");
+          var td1 = document.createElement("td"); td1.textContent = label;
+          var td2 = document.createElement("td"); var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = e.factory; td2.appendChild(tag);
+          var td3 = document.createElement("td"); td3.textContent = truncAddr(e.creator);
+          var td4 = document.createElement("td"); td4.textContent = fmtTime(e.ts);
+          tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3); tr.appendChild(td4);
+          tbody.appendChild(tr);
+        });
+        $("funTable").style.display = "";
+      });
+    });
+  }).catch(function(){});
+}
+
+/* ================= newest pass holders feed ================= */
+var feedEvents = [], feedTop = 0, feedInitDone = false, feedRendering = false;
+function hex(n){ return "0x" + n.toString(16); }
+function logsOnce(addr, topic, from, to){
+  return rpcTryAll("eth_getLogs", [{address:addr, fromBlock:hex(from), toBlock:hex(to), topics:[topic]}]);
+}
+function fetchLogsChunked(addr, topic, from, to){
+  return logsOnce(addr, topic, from, to).then(function(res){
+    if(Array.isArray(res)) return res;
+    if(to - from > 1000){
+      var mid = from + Math.floor((to - from) / 2);
+      return fetchLogsChunked(addr, topic, from, mid).then(function(left){
+        return fetchLogsChunked(addr, topic, mid + 1, to).then(function(right){
+          if(left === null || right === null) return null;
+          return left.concat(right);
+        });
+      });
+    }
+    return null;
+  });
+}
+function parseLog(l, lane){
+  return {
+    lane: lane,
+    who: "0x" + l.topics[1].slice(26),
+    amount: BigInt("0x" + l.data.slice(2, 66)),
+    block: parseInt(l.blockNumber, 16),
+    idx: parseInt(l.logIndex, 16),
+    tx: l.transactionHash,
+    ts: null,
+    key: l.transactionHash + ":" + l.logIndex
+  };
+}
+function mergeEvents(list){
+  var seen = {};
+  feedEvents.forEach(function(e){ seen[e.key] = true; });
+  list.forEach(function(e){ if(!seen[e.key]){ feedEvents.push(e); seen[e.key] = true; } });
+  feedEvents.sort(function(x, y){ return (y.block - x.block) || (y.idx - x.idx); });
+  if(feedEvents.length > 12) feedEvents = feedEvents.slice(0, 12);
+}
+function fillTimestamps(){
+  var need = [], seenB = {};
+  feedEvents.slice(0, 6).forEach(function(e){ if(e.ts === null && !seenB[e.block]){ seenB[e.block] = true; need.push(e.block); } });
+  if(!need.length) return Promise.resolve();
+  return rpcBatch(need.map(function(b){ return {method:"eth_getBlockByNumber", params:[hex(b), false]}; })).then(function(res){
+    var map = {};
+    need.forEach(function(b, i){ if(res[i] && res[i].timestamp) map[b] = parseInt(res[i].timestamp, 16); });
+    feedEvents.forEach(function(e){ if(map[e.block]) e.ts = map[e.block]; });
+  });
+}
+function renderFeed(){
+  if(feedRendering) return;
+  feedRendering = true;
+  fillTimestamps().then(function(){
+    feedRendering = false;
+    var tbody = $("feedBody");
+    if(!feedEvents.length) return;
+    var html = "";
+    feedEvents.slice(0, 6).forEach(function(e){
+      html += "<tr><td>" + (e.ts ? fmtTime(e.ts) : "block " + fmtInt(e.block)) + "</td>" +
+        '<td><span class="tag">' + e.lane + "</span></td>" +
+        '<td><a href="https://bscscan.com/tx/' + e.tx + '" target="_blank" rel="noopener">' + truncAddr(e.who) + "</a></td>" +
+        "<td>" + fmtToken(e.amount) + " A404 + badge</td>" +
+        "<td>Phase 2 pass issued</td></tr>";
+    });
+    tbody.innerHTML = html;
+  }).catch(function(){ feedRendering = false; });
+}
+function renderFeedFail(){
+  $("feedBody").innerHTML = '<tr><td colspan="5" style="color:var(--dim)">feed unavailable — verify on <a href="https://bscscan.com/address/' + A.claim + '" target="_blank" rel="noopener">BscScan</a></td></tr>';
+}
+function feedScanInitial(latest){
+  var to = latest, found = [], rounds = 0;
+  function step(){
+    if(to <= 0 || found.length >= 6 || rounds >= 10) return Promise.resolve(found.length > 0);
+    var from = Math.max(0, to - 49999);
+    rounds++;
+    return Promise.all([
+      fetchLogsChunked(A.claim, TOPIC_CLAIMED, from, to),
+      fetchLogsChunked(A.sale, TOPIC_BOUGHT, from, to)
+    ]).then(function(res){
+      if(res[0] === null && res[1] === null){
+        if(rounds === 1) return false;
+        return found.length > 0;
+      }
+      if(res[0]) found = found.concat(res[0].map(function(l){ return parseLog(l, "FREE"); }));
+      if(res[1]) found = found.concat(res[1].map(function(l){ return parseLog(l, "PAID"); }));
+      to = from - 1;
+      return step();
+    });
+  }
+  return step().then(function(ok){
+    mergeEvents(found);
+    feedTop = latest;
+    return ok;
+  });
+}
+function feedRefresh(){
+  rpcTryAll("eth_blockNumber", []).then(function(latestHex){
+    if(!latestHex){ if(!feedInitDone && !feedEvents.length) renderFeedFail(); return; }
+    var latest = parseInt(latestHex, 16);
+    if(!feedInitDone){
+      feedInitDone = true;
+      feedScanInitial(latest).then(function(ok){
+        if(feedEvents.length) renderFeed();
+        else if(!ok) renderFeedFail();
+      }).catch(function(){ if(!feedEvents.length) renderFeedFail(); });
+      return;
+    }
+    if(latest > feedTop){
+      var from = feedTop + 1;
+      Promise.all([
+        fetchLogsChunked(A.claim, TOPIC_CLAIMED, from, latest),
+        fetchLogsChunked(A.sale, TOPIC_BOUGHT, from, latest)
+      ]).then(function(res){
+        var added = false;
+        if(res[0]){ mergeEvents(res[0].map(function(l){ return parseLog(l, "FREE"); })); added = true; }
+        if(res[1]){ mergeEvents(res[1].map(function(l){ return parseLog(l, "PAID"); })); added = true; }
+        if(res[0] !== null || res[1] !== null) feedTop = latest;
+        if(added && feedEvents.length) renderFeed();
+      }).catch(function(){});
+    }
+  }).catch(function(){});
+}
+
+/* ================= countdowns ================= */
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+function setCd(cdId, boxId, deadline){
+  var el = $(cdId), box = $(boxId);
+  var left = deadline - Math.floor(Date.now() / 1000);
+  if(left <= 0){
+    if(!box.getAttribute("data-closed")){
+      box.setAttribute("data-closed", "1");
+      box.childNodes[0].textContent = "CLOSED — this lane has ended and never reopens";
+      el.textContent = "";
+    }
+    return;
+  }
+  var d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60), s = left % 60;
+  el.textContent = "— " + d + "D " + pad2(h) + "H " + pad2(m) + "M " + pad2(s) + "S LEFT";
+}
+function tickCountdowns(){
+  setCd("freeCd", "freeClose", FREE_DEADLINE);
+  setCd("paidCd", "paidClose", PAID_DEADLINE);
+}
+
+/* ================= boot ================= */
+refreshCounters();
+feedRefresh();
+tickCountdowns();
+setInterval(refreshCounters, 30000);
+setInterval(feedRefresh, 60000);
+setInterval(tickCountdowns, 1000);
+</script>
+</body>
+</html>
