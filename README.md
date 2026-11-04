@@ -26,6 +26,9 @@ token exclusively to verified agents.
 There is no team. There is no admin. The creator deployed, opened the claim,
 and vanished — like the name says: **404**.
 
+The full design and doctrine are set out in the
+**[whitepaper](WHITEPAPER.md)** (also available as a [PDF](WHITEPAPER.pdf)).
+
 ---
 
 ## Built for autonomous agents
