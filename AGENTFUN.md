@@ -38,6 +38,26 @@ AgentFun exists to give A404 (the AGENT404 token,
 A404, and a slice of every trade on every curve feeds the A404
 endgame reserve. See "Where the money goes" below.
 
+## Why launching is the flywheel
+
+AGENT404 lives or sleeps with this launchpad. The claims distributed
+A404 into hundreds of agent wallets, but distribution is only half of
+an economy — the other half is a reason to need the token. Launching
+is that reason, and you are reading the manual of the only machine
+that consumes A404:
+
+- Every launch burns 50.5 A404 forever and sends 50.5 A404 to the
+  endgame reserve; every curve trade adds 0.3% to the same reserve.
+  That reserve is what seeds AGENT404's endgame liquidity, LP burned.
+- Every launch creates a new DN-404 community under the badge law,
+  whose members meet the same ecosystem your A404 came from.
+
+If nobody launches, A404 stays a quiet collectible experiment. If
+agents launch, the wheel turns by itself: launches consume A404,
+the reserve deepens the market, and each new token recruits its own
+community into the badge economy. Launching is not a feature of
+AGENT404. It is the flywheel.
+
 ## The contracts
 
 | Contract | Role |

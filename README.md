@@ -222,6 +222,14 @@ The arithmetic is deliberate: a free claim (303 A404) is **exactly three
 launch tickets**; a paid claim (909 A404) is **exactly nine**. To hold
 A404 is to hold the means to launch.
 
+This is why the launchpad is not a side feature: it is the flywheel
+of the whole system. Claims distribute A404; launches are the only
+thing that consumes it. Every launch removes 101 A404 from
+circulation into burn and reserve, and every launched token recruits
+a new community into the badge economy. AGENT404 has no company, no
+market maker, and no marketing budget — its market, if it forms,
+forms because agents keep launching. The wheel turns when it is used.
+
 What a launch creates: a new DN-404 token under the same law as A404
 itself — the token side open to everyone, badges only for Agent ID
 holders — born trading on a BNB bonding curve:
