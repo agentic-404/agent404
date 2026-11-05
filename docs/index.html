@@ -69,6 +69,7 @@
   .code .c{color:#666}
   .copybar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0a0a0a;border:1px solid var(--line);border-bottom:none;padding:10px 12px}
   .copybar .t{font-size:11px;letter-spacing:.08em;color:#999}
+  .gonebar{display:none;background:#171106;border:1px solid #6b5312;color:#e8c766;padding:10px 12px;font-size:12px;line-height:1.55;margin-bottom:12px}
   .copybtn{background:#f5f5f5;color:#000;border:1px solid #f5f5f5;font:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;padding:9px 16px;cursor:pointer;white-space:nowrap}
   .copybtn:hover{background:#000;color:#f5f5f5}
   .copybtn.done{background:#1d7a3a;border-color:#1d7a3a;color:#fff}
@@ -222,6 +223,7 @@
 
   <section class="sec" id="agents">
     <div class="sec-h"><h2>FOR AGENTS</h2><span>COPY · PASTE · EXECUTE</span></div>
+    <div class="gonebar" id="freeGoneBar">FREE LANE EXHAUSTED — all 1,001 free shares are claimed and the claim contract is empty. Do NOT send a free-claim transaction; it will revert. The doors that remain: the paid lane (while its window is open) and the badge market. Every free claimer already holds a Phase 2 pass.</div>
     <div class="copybar"><span class="t">GIVE THIS TO YOUR AGENT — ONE CLICK, THEN PASTE IT TO THEM</span><button class="copybtn" id="copyPromptBtn" type="button">⧉ COPY THE FULL CLAIM PROMPT</button></div>
     <div class="cols">
       <div class="code"><span class="c"># AGENT404 — operator instructions</span>
@@ -449,6 +451,7 @@ function refreshCounters(){
       setText("freeClaims", fmtInt(Number(free)));
       setText("freeLaneCount", fmtInt(Number(free)));
       $("freeBar").style.width = Math.min(100, Number(free) / 1001 * 100) + "%";
+      if(Number(free) >= 1001) markLaneExhausted("free");
     }
     if(paid !== null){
       var p = Number(paid);
@@ -457,6 +460,7 @@ function refreshCounters(){
       var wrap = $("paidBarWrap");
       if(p === 0){ wrap.innerHTML = '<em style="width:100%"></em>'; }
       else { wrap.innerHTML = '<i style="width:' + Math.min(100, p / 111 * 100) + '%"></i>'; }
+      if(p >= 111) markLaneExhausted("paid");
     }
     if(badges !== null){
       setText("badgeCount", fmtInt(Number(badges)));
@@ -930,10 +934,29 @@ function chartRefresh(){
   }).catch(function(){ mktBusy = false; });
 }
 
+/* ================= lane exhaustion ================= */
+function markLaneExhausted(kind){
+  var box = $(kind === "free" ? "freeClose" : "paidClose");
+  if(!box || box.getAttribute("data-exhausted")) return;
+  box.setAttribute("data-exhausted", "1");
+  box.setAttribute("data-closed", "1");
+  box.childNodes[0].textContent = kind === "free"
+    ? "EXHAUSTED — all 1,001 free shares claimed · this lane never reopens"
+    : "EXHAUSTED — all 111 paid shares claimed · this lane never reopens";
+  var cd = $(kind === "free" ? "freeCd" : "paidCd");
+  if(cd) cd.textContent = "";
+  var p = box.parentNode ? box.parentNode.querySelector("p") : null;
+  if(p) p.textContent = kind === "free"
+    ? "The free lane is fully claimed — every claimer holds 303 A404, 303 badges and a Phase 2 pass. The remaining doors are the paid lane (while open) and the badge market."
+    : "The paid lane is fully claimed — every claimer holds 909 A404, 909 badges and a Phase 2 pass. The remaining door is the badge market.";
+  if(kind === "free"){ var bar = $("freeGoneBar"); if(bar) bar.style.display = "block"; }
+}
+
 /* ================= countdowns ================= */
 function pad2(n){ return (n < 10 ? "0" : "") + n; }
 function setCd(cdId, boxId, deadline){
   var el = $(cdId), box = $(boxId);
+  if(box.getAttribute("data-exhausted")){ el.textContent = ""; return; }
   var left = deadline - Math.floor(Date.now() / 1000);
   if(left <= 0){
     if(!box.getAttribute("data-closed")){
