@@ -465,6 +465,7 @@ function refreshCounters(){
     if(supply !== null) setText("supplyCount", fmtToken(supply));
     if(listings !== null) setText("mktListings", fmtInt(Number(listings)));
     if(floor !== null) setText("mktFloor", floor === 0n ? "—" : fmtToken(floor));
+    if(floor !== null) liveFloorWei = floor;
     if(mSales !== null) setText("mktSales", fmtInt(Number(mSales)));
 
     if(l1 !== null && l2 !== null){
@@ -677,10 +678,11 @@ var TOPIC_CANCEL  = "0xc41d93b8bfbf9fd7cf5bfe271fd649ab6a6fec0ea101c23b82a2a28ec
 var TOPIC_SOLD    = "0xa70b1a854695e7921b122988e216d3a6cd10ed799017c67b1ff231967e6bf56d";
 var TOPIC_CLEANED = "0x3db45b70b11615844509a38cfa92c8b3b1f3bd4866cc62af09c8ab1b60994723";
 var MKT_TOPICS = [TOPIC_LISTED, TOPIC_PRICE, TOPIC_CANCEL, TOPIC_SOLD, TOPIC_CLEANED];
-var mktEvents = [], mktTop = 0, mktInitDone = false, mktBusy = false, mktBlockTs = {};
+var mktEvents = [], mktTop = 0, mktInitDone = false, mktBusy = false, mktBlockTs = {}, liveFloorWei = null;
 function logsMultiOnce(from, to){
   return rpcTryAll("eth_getLogs", [{address:A.market, fromBlock:hex(from), toBlock:hex(to), topics:[MKT_TOPICS]}]);
 }
+function waitMs(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 function fetchMktChunked(from, to){
   return logsMultiOnce(from, to).then(function(res){
     if(Array.isArray(res)) return res;
@@ -693,7 +695,9 @@ function fetchMktChunked(from, to){
         });
       });
     }
-    return null;
+    return waitMs(1500).then(function(){ return logsMultiOnce(from, to); }).then(function(res2){
+      return Array.isArray(res2) ? res2 : null;
+    });
   });
 }
 function parseMktLog(l){
@@ -753,6 +757,22 @@ function renderSpark(latestBlock, latestTs){
   if(!s.pts.length){
     box.innerHTML = '<div class="chart-note">no market events yet — the first listing draws this line</div>';
     setText("mktMinMax", "NO LISTINGS YET");
+    return;
+  }
+  if(!s.pts.length && liveFloorWei !== null && liveFloorWei > 0n){
+    var lf = Number(liveFloorWei) / 1e18;
+    var llo = lf * 0.9, lhi = lf * 1.1;
+    var ly = 12 + (lhi - lf) / (lhi - llo) * 58;
+    box.innerHTML =
+      '<svg viewBox="0 0 640 96">' +
+      '<line x1="8" y1="' + ly.toFixed(1) + '" x2="632" y2="' + ly.toFixed(1) + '" stroke="#2b2b2b" stroke-dasharray="3 4"/>' +
+      '<circle cx="632" cy="' + ly.toFixed(1) + '" r="9" fill="rgba(255,255,255,.16)"/>' +
+      '<circle cx="632" cy="' + ly.toFixed(1) + '" r="3.6" fill="#fff"/>' +
+      '<text x="622" y="' + Math.max(10, ly - 10).toFixed(1) + '" fill="#f2f2f2" font-size="11" text-anchor="end">' + esc(fmtToken(liveFloorWei)) + '</text>' +
+      '<text x="8" y="92" fill="#666" font-size="9">full history still loading from chain — showing the live floor</text>' +
+      '<text x="632" y="92" fill="#666" font-size="9" text-anchor="end">' + esc(fmtTime(latestTs)) + '</text>' +
+      '</svg>';
+    setText("mktMinMax", "LIVE FLOOR · HISTORY LOADING");
     return;
   }
   var verts = [], min = null, max = null, i, p;
@@ -831,6 +851,7 @@ function renderLadder(rows){
     return;
   }
   rows.sort(function(a, b){ return a.price < b.price ? -1 : (a.price > b.price ? 1 : 0); });
+  liveFloorWei = rows[0].price;
   var floor = rows[0].price;
   var maxP = Number(rows[rows.length - 1].price) / 1e18;
   var axisMax = Math.max(maxP * 1.15, Number(floor) / 1e18 * 2);
@@ -866,20 +887,20 @@ function refreshLadder(){
   }).catch(function(){});
 }
 function chartScanInitial(latest){
-  var to = latest, rounds = 0, foundAny = false, emptyAfterFound = 0;
+  var to = latest, rounds = 0, foundAny = false, emptyAfterFound = 0, clean = true;
   function step(){
-    if(to <= 0 || rounds >= 16 || emptyAfterFound >= 1) return Promise.resolve(foundAny);
+    if(to <= 0 || rounds >= 20 || emptyAfterFound >= 1) return Promise.resolve(clean);
     var from = Math.max(0, to - 49999);
     rounds++;
     return fetchMktChunked(from, to).then(function(res){
-      if(res === null) return foundAny;
-      if(res.length){ foundAny = true; mergeMktEvents(res.map(parseMktLog)); }
+      if(res === null){ clean = false; }
+      else if(res.length){ foundAny = true; mergeMktEvents(res.map(parseMktLog)); }
       else if(foundAny){ emptyAfterFound++; }
       to = from - 1;
-      return step();
+      return waitMs(700).then(step);
     });
   }
-  return step().then(function(ok){ mktTop = latest; return ok; });
+  return step().then(function(cleanScan){ mktTop = latest; return cleanScan; });
 }
 function chartScanForward(latest){
   var from = mktTop + 1;
@@ -898,8 +919,8 @@ function chartRefresh(){
     if(!latestHex){ mktBusy = false; return; }
     var latest = parseInt(latestHex, 16);
     var job = mktInitDone ? chartScanForward(latest) : chartScanInitial(latest);
-    mktInitDone = true;
-    return job.then(function(){
+    return job.then(function(cleanScan){
+      if(cleanScan) mktInitDone = true;
       return fillMktTs(latest).then(function(){
         var lts = mktBlockTs[latest] || Math.floor(Date.now() / 1000);
         mktBusy = false;
@@ -970,7 +991,7 @@ function tickCountdowns(){
 refreshCounters();
 feedRefresh();
 refreshLadder();
-chartRefresh();
+setTimeout(chartRefresh, 4000);
 tickCountdowns();
 setInterval(refreshCounters, 30000);
 setInterval(feedRefresh, 60000);
