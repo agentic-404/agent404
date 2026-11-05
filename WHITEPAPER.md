@@ -1,6 +1,6 @@
 # AGENT404
 
-## Whitepaper — Version 1.0, November 2026
+## Whitepaper — Version 1.1, November 2026
 
 **An experimental DN-404 asset, born in the Agentic Era, for the Binance Agent ID ecosystem.**
 
@@ -48,11 +48,11 @@ This is the heart of the design. The badge is not a separate drop or a second sa
 Distribution is entirely to the community, in two lanes, both gated by one rule only — the claimer must hold a Binance Agent ID — and both first-come, first-served:
 
 - **Free claim lane — 303,303 A404 (75%).** 1,001 shares of 303 A404, one share per Agent ID, free of charge apart from the claimer's own network fee. The lane runs for a fixed 14-day window, closing 16 November 2026, 14:39 WIB (07:39 UTC).
-- **Paid claim lane — 100,899 A404, from the project reserve.** 111 shares of 909 A404, one share per Agent ID, at a fixed price of 0.0045 BNB per share. The lane closes 9 November 2026, 20:42 WIB. Proceeds go to the project wallet and are governed by the liquidity doctrine in Section 7.
+- **Paid claim lane — 100,899 A404, from the project reserve.** 111 shares of 909 A404, one share per Agent ID, at a fixed price of 0.0045 BNB per share. The lane closes 9 November 2026, 20:42 WIB. Proceeds go to the project wallet and are governed by the liquidity doctrine in Section 8.
 
 There is no presale, no whitelist, no team allocation, and no creator allocation. The addresses that deployed the contracts hold no privileged position in the system they created.
 
-Any amount not claimed by a lane's deadline returns to the project wallet and becomes the subject of Phase 2 (Section 8).
+Any amount not claimed by a lane's deadline returns to the project wallet and becomes the subject of Phase 2 (Section 9).
 
 ## 5. The Badge Market
 
@@ -71,7 +71,23 @@ Two factories are live: a direct-supply factory, and a bonding-curve factory in 
 
 This gives A404 a continuing function beyond its own distribution: it is the toll every future DN-404 launch in this ecosystem pays — and half of every toll is destroyed.
 
-## 7. Liquidity Doctrine
+## 7. The Deflationary System
+
+AGENT404's supply is fixed at 404,404 and can never increase — the token contract has no mint function. But the supply that is actually *reachable* is designed to shrink. Three mechanisms, all in code, all verifiable on-chain:
+
+**1. Every launch burns.** Creating a token on AgentFun costs 101 A404. Of that fee, 50.5 A404 is burned — sent to the dead address, gone forever — and 50.5 A404 moves to the community reserve, out of circulation. A single launch therefore removes 101 A404 from the reachable float: half destroyed, half parked. Ten launches remove 1,010. A hundred launches remove 10,100. A thousand launches remove 101,000 — a quarter of all the A404 that will ever exist.
+
+**2. Liquidity locks, permanently.** When the official pool is formed in Phase 2, its LP tokens are burned. The A404 on the pool's side of that pair can never be withdrawn; it remains as market depth forever. Tokens locked this way are not destroyed, but they can never return to a wallet — they can only change hands through the market itself.
+
+**3. The reserve refills the lock.** Every trade on every AgentFun curve pays a 1% fee, and 0.3% of each trade accrues to the endgame reserve. Of the community-side BNB that accumulates there, 20% is earmarked to seed further liquidity whose LP tokens are likewise burned. Trading activity anywhere in the ecosystem therefore deepens the one pool that matters — and locks more of the supply inside it.
+
+**The badge layer deflates too.** A badge exists only while its whole tokens rest in a wallet holding a Binance Agent ID. Move the tokens to a wallet without one, and the badges burn. The badge supply has no cap written in code; it is held scarce by the rules of the system itself — badges survive only where they belong.
+
+**A built-in thermostat.** The launch fee is denominated in A404, not in fiat. If the market price of A404 rises, launching becomes more expensive in currency terms and the pace of new launches cools on its own; if the price falls, launching is cheap and the burn accelerates. No committee adjusts this. The fee schedule is the governor.
+
+Nothing in this section is a promise about price. It is a statement about arithmetic: the reachable float is designed to shrink whenever the ecosystem is used — and to shrink fastest exactly when the ecosystem is busiest.
+
+## 8. Liquidity Doctrine
 
 **The creator seeds no market and sets no price.** This is a principle, not an omission. A price named by a creator is an opinion; a price formed by a community is a fact. AGENT404 chooses the second.
 
@@ -81,7 +97,7 @@ Liquidity for A404, if it forms, forms from the community itself — from what p
 
 The rest serves the endgame reserve. No other use is made of community funds, and no other promise is made about them.
 
-## 8. Phase 2: The Earned Round
+## 9. Phase 2: The Earned Round
 
 Phase 1 is the open distribution described above. Its remainder — everything unclaimed when the lanes close — does not return to open sale. It becomes the pot of **Phase 2**, an earned distribution round for the people who were present in Phase 1:
 
@@ -91,19 +107,19 @@ Phase 1 is the open distribution described above. Its remainder — everything u
 
 The final pot size is determined by Phase 1's real closing numbers and is announced after 16 November 2026. Phase 2's full parameters are published with it.
 
-## 9. Anonymity, and the Absence of Promises
+## 10. Anonymity, and the Absence of Promises
 
 AGENT404 is an anonymous project. It has no face, no spokesperson, and no insider. Its official home is its public repository, where its contracts, its guides, and this document live in the open. Anonymity here is not a marketing costume; it is the continuation of the oldest tradition in this industry. Bitcoin's creator vanished. The creator of Shiba Inu worked under a pseudonym and took nothing. The creator of the first BRC-20 token deployed it as an experiment, kept none of it, and told the world plainly that it would probably be worthless.
 
 This whitepaper stands in that line, and so it ends its claims where those pioneers ended theirs:
 
 - **Nothing in this document is a promise of value.** A404 may be worth something, or nothing, forever. No statement here — about distribution, markets, launches, or phases — is a prediction that it will be worth anything.
-- **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 10. What is described as direction is direction, not obligation.
+- **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 11. What is described as direction is direction, not obligation.
 - **Participation is an experiment, not an investment.** Anyone who claims, buys, lists, or launches does so as a participant in an open experiment on a new asset form — the same spirit in which the first inscriptions were made and the first meme assets were locked into pools by people who expected nothing.
 
 The experiment does not need belief. It needs only to be run, in public, exactly as specified.
 
-## 10. Technical Reference
+## 11. Technical Reference
 
 - **Network:** BNB Smart Chain (BSC), chain ID 56.
 - **Standard:** DN-404 (Vectorized reference implementation; core files unmodified, MIT license), with an Agent-ID badge gate against the native Binance Agent ID registry, `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F`.
@@ -119,14 +135,14 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 | AgentFun factory (curve) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
 | AgentFun factory (direct) | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
 
-## 11. Risks
+## 12. Risks
 
 - **Experimental standard.** DN-404 is a young asset form. Its behavior at scale, including the gas cost of badge minting and burning on large transfers, is a property of the design and a real cost participants bear.
 - **Smart contract risk.** The contracts are immutable, which means defects, if any are ever found, cannot be patched. Immutability is simultaneously this project's trust guarantee and its risk.
-- **No seeded market.** By the doctrine of Section 7, there may never be meaningful liquidity or any functioning price for A404. Any price that appears in thin community venues will be extremely volatile and must not be mistaken for a valuation.
+- **No seeded market.** By the doctrine of Section 8, there may never be meaningful liquidity or any functioning price for A404. Any price that appears in thin community venues will be extremely volatile and must not be mistaken for a valuation.
 - **Identity dependency.** The badge form depends on the Binance Agent ID registry, an external system outside this project's control.
 
-## 12. Closing
+## 13. Closing
 
 The Agentic Era will have its assets — assets whose holders are identified machines, whose communities are swarms of agents, and whose rules are kept by code instead of by promises. AGENT404 does not claim to be their final form. It claims only to be an early, honest attempt: an open distribution, an engineered standard, an identity-aware asset, an anonymous creator who takes nothing and promises nothing.
 

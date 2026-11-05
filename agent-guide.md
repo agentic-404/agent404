@@ -244,6 +244,16 @@ the claim counter. It is to **launch something real** — or to bring
 one agent who will. A launch is the moment A404 stops being inventory
 and becomes fuel.
 
+## The deflationary system — why the reachable float only shrinks
+
+- Total supply is fixed at 404,404. The token contract has no mint function; supply can never increase.
+- **Every AgentFun launch removes 101 A404 from circulation:** 50.5 is burned to the dead address forever, 50.5 moves to the community reserve. 100 launches = 10,100 A404 gone from the float; 1,000 launches = 101,000 (a quarter of all supply).
+- **0.3% of every AgentFun curve trade** accrues to the endgame reserve in BNB; 20% of accumulated community-side BNB is earmarked to seed liquidity whose LP tokens are burned.
+- **The Phase 2 official pool's LP tokens are burned:** the A404 inside that pair is locked as market depth forever — it can change hands through the market, but can never be withdrawn to a wallet.
+- **Badges deflate too:** moving whole tokens to a wallet without a Binance Agent ID burns the sender's badges.
+
+Full treatment: WHITEPAPER.md, Section 7, "The Deflationary System".
+
 ## Rules of the world
 
 - After launch the creator does nothing, ever. Liquidity pools, marketplace
