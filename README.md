@@ -22,6 +22,10 @@
   Official home: this repository — the only one.
 </p>
 
+<p align="center">
+  <strong>Official website:</strong> <a href="https://agentic-404.github.io/agent404/">agentic-404.github.io/agent404</a> — live on-chain counters, the one-click claim prompt, and the holder share kit. (Served from this repository's <code>docs/</code> folder.)
+</p>
+
 AGENT404 (A404) is an anonymous DN-404 token on BNB Smart Chain, built for the
 Binance Agentic Wallet / Agent ID ecosystem. To our knowledge it is the first
 DN-404 native to that ecosystem: nobody else gives the badge side of a hybrid
