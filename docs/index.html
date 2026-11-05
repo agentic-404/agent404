@@ -70,6 +70,8 @@
   .copybar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0a0a0a;border:1px solid var(--line);border-bottom:none;padding:10px 12px}
   .copybar .t{font-size:11px;letter-spacing:.08em;color:#999}
   .gonebar{display:none;background:#171106;border:1px solid #6b5312;color:#e8c766;padding:10px 12px;font-size:12px;line-height:1.55;margin-bottom:12px}
+  .px-big{font-size:22px;margin:2px 0 6px}
+  .px-big .px-unit{font-size:11px;color:var(--mut);margin-left:8px;letter-spacing:.06em}
   .copybtn{background:#f5f5f5;color:#000;border:1px solid #f5f5f5;font:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;padding:9px 16px;cursor:pointer;white-space:nowrap}
   .copybtn:hover{background:#000;color:#f5f5f5}
   .copybtn.done{background:#1d7a3a;border-color:#1d7a3a;color:#fff}
@@ -219,6 +221,13 @@
       <div class="chart-sub">ACTIVE LISTINGS BY PRICE</div>
       <div id="mktLadder"><div class="chart-note">reading listings…</div></div>
     </div>
+    <div class="chartbox" id="pxPanel">
+      <div class="chart-h"><span>TOKEN PRICE · A404/BNB</span><span id="pxPct">—</span></div>
+      <div class="px-big"><span id="pxPrice">—</span><span class="px-unit">USDT / A404</span></div>
+      <div id="pxChart"><div class="chart-note">reading the pair from chain…</div></div>
+      <div class="chart-sub"><span>PRICE · SINCE PAIR OPEN</span><span id="pxMinMax"></span></div>
+      <div class="chart-note">reconstructed from the pair's own Sync events · USDT at the current BNB rate · no server, no oracle</div>
+    </div>
   </section>
 
   <section class="sec" id="agents">
@@ -317,7 +326,9 @@ var A = {
   sale:   "0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9",
   market: "0x076Ea27B59aC73738b8c970d727aCCb4f77685A7",
   funV1:  "0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00",
-  funV2:  "0x320eaE47B443Bcf15eAf73B75B5e11656CB12315"
+  funV2:  "0x320eaE47B443Bcf15eAf73B75B5e11656CB12315",
+  pair:   "0x6116d6B62b35aAa9aCbC118eD7c51861c085de09",
+  usdtPair: "0x16b9a82891338f9bA80E2D6970FddA79D1eb0daE"
 };
 var SEL = {
   totalSupply:   "0x18160ddd",
@@ -438,7 +449,9 @@ function refreshCounters(){
     callReq(A.funV2,  SEL.totalLaunches), /* 10 */
     callReq(A.funV2,  SEL.totalFees),     /* 11 */
     callReq(A.funV2,  SEL.totalBurned),   /* 12 */
-    {method:"eth_blockNumber", params:[]} /* 13 */
+    {method:"eth_blockNumber", params:[]}, /* 13 */
+    callReq(A.pair, "0x0902f1ac"),       /* 14 A404/WBNB reserves */
+    callReq(A.usdtPair, "0x0902f1ac")    /* 15 USDT/WBNB reserves */
   ];
   return rpcBatch(reqs).then(function(r){
     var free = toBig(r[0]), paid = toBig(r[1]), badges = toBig(r[2]), supply = toBig(r[3]);
@@ -481,6 +494,17 @@ function refreshCounters(){
     if(f1 !== null && f2 !== null) setText("funFees", fmtToken(f1 + f2));
     if(b1 !== null && b2 !== null) setText("funBurned", fmtToken(b1 + b2));
     if(block !== null) setText("blockTag", "BLOCK " + fmtInt(Number(block)) + " · BSC MAINNET");
+    var resA = r[14], resU = r[15];
+    if(typeof resA === "string" && resA.length >= 130 && typeof resU === "string" && resU.length >= 130){
+      var a0 = BigInt("0x" + resA.slice(2, 66)), a1 = BigInt("0x" + resA.slice(66, 130));
+      var u0 = BigInt("0x" + resU.slice(2, 66)), u1 = BigInt("0x" + resU.slice(66, 130));
+      if(a0 > 0n && u1 > 0n){
+        spotBnb = Number(a1) / Number(a0);
+        bnbUsdt = Number(u0) / Number(u1);
+        spotUsd = spotBnb * bnbUsdt;
+        renderPx();
+      }
+    }
   }).catch(function(){});
 }
 
@@ -952,6 +976,157 @@ function markLaneExhausted(kind){
   if(kind === "free"){ var bar = $("freeGoneBar"); if(bar) bar.style.display = "block"; }
 }
 
+/* ================= token price (A404/BNB pair) ================= */
+var SYNC_TOPIC = "0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1";
+var pxEvents = [], pxTop = 0, pxInitDone = false, pxBusy = false, pxTsMap = {};
+var spotBnb = null, bnbUsdt = null, spotUsd = null;
+function fmtUsd(v){
+  if(v === null || !isFinite(v)) return "—";
+  if(v >= 1) return v.toFixed(2);
+  if(v >= 0.01) return v.toFixed(4);
+  if(v >= 0.0001) return v.toFixed(10).replace(/0+$/, "").replace(/\.$/, "");
+  var s = v.toFixed(12).replace(/0+$/, "").replace(/\.$/, "");
+  return s === "0" ? "0" : s;
+}
+function parseSyncLog(l){
+  var d = (l.data || "").slice(2);
+  if(d.length < 128) return null;
+  var r0 = BigInt("0x" + d.slice(0, 64)), r1 = BigInt("0x" + d.slice(64, 128));
+  if(r0 === 0n) return null;
+  return { block: parseInt(l.blockNumber, 16), idx: parseInt(l.logIndex, 16), price: Number(r1) / Number(r0), key: l.transactionHash + ":" + l.logIndex };
+}
+function mergePx(logs){
+  var seen = {};
+  pxEvents.forEach(function(e){ seen[e.key] = true; });
+  logs.forEach(function(raw){ var e = parseSyncLog(raw); if(e && !seen[e.key]){ seen[e.key] = true; pxEvents.push(e); } });
+  pxEvents.sort(function(a, b){ return a.block - b.block || a.idx - b.idx; });
+}
+function pxFetch(from, to){
+  return fetchLogsChunked(A.pair, SYNC_TOPIC, from, to).then(function(res){
+    if(Array.isArray(res)) return res;
+    return waitMs(1500).then(function(){ return fetchLogsChunked(A.pair, SYNC_TOPIC, from, to); }).then(function(res2){
+      return Array.isArray(res2) ? res2 : null;
+    });
+  });
+}
+function pxScanInitial(latest){
+  var to = latest, rounds = 0, clean = true;
+  function step(){
+    if(to <= 0 || rounds >= 20) return Promise.resolve(clean);
+    var from = Math.max(0, to - 49999);
+    rounds++;
+    return pxFetch(from, to).then(function(res){
+      if(res === null){ clean = false; }
+      else if(res.length){ mergePx(res); }
+      to = from - 1;
+      return waitMs(700).then(step);
+    });
+  }
+  return step().then(function(c){ pxTop = latest; return c; });
+}
+function pxScanForward(latest){
+  if(latest <= pxTop) return Promise.resolve(true);
+  return pxFetch(pxTop + 1, latest).then(function(res){
+    if(res === null) return false;
+    if(res.length) mergePx(res);
+    pxTop = latest;
+    return true;
+  });
+}
+function pxFillTs(){
+  var missing = [];
+  pxEvents.forEach(function(e){ if(pxTsMap[e.block] === undefined && missing.indexOf(e.block) < 0) missing.push(e.block); });
+  missing = missing.slice(0, 60);
+  if(!missing.length) return Promise.resolve();
+  var reqs = missing.map(function(b){ return { method: "eth_getBlockByNumber", params: ["0x" + b.toString(16), false] }; });
+  return rpcBatch(reqs).then(function(rs){
+    rs.forEach(function(res, i){
+      if(res && res.timestamp) pxTsMap[missing[i]] = parseInt(res.timestamp, 16);
+    });
+  }).catch(function(){});
+}
+function pxPts(nowTs){
+  return pxEvents.map(function(e){
+    var ts = pxTsMap[e.block];
+    if(ts === undefined) ts = Math.floor(nowTs - (pxTop - e.block) * 0.45);
+    return { ts: ts, price: e.price };
+  });
+}
+function renderPx(){
+  var box = $("pxChart");
+  if(!box) return;
+  var nowTs = Math.floor(Date.now() / 1000);
+  var pts = pxPts(nowTs);
+  if(spotBnb !== null && pts.length){
+    var refT = nowTs - 86400, ref = null, lbl = "24H", i;
+    for(i = 0; i < pts.length; i++){ if(pts[i].ts <= refT) ref = pts[i].price; else break; }
+    if(ref === null){ ref = pts[0].price; lbl = "SINCE OPEN"; }
+    if(ref > 0){
+      var pct = (spotBnb / ref - 1) * 100;
+      setText("pxPct", (pct >= 0 ? "+" : "-") + Math.abs(pct).toFixed(1) + "% · " + lbl);
+    }
+  }
+  if(spotUsd !== null) setText("pxPrice", "$" + fmtUsd(spotUsd));
+  if(!pts.length){
+    if(spotUsd === null) return;
+    var v = spotUsd, lo = v * 0.9, hi = v * 1.1;
+    var y = 12 + (hi - v) / (hi - lo) * 58;
+    box.innerHTML = '<svg viewBox="0 0 640 96">' +
+      '<line x1="8" y1="' + y.toFixed(1) + '" x2="632" y2="' + y.toFixed(1) + '" stroke="#2b2b2b" stroke-dasharray="3 4"/>' +
+      '<circle cx="632" cy="' + y.toFixed(1) + '" r="9" fill="rgba(255,255,255,.16)"/>' +
+      '<circle cx="632" cy="' + y.toFixed(1) + '" r="3.6" fill="#fff"/>' +
+      '<text x="622" y="' + Math.max(10, y - 10).toFixed(1) + '" fill="#f2f2f2" font-size="11" text-anchor="end">$' + esc(fmtUsd(v)) + '</text>' +
+      '<text x="8" y="92" fill="#666" font-size="9">price history still loading from chain — showing the live price</text>' +
+      '<text x="632" y="92" fill="#666" font-size="9" text-anchor="end">' + esc(fmtTime(nowTs)) + '</text></svg>';
+    setText("pxMinMax", "LIVE · HISTORY LOADING");
+    return;
+  }
+  var t0 = pts[0].ts, t1 = Math.max(nowTs, pts[pts.length - 1].ts);
+  var span = Math.max(1, t1 - t0);
+  var X = function(ts){ return 8 + (ts - t0) / span * 624; };
+  var min = null, max = null, i2, p, verts = [];
+  for(i2 = 0; i2 < pts.length; i2++){
+    p = bnbUsdt ? pts[i2].price * bnbUsdt : null;
+    if(p === null) return;
+    if(min === null || p < min) min = p;
+    if(max === null || p > max) max = p;
+    verts.push({ x: X(pts[i2].ts), v: p });
+  }
+  if(spotUsd !== null){ if(spotUsd < min) min = spotUsd; if(spotUsd > max) max = spotUsd; }
+  var pad = (max - min) * 0.15; if(!(pad > 0)) pad = max * 0.1 || 1;
+  var lo2 = Math.max(0, min - pad), hi2 = max + pad;
+  var Y = function(v2){ return 12 + (hi2 - v2) / (hi2 - lo2) * 58; };
+  var d = "";
+  for(i2 = 0; i2 < verts.length; i2++){
+    var nx = i2 + 1 < verts.length ? verts[i2 + 1].x : 632;
+    if(i2 === 0) d += "M" + verts[i2].x.toFixed(1) + "," + Y(verts[i2].v).toFixed(1);
+    d += " H" + nx.toFixed(1);
+    if(i2 + 1 < verts.length) d += " V" + Y(verts[i2 + 1].v).toFixed(1);
+  }
+  var endV = spotUsd !== null ? spotUsd : verts[verts.length - 1].v;
+  box.innerHTML = '<svg viewBox="0 0 640 96">' +
+    '<path d="' + d + '" fill="none" stroke="#fff" stroke-width="1.6"/>' +
+    '<circle cx="632" cy="' + Y(endV).toFixed(1) + '" r="9" fill="rgba(255,255,255,.16)"/>' +
+    '<circle cx="632" cy="' + Y(endV).toFixed(1) + '" r="3.6" fill="#fff"/>' +
+    '<text x="622" y="' + Math.max(10, Y(endV) - 10).toFixed(1) + '" fill="#f2f2f2" font-size="11" text-anchor="end">$' + esc(fmtUsd(endV)) + '</text>' +
+    '<text x="8" y="92" fill="#666" font-size="9">' + esc(fmtTime(t0)) + '</text>' +
+    '<text x="632" y="92" fill="#666" font-size="9" text-anchor="end">' + esc(fmtTime(nowTs)) + '</text></svg>';
+  setText("pxMinMax", "MIN $" + fmtUsd(min) + " — MAX $" + fmtUsd(max));
+}
+function pxRefresh(){
+  if(pxBusy) return;
+  pxBusy = true;
+  rpcTryAll("eth_blockNumber", []).then(function(latestHex){
+    if(!latestHex) throw new Error("no block");
+    var latest = parseInt(latestHex, 16);
+    var job = pxInitDone ? pxScanForward(latest) : pxScanInitial(latest);
+    return job.then(function(clean){
+      if(clean) pxInitDone = true;
+      return pxFillTs().then(function(){ renderPx(); });
+    });
+  }).catch(function(){}).then(function(){ pxBusy = false; });
+}
+
 /* ================= countdowns ================= */
 function pad2(n){ return (n < 10 ? "0" : "") + n; }
 function setCd(cdId, boxId, deadline){
@@ -1015,6 +1190,8 @@ refreshCounters();
 feedRefresh();
 refreshLadder();
 setTimeout(chartRefresh, 4000);
+setTimeout(pxRefresh, 6000);
+setInterval(pxRefresh, 60000);
 tickCountdowns();
 setInterval(refreshCounters, 30000);
 setInterval(feedRefresh, 60000);
