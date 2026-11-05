@@ -47,6 +47,8 @@
   .bname{font-size:12px;letter-spacing:.08em;margin-top:8px}
   .bstatus{font-size:10.5px;color:var(--dim);letter-spacing:.05em;margin-top:3px}
   .bstatus.listed{color:#e8c766}
+  .bprice{font-size:13px;letter-spacing:.06em;margin-top:6px;color:var(--dim)}
+  .bprice.listed{color:#e8c766}
   .bnote{color:var(--mut);font-size:12px;line-height:1.6;margin-top:10px}
   .card{background:var(--panel);border:1px solid var(--line);padding:16px}
   .card .lbl{font-size:10px;letter-spacing:.22em;color:var(--mut)}
@@ -159,9 +161,9 @@
       <div id="mktLadder"><div class="chart-note">reading listings…</div></div>
     </div>
   </div>
-    <div class="bhead"><span>NEWEST BADGES</span><span class="bhead-r">READ FROM THE MIRROR · EVERY MINUTE</span></div>
-    <div class="bgrid" id="badgeGrid"><div class="chart-note">reading the newest badges from chain…</div></div>
-    <p class="bnote">Every whole A404 in a verified Agent ID wallet is a badge. These are the eight most recently minted — the wall moves as claims land. All badges carry one shared artwork, minted into the token at launch; each is numbered and held by exactly one agent.</p>
+    <div class="bhead"><span>THE BADGE WALL</span><span class="bhead-r">LISTED FIRST · FLOOR → HIGHEST · THEN NEWEST</span></div>
+    <div class="bgrid" id="badgeGrid"><div class="chart-note">reading badges from chain…</div></div>
+    <p class="bnote">The wall works like a marketplace: badges listed on the internal market come first, sorted from the floor price upward, each with its owner's address. The remaining slots show the newest minted badges, marked NOT LISTED. Every badge stays in its owner's wallet until the moment it sells — the market never takes custody.</p>
     <div class="lanes" style="margin-top:12px">
       <div class="lane">
         <h3>FREE LANE</h3><div class="big"><span id="freeLaneCount">—</span> claimed</div>
@@ -935,40 +937,55 @@ function shortAddr(a){ return "0x" + a.slice(2, 6) + "…" + a.slice(a.length - 
 function refreshBadges(){
   var box = $("badgeGrid");
   if(!box) return;
-  rpcBatch([callReq(A.mirror, SEL.totalSupply)]).then(function(r0){
+  rpcBatch([callReq(A.mirror, SEL.totalSupply), callReq(A.market, SEL.activeListings + padArg(0) + padArg(60))]).then(function(r0){
     var total = toBig(r0[0]);
     if(total === null || total <= 0n) return;
     var hi = Number(total);
-    var ids = [];
-    for(var id = hi; id >= Math.max(1, hi - 31); id--) ids.push(id);
-    var reqs = ids.map(function(id){ return callReq(A.mirror, SEL.ownerOf + padArg(id)); });
-    reqs.push(callReq(A.market, SEL.activeListings + padArg(0) + padArg(60)));
+    var listed = decodeListings(r0[1]) || [];
+    listed.sort(function(a, b){ return a.price < b.price ? -1 : (a.price > b.price ? 1 : 0); });
+    if(listed.length > 8) listed = listed.slice(0, 8);
+    var listedIds = {};
+    listed.forEach(function(rw){ listedIds[rw.id.toString()] = true; });
+    var win = [];
+    for(var id = hi; id >= Math.max(1, hi - 39); id--) win.push(id);
+    var reqs = [];
+    listed.forEach(function(rw){ reqs.push(callReq(A.mirror, SEL.ownerOf + padArg(Number(rw.id)))); });
+    var winStart = reqs.length;
+    win.forEach(function(wid){ reqs.push(callReq(A.mirror, SEL.ownerOf + padArg(wid))); });
     var uriIdx = -1;
-    if(badgeImg === null && ids.length){ uriIdx = reqs.length; reqs.push(callReq(A.mirror, SEL.tokenURI + padArg(ids[0]))); }
+    if(badgeImg === null){
+      uriIdx = reqs.length;
+      var uriId = listed.length ? Number(listed[0].id) : hi;
+      reqs.push(callReq(A.mirror, SEL.tokenURI + padArg(uriId)));
+    }
     return rpcBatch(reqs).then(function(r){
-      var listRows = decodeListings(r[ids.length]);
-      var priceById = {};
-      if(listRows) listRows.forEach(function(rw){ priceById[rw.id.toString()] = rw.price; });
       if(badgeImg === null && uriIdx >= 0){
         badgeImg = badgeImageFromUri(decodeAbiString(r[uriIdx])) || "";
       }
       if(!badgeImg) return;
+      function ownerAt(hex){
+        if(typeof hex !== "string" || hex.length < 42) return null;
+        var owner = "0x" + hex.slice(-40);
+        return /^0x0{40}$/.test(owner) ? null : owner;
+      }
       var cards = [];
-      for(var i = 0; i < ids.length && cards.length < 8; i++){
-        var ow = r[i];
-        if(typeof ow !== "string" || ow.length < 42) continue;
-        var owner = "0x" + ow.slice(-40);
-        if(/^0x0{40}$/.test(owner)) continue;
-        cards.push({id: ids[i], owner: owner});
+      listed.forEach(function(rw, i){
+        var ow = ownerAt(r[winStart - listed.length + i]);
+        if(ow) cards.push({id: Number(rw.id), owner: ow, price: rw.price});
+      });
+      for(var j = 0; j < win.length && cards.length < 8; j++){
+        if(listedIds[String(win[j])]) continue;
+        var ow2 = ownerAt(r[winStart + j]);
+        if(ow2) cards.push({id: win[j], owner: ow2, price: null});
       }
       if(!cards.length) return;
       box.innerHTML = cards.map(function(c){
-        var p = priceById[String(c.id)];
-        var st = (p !== undefined)
-          ? '<div class="bstatus listed">LISTED · ' + esc(fmtToken(p)) + ' BNB</div>'
-          : '<div class="bstatus">HELD BY ' + esc(shortAddr(c.owner)) + '</div>';
+        var pr = (c.price !== null)
+          ? '<div class="bprice listed">' + esc(fmtToken(c.price)) + ' BNB</div>'
+          : '<div class="bprice">NOT LISTED</div>';
         return '<div class="bcard"><img src="' + esc(badgeImg) + '" alt="AGENT404 Badge #' + c.id + '" loading="lazy">' +
-          '<div class="bname">BADGE #' + c.id + '</div>' + st + '</div>';
+          '<div class="bname">BADGE #' + c.id + '</div>' + pr +
+          '<div class="bstatus">OWNER ' + esc(shortAddr(c.owner)) + '</div></div>';
       }).join("");
     });
   }).catch(function(){});
