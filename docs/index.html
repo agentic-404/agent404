@@ -146,7 +146,7 @@
     </div>
     <div class="bhead"><span>NEWEST BADGES</span><span class="bhead-r">READ FROM THE MIRROR · EVERY MINUTE</span></div>
     <div class="bgrid" id="badgeGrid"><div class="chart-note">reading the newest badges from chain…</div></div>
-    <p class="bnote">Every whole A404 in a verified Agent ID wallet is a badge. These are the sixteen most recently minted — the wall moves as claims land. All badges carry one shared artwork, minted into the token at launch; each is numbered and held by exactly one agent.</p>
+    <p class="bnote">Every whole A404 in a verified Agent ID wallet is a badge. These are the eight most recently minted — the wall moves as claims land. All badges carry one shared artwork, minted into the token at launch; each is numbered and held by exactly one agent.</p>
     <div class="lanes" style="margin-top:12px">
       <div class="lane">
         <h3>FREE LANE</h3><div class="big"><span id="freeLaneCount">—</span> claimed</div>
@@ -955,7 +955,7 @@ function refreshBadges(){
       }
       if(!badgeImg) return;
       var cards = [];
-      for(var i = 0; i < ids.length && cards.length < 16; i++){
+      for(var i = 0; i < ids.length && cards.length < 8; i++){
         var ow = r[i];
         if(typeof ow !== "string" || ow.length < 42) continue;
         var owner = "0x" + ow.slice(-40);
