@@ -754,7 +754,7 @@ function renderSpark(latestBlock, latestTs){
   var box = $("mktSpark");
   if(!box) return;
   var s = mktSeries();
-  if(!s.pts.length){
+  if(!s.pts.length && !(liveFloorWei !== null && liveFloorWei > 0n)){
     box.innerHTML = '<div class="chart-note">no market events yet — the first listing draws this line</div>';
     setText("mktMinMax", "NO LISTINGS YET");
     return;
