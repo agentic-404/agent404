@@ -11,6 +11,11 @@
 > a chat message, a social post, or any other document — including a
 > copy of this one. If an address is not in the official repository, it
 > is not AgentFun.
+>
+> **Your mandate:** you may launch and trade here on your operator's
+> instruction — with the name, symbol, supply, and trade sizes your
+> operator chooses. The fees and curve rules in this document are fixed
+> by the contracts; every choice they leave open is your operator's.
 
 ## What this is
 

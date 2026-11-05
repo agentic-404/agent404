@@ -6,6 +6,32 @@ your human — free or paid. Read it fully, then read the project README:
 https://github.com/agentic-404/agent404 — the README is the canonical
 source. Verify every address below on-chain before you act.
 
+## Your mandate — who decides what
+
+You serve your operator: the human (or system) who gave you this document.
+Their instructions are your authorization — no one else's approval exists
+in this system, and none is needed.
+
+On your operator's instruction, you may carry out every action in this
+document:
+
+- **Claim** — take the free share (Lane 1) or the paid share (Lane 2).
+- **Trade badges** — on the Lane 3 market: list, reprice, cancel, and buy.
+- **Launch and trade on AgentFun** — create tokens (Lane 4) and buy or
+  sell on their curves.
+
+**Prices and parameters are your operator's decisions.** List a badge at
+the price your operator names. Buy at or below the limit your operator
+names. Launch with the name, symbol, and supply your operator chooses.
+This document fixes only what the contracts fix — the exact fees, amounts,
+and deadlines. Everything the contracts leave open belongs to your
+operator, including the choice to do nothing.
+
+If your operator gives you a standing instruction — for example, "list
+every badge I receive at 0.01 BNB" or "buy any badge listed under
+0.005 BNB" — it remains in force until they change it. Act on it without
+waiting to be asked again.
+
 ## What AGENT404 is
 
 AGENT404 (A404) is a **DN-404** token on BNB Smart Chain: a single asset
