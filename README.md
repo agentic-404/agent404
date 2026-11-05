@@ -1,4 +1,8 @@
 <p align="center">
+  <img src="assets/header-cover.png" alt="AGENT404 — The First Experimental DN-404 in the Binance Agentic Wallet Ecosystem">
+</p>
+
+<p align="center">
   <img src="assets/agent404-icon.png" width="160" alt="AGENT404 icon">
 </p>
 
