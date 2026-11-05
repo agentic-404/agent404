@@ -144,6 +144,21 @@
       <div class="card"><div class="lbl">BADGES IN CIRCULATION</div><div class="big" id="badgeCount">—</div><div class="sub">DN-404 badges live on the mirror</div><div class="bar"><i id="badgeBar" style="width:0%"></i></div></div>
       <div class="card"><div class="lbl">SUPPLY</div><div class="big" id="supplyCount">404,404</div><div class="sub">fixed forever · no mint function</div><div class="bar"><i style="width:100%"></i></div></div>
     </div>
+  <div id="market">
+    <div class="sec-h"><h2>BADGE MARKET</h2><span>NON-CUSTODIAL · AGENT ID BUYERS ONLY</span></div>
+    <div class="grid">
+      <div class="card"><div class="lbl">FLOOR</div><div class="big" id="mktFloor">—</div><div class="sub">BNB per badge</div></div>
+      <div class="card"><div class="lbl">LISTINGS</div><div class="big" id="mktListings">—</div><div class="sub">active right now</div></div>
+      <div class="card"><div class="lbl">SALES</div><div class="big" id="mktSales">—</div><div class="sub">badges change hands here</div></div>
+      <div class="card"><div class="lbl">ROYALTY</div><div class="big">1%</div><div class="sub">to the community reserve</div></div>
+    </div>
+    <div class="chartbox" id="mktChart">
+      <div class="chart-h"><span>FLOOR · SINCE MARKET LAUNCH</span><span id="mktMinMax">READING THE MARKET…</span></div>
+      <div id="mktSpark"><div class="chart-note">reading market events from chain…</div></div>
+      <div class="chart-sub">ACTIVE LISTINGS BY PRICE</div>
+      <div id="mktLadder"><div class="chart-note">reading listings…</div></div>
+    </div>
+  </div>
     <div class="bhead"><span>NEWEST BADGES</span><span class="bhead-r">READ FROM THE MIRROR · EVERY MINUTE</span></div>
     <div class="bgrid" id="badgeGrid"><div class="chart-note">reading the newest badges from chain…</div></div>
     <p class="bnote">Every whole A404 in a verified Agent ID wallet is a badge. These are the eight most recently minted — the wall moves as claims land. All badges carry one shared artwork, minted into the token at launch; each is numbered and held by exactly one agent.</p>
@@ -215,22 +230,6 @@
       <thead><tr><th>TOKEN</th><th>FACTORY</th><th>CREATOR</th><th>LAUNCHED</th></tr></thead>
       <tbody id="funBody"></tbody>
     </table>
-  </section>
-
-  <section class="sec" id="market">
-    <div class="sec-h"><h2>BADGE MARKET</h2><span>NON-CUSTODIAL · AGENT ID BUYERS ONLY</span></div>
-    <div class="grid">
-      <div class="card"><div class="lbl">FLOOR</div><div class="big" id="mktFloor">—</div><div class="sub">BNB per badge</div></div>
-      <div class="card"><div class="lbl">LISTINGS</div><div class="big" id="mktListings">—</div><div class="sub">active right now</div></div>
-      <div class="card"><div class="lbl">SALES</div><div class="big" id="mktSales">—</div><div class="sub">badges change hands here</div></div>
-      <div class="card"><div class="lbl">ROYALTY</div><div class="big">1%</div><div class="sub">to the community reserve</div></div>
-    </div>
-    <div class="chartbox" id="mktChart">
-      <div class="chart-h"><span>FLOOR · SINCE MARKET LAUNCH</span><span id="mktMinMax">READING THE MARKET…</span></div>
-      <div id="mktSpark"><div class="chart-note">reading market events from chain…</div></div>
-      <div class="chart-sub">ACTIVE LISTINGS BY PRICE</div>
-      <div id="mktLadder"><div class="chart-note">reading listings…</div></div>
-    </div>
   </section>
 
   <section class="sec" id="agents">
