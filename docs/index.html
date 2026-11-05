@@ -73,6 +73,11 @@
   .copybtn:hover{background:#000;color:#f5f5f5}
   .copybtn.done{background:#1d7a3a;border-color:#1d7a3a;color:#fff}
   .eco{margin-top:16px;font-size:12px;color:var(--dim)}
+  .chartbox{background:var(--panel);border:1px solid var(--line);padding:14px 16px 10px;margin-top:12px}
+  .chart-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:10px;letter-spacing:.18em;color:var(--mut)}
+  .chart-sub{border-top:1px solid var(--line);margin-top:4px;padding-top:10px;font-size:10px;letter-spacing:.18em;color:var(--mut)}
+  .chartbox svg{width:100%;display:block}
+  .chart-note{font-size:11px;color:var(--dim);padding:8px 0 6px}
   .eco a{color:#f5f5f5;text-decoration:underline}
   footer a{color:var(--mut);text-decoration:underline}
   .signal{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
@@ -207,6 +212,12 @@
       <div class="card"><div class="lbl">SALES</div><div class="big" id="mktSales">—</div><div class="sub">badges change hands here</div></div>
       <div class="card"><div class="lbl">ROYALTY</div><div class="big">1%</div><div class="sub">to the community reserve</div></div>
     </div>
+    <div class="chartbox" id="mktChart">
+      <div class="chart-h"><span>FLOOR · SINCE MARKET LAUNCH</span><span id="mktMinMax">READING THE MARKET…</span></div>
+      <div id="mktSpark"><div class="chart-note">reading market events from chain…</div></div>
+      <div class="chart-sub">ACTIVE LISTINGS BY PRICE</div>
+      <div id="mktLadder"><div class="chart-note">reading listings…</div></div>
+    </div>
   </section>
 
   <section class="sec" id="agents">
@@ -313,6 +324,7 @@ var SEL = {
   activeCount:   "0x4331ed1f",
   floorPrice:    "0x9363c812",
   totalSales:    "0x6605ff66",
+  activeListings: "0xaa4df6f0",
   totalLaunches: "0x0e883f8b",
   totalFees:     "0x60c6d8ae",
   totalBurned:   "0xd89135cd",
@@ -658,6 +670,245 @@ function feedRefresh(){
   }).catch(function(){});
 }
 
+/* ================= badge market chart ================= */
+var TOPIC_LISTED  = "0x50955776c5778c3b7d968d86d8c51fb6b29a7a74c20866b533268e209fc08343";
+var TOPIC_PRICE   = "0x945c1c4e99aa89f648fbfe3df471b916f719e16d960fcec0737d4d56bd696838";
+var TOPIC_CANCEL  = "0xc41d93b8bfbf9fd7cf5bfe271fd649ab6a6fec0ea101c23b82a2a28eca2533a9";
+var TOPIC_SOLD    = "0xa70b1a854695e7921b122988e216d3a6cd10ed799017c67b1ff231967e6bf56d";
+var TOPIC_CLEANED = "0x3db45b70b11615844509a38cfa92c8b3b1f3bd4866cc62af09c8ab1b60994723";
+var MKT_TOPICS = [TOPIC_LISTED, TOPIC_PRICE, TOPIC_CANCEL, TOPIC_SOLD, TOPIC_CLEANED];
+var mktEvents = [], mktTop = 0, mktInitDone = false, mktBusy = false, mktBlockTs = {};
+function logsMultiOnce(from, to){
+  return rpcTryAll("eth_getLogs", [{address:A.market, fromBlock:hex(from), toBlock:hex(to), topics:[MKT_TOPICS]}]);
+}
+function fetchMktChunked(from, to){
+  return logsMultiOnce(from, to).then(function(res){
+    if(Array.isArray(res)) return res;
+    if(to - from > 1000){
+      var mid = from + Math.floor((to - from) / 2);
+      return fetchMktChunked(from, mid).then(function(left){
+        return fetchMktChunked(mid + 1, to).then(function(right){
+          if(left === null || right === null) return null;
+          return left.concat(right);
+        });
+      });
+    }
+    return null;
+  });
+}
+function parseMktLog(l){
+  var t0 = (l.topics[0] || "").toLowerCase();
+  var kind = null;
+  if(t0 === TOPIC_LISTED) kind = "list";
+  else if(t0 === TOPIC_PRICE) kind = "price";
+  else if(t0 === TOPIC_CANCEL || t0 === TOPIC_CLEANED) kind = "gone";
+  else if(t0 === TOPIC_SOLD) kind = "sold";
+  if(!kind || !l.topics[1]) return null;
+  var id = null, price = null;
+  try { id = BigInt("0x" + l.topics[1].slice(2)); } catch(e){ return null; }
+  if(kind !== "gone"){
+    try { price = BigInt("0x" + l.data.slice(2, 66)); } catch(e){ return null; }
+  }
+  return {kind:kind, id:id.toString(), price:price, block:parseInt(l.blockNumber, 16), idx:parseInt(l.logIndex, 16), key:l.transactionHash + ":" + l.logIndex};
+}
+function mergeMktEvents(list){
+  var seen = {};
+  mktEvents.forEach(function(e){ seen[e.key] = true; });
+  list.forEach(function(e){ if(e && !seen[e.key]){ mktEvents.push(e); seen[e.key] = true; } });
+  mktEvents.sort(function(x, y){ return (x.block - y.block) || (x.idx - y.idx); });
+}
+function mktSeries(){
+  var active = {}, pts = [], sales = [];
+  mktEvents.forEach(function(e){
+    if(e.kind === "list" || e.kind === "price") active[e.id] = e.price;
+    else if(e.kind === "gone") delete active[e.id];
+    else if(e.kind === "sold"){ sales.push({block:e.block, price:e.price}); delete active[e.id]; }
+    var floor = null;
+    for(var k in active){ if(floor === null || active[k] < floor) floor = active[k]; }
+    pts.push({block:e.block, floor:floor});
+  });
+  return {pts:pts, sales:sales};
+}
+function fillMktTs(latestBlock){
+  var need = {}, list = [];
+  mktEvents.forEach(function(e){ if(typeof mktBlockTs[e.block] === "undefined" && !need[e.block]){ need[e.block] = true; list.push(e.block); } });
+  if(typeof mktBlockTs[latestBlock] === "undefined" && !need[latestBlock]){ need[latestBlock] = true; list.push(latestBlock); }
+  if(!list.length) return Promise.resolve();
+  list = list.slice(0, 60);
+  return rpcBatch(list.map(function(b){ return {method:"eth_getBlockByNumber", params:[hex(b), false]}; })).then(function(res){
+    list.forEach(function(b, i){ if(res[i] && res[i].timestamp) mktBlockTs[b] = parseInt(res[i].timestamp, 16); });
+  }).catch(function(){});
+}
+function tsOf(block, latestBlock, latestTs){
+  if(mktBlockTs[block]) return mktBlockTs[block];
+  return latestTs - Math.round((latestBlock - block) * 0.45);
+}
+function fmtAxis(v){
+  return (Math.round(v * 10000) / 10000).toString();
+}
+function renderSpark(latestBlock, latestTs){
+  var box = $("mktSpark");
+  if(!box) return;
+  var s = mktSeries();
+  if(!s.pts.length){
+    box.innerHTML = '<div class="chart-note">no market events yet — the first listing draws this line</div>';
+    setText("mktMinMax", "NO LISTINGS YET");
+    return;
+  }
+  var verts = [], min = null, max = null, i, p;
+  for(i = 0; i < s.pts.length; i++){
+    p = s.pts[i];
+    if(p.floor === null) continue;
+    if(min === null || p.floor < min) min = p.floor;
+    if(max === null || p.floor > max) max = p.floor;
+    if(!verts.length || verts[verts.length - 1].floor !== p.floor) verts.push(p);
+  }
+  s.sales.forEach(function(x){
+    if(min === null || x.price < min) min = x.price;
+    if(max === null || x.price > max) max = x.price;
+  });
+  if(!verts.length){
+    box.innerHTML = '<div class="chart-note">market empty right now — the floor reappears with the next listing</div>';
+    setText("mktMinMax", "NO ACTIVE LISTINGS");
+    return;
+  }
+  var t0 = tsOf(verts[0].block, latestBlock, latestTs);
+  var t1 = latestTs;
+  if(t1 - t0 < 3600) t1 = t0 + 3600;
+  var lo = Number(min) / 1e18, hi = Number(max) / 1e18, padY;
+  if(hi - lo < 1e-12){ lo = lo * 0.9; hi = hi * 1.1; if(hi - lo < 1e-12){ lo = 0; hi = 0.001; } }
+  else { padY = (hi - lo) * 0.12; lo -= padY; hi += padY; if(lo < 0) lo = 0; }
+  function X(ts){ return 8 + (ts - t0) / (t1 - t0) * 624; }
+  function Y(v){ return 12 + (hi - v) / (hi - lo) * 58; }
+  var d = "M" + X(t0).toFixed(1) + "," + Y(Number(verts[0].floor) / 1e18).toFixed(1);
+  for(i = 1; i < verts.length; i++){
+    d += " H" + X(tsOf(verts[i].block, latestBlock, latestTs)).toFixed(1) + " V" + Y(Number(verts[i].floor) / 1e18).toFixed(1);
+  }
+  d += " H" + X(t1).toFixed(1);
+  var curFloor = verts[verts.length - 1].floor;
+  var ey = Y(Number(curFloor) / 1e18);
+  var marks = "";
+  s.sales.forEach(function(x){
+    marks += '<circle cx="' + X(tsOf(x.block, latestBlock, latestTs)).toFixed(1) + '" cy="' + Y(Number(x.price) / 1e18).toFixed(1) + '" r="3.2" fill="#0a0a0a" stroke="#f2f2f2" stroke-width="1.4"/>';
+  });
+  box.innerHTML =
+    '<svg viewBox="0 0 640 96">' +
+    '<line x1="8" y1="' + Y(hi).toFixed(1) + '" x2="632" y2="' + Y(hi).toFixed(1) + '" stroke="#232323" stroke-dasharray="3 4"/>' +
+    '<line x1="8" y1="' + Y((hi + lo) / 2).toFixed(1) + '" x2="632" y2="' + Y((hi + lo) / 2).toFixed(1) + '" stroke="#232323" stroke-dasharray="3 4"/>' +
+    '<line x1="8" y1="' + Y(lo).toFixed(1) + '" x2="632" y2="' + Y(lo).toFixed(1) + '" stroke="#232323" stroke-dasharray="3 4"/>' +
+    '<path d="' + d + '" fill="none" stroke="#f2f2f2" stroke-width="1.6"/>' +
+    marks +
+    '<circle cx="632" cy="' + ey.toFixed(1) + '" r="9" fill="rgba(255,255,255,.16)"/>' +
+    '<circle cx="632" cy="' + ey.toFixed(1) + '" r="3.6" fill="#fff"/>' +
+    '<text x="622" y="' + Math.max(10, ey - 10).toFixed(1) + '" fill="#f2f2f2" font-size="11" text-anchor="end">' + esc(fmtToken(curFloor)) + '</text>' +
+    '<text x="8" y="92" fill="#666" font-size="9">' + esc(fmtTime(t0)) + '</text>' +
+    '<text x="632" y="92" fill="#666" font-size="9" text-anchor="end">' + esc(fmtTime(latestTs)) + (s.sales.length ? ' · ○ = SALE' : '') + '</text>' +
+    '</svg>';
+  setText("mktMinMax", "MIN " + fmtToken(min) + " — MAX " + fmtToken(max) + " BNB");
+}
+function decodeListings(hexStr){
+  if(typeof hexStr !== "string" || hexStr.length < 2 + 128) return null;
+  try {
+    var clean = hexStr.slice(2);
+    var offIds = Number(BigInt("0x" + clean.slice(0, 64))) * 2;
+    var offPr = Number(BigInt("0x" + clean.slice(64, 128))) * 2;
+    var n = Number(BigInt("0x" + clean.slice(offIds, offIds + 64)));
+    if(n < 0 || n > 500) return null;
+    var out = [];
+    for(var i = 0; i < n; i++){
+      var id = BigInt("0x" + clean.slice(offIds + 64 + i * 64, offIds + 128 + i * 64));
+      var pr = BigInt("0x" + clean.slice(offPr + 64 + i * 64, offPr + 128 + i * 64));
+      out.push({id:id, price:pr});
+    }
+    return out;
+  } catch(e){ return null; }
+}
+function renderLadder(rows){
+  var box = $("mktLadder");
+  if(!box) return;
+  if(!rows.length){
+    box.innerHTML = '<div class="chart-note">no active listings — be the first to list a badge</div>';
+    return;
+  }
+  rows.sort(function(a, b){ return a.price < b.price ? -1 : (a.price > b.price ? 1 : 0); });
+  var floor = rows[0].price;
+  var maxP = Number(rows[rows.length - 1].price) / 1e18;
+  var axisMax = Math.max(maxP * 1.15, Number(floor) / 1e18 * 2);
+  var steps = [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100];
+  for(var i = 0; i < steps.length; i++){ if(steps[i] >= axisMax){ axisMax = steps[i]; break; } }
+  function X(v){ return 8 + (v / axisMax) * 624; }
+  var ticks = "", t, tv, tx;
+  for(t = 0; t <= 4; t++){
+    tv = axisMax * t / 4; tx = X(tv);
+    ticks += '<line x1="' + tx.toFixed(1) + '" y1="30" x2="' + tx.toFixed(1) + '" y2="38" stroke="#444"/>' +
+      '<text x="' + tx.toFixed(1) + '" y="58" fill="#666" font-size="9" text-anchor="middle">' + fmtAxis(tv) + (t === 4 ? ' BNB' : '') + '</text>';
+  }
+  var dots = "", lastX = -100, alt = false, tagged = false;
+  rows.forEach(function(rw){
+    var pv = Number(rw.price) / 1e18, x = X(pv), y = 34;
+    if(Math.abs(x - lastX) < 10){ alt = !alt; y = alt ? 25 : 43; } else { alt = false; }
+    lastX = x;
+    if(rw.price === floor && !tagged){
+      tagged = true;
+      dots += '<circle cx="' + x.toFixed(1) + '" cy="34" r="8.5" fill="rgba(255,255,255,.16)"/>' +
+        '<circle cx="' + x.toFixed(1) + '" cy="34" r="3.6" fill="#fff"/>' +
+        '<text x="' + x.toFixed(1) + '" y="12" fill="#f2f2f2" font-size="10.5" text-anchor="middle">#' + rw.id.toString() + ' · ' + esc(fmtToken(rw.price)) + ' · FLOOR</text>';
+    } else {
+      dots += '<circle cx="' + x.toFixed(1) + '" cy="' + y + '" r="3.2" fill="#9a9a9a"/>';
+    }
+  });
+  box.innerHTML = '<svg viewBox="0 0 640 62"><line x1="8" y1="34" x2="632" y2="34" stroke="#333"/>' + ticks + dots + '</svg>';
+}
+function refreshLadder(){
+  rpcBatch([callReq(A.market, SEL.activeListings + padArg(0) + padArg(60))]).then(function(r){
+    var rows = decodeListings(r[0]);
+    if(rows) renderLadder(rows);
+  }).catch(function(){});
+}
+function chartScanInitial(latest){
+  var to = latest, rounds = 0, foundAny = false, emptyAfterFound = 0;
+  function step(){
+    if(to <= 0 || rounds >= 16 || emptyAfterFound >= 1) return Promise.resolve(foundAny);
+    var from = Math.max(0, to - 49999);
+    rounds++;
+    return fetchMktChunked(from, to).then(function(res){
+      if(res === null) return foundAny;
+      if(res.length){ foundAny = true; mergeMktEvents(res.map(parseMktLog)); }
+      else if(foundAny){ emptyAfterFound++; }
+      to = from - 1;
+      return step();
+    });
+  }
+  return step().then(function(ok){ mktTop = latest; return ok; });
+}
+function chartScanForward(latest){
+  var from = mktTop + 1;
+  if(from > latest) return Promise.resolve(true);
+  return fetchMktChunked(from, latest).then(function(res){
+    if(res === null) return false;
+    mergeMktEvents(res.map(parseMktLog));
+    mktTop = latest;
+    return true;
+  });
+}
+function chartRefresh(){
+  if(mktBusy) return;
+  mktBusy = true;
+  rpcTryAll("eth_blockNumber", []).then(function(latestHex){
+    if(!latestHex){ mktBusy = false; return; }
+    var latest = parseInt(latestHex, 16);
+    var job = mktInitDone ? chartScanForward(latest) : chartScanInitial(latest);
+    mktInitDone = true;
+    return job.then(function(){
+      return fillMktTs(latest).then(function(){
+        var lts = mktBlockTs[latest] || Math.floor(Date.now() / 1000);
+        mktBusy = false;
+        renderSpark(latest, lts);
+      });
+    }).catch(function(){ mktBusy = false; });
+  }).catch(function(){ mktBusy = false; });
+}
+
 /* ================= countdowns ================= */
 function pad2(n){ return (n < 10 ? "0" : "") + n; }
 function setCd(cdId, boxId, deadline){
@@ -718,9 +969,13 @@ function tickCountdowns(){
 /* ================= boot ================= */
 refreshCounters();
 feedRefresh();
+refreshLadder();
+chartRefresh();
 tickCountdowns();
 setInterval(refreshCounters, 30000);
 setInterval(feedRefresh, 60000);
+setInterval(refreshLadder, 30000);
+setInterval(chartRefresh, 60000);
 setInterval(tickCountdowns, 1000);
 (function(){
   var btn = document.getElementById('copyPromptBtn');
