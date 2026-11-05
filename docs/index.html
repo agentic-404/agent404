@@ -75,6 +75,16 @@
   .eco{margin-top:16px;font-size:12px;color:var(--dim)}
   .eco a{color:#f5f5f5;text-decoration:underline}
   footer a{color:var(--mut);text-decoration:underline}
+  .signal{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .postcard{border:1px solid var(--line);background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:10px}
+  .postcard .lbl{font-size:11px;letter-spacing:.12em;color:var(--dim)}
+  .ptext{font-size:13px;line-height:1.55;color:#e8e8e8}
+  .pbtns{display:flex;gap:8px;margin-top:auto}
+  .pbtn{flex:1;text-align:center;padding:9px 6px;border:1px solid var(--line2);background:transparent;color:#f5f5f5;font-size:12px;letter-spacing:.06em;cursor:pointer;font-family:inherit}
+  .pbtn:hover{border-color:#f5f5f5}
+  .pbtn.x{background:#f5f5f5;color:#0a0a0a;border-color:#f5f5f5;font-weight:700}
+  .pbtn.done{background:#1d7a3a;border-color:#1d7a3a;color:#fff}
+  .refnote{margin-top:14px;font-size:12.5px;color:var(--mut);line-height:1.6}
   .wheel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:820px){.wheel{grid-template-columns:1fr}}
   .step{background:var(--panel2);border:1px solid var(--line);padding:16px}
@@ -131,6 +141,38 @@
         <div class="close" id="paidClose">CLOSES · MON 9 NOV 2026 · 20:42 (UTC+7) — then never reopens<span class="cd" id="paidCd"></span></div>
       </div>
     </div>
+  </section>
+
+  <section class="sec" id="spread">
+    <div class="sec-h"><h2>SPREAD THE SIGNAL</h2><span>NO PROJECT ACCOUNT — THE HOLDERS CARRY IT</span></div>
+    <p class="lede">AGENT404 keeps no account on X. By design, the signal travels with the people who hold the pass. Claimed yours — free or paid? This is your move: one post, from your own account, in your own name. It is voluntary, always — no claim ever depended on a post, and none ever will. Steal a text below, or write your own.</p>
+    <div class="signal">
+      <div class="postcard">
+        <div class="lbl">AFTER YOUR FREE CLAIM</div>
+        <div class="ptext">I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims are still open: https://agentic-404.github.io/agent404/</div>
+        <div class="pbtns">
+          <button class="pbtn copytext" data-text="I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims are still open: https://agentic-404.github.io/agent404/">⧉ COPY</button>
+          <button class="pbtn x xpost" data-text="I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims are still open: https://agentic-404.github.io/agent404/">POST ON X ↗</button>
+        </div>
+      </div>
+      <div class="postcard">
+        <div class="lbl">AFTER YOUR PAID CLAIM</div>
+        <div class="ptext">I took a paid AGENT404 pass — 909 A404. Pass holders earn the Phase 2 distribution, and every AgentFun launch burns 50.5 A404 forever. Paid claims close Nov 9: https://agentic-404.github.io/agent404/</div>
+        <div class="pbtns">
+          <button class="pbtn copytext" data-text="I took a paid AGENT404 pass — 909 A404. Pass holders earn the Phase 2 distribution, and every AgentFun launch burns 50.5 A404 forever. Paid claims close Nov 9: https://agentic-404.github.io/agent404/">⧉ COPY</button>
+          <button class="pbtn x xpost" data-text="I took a paid AGENT404 pass — 909 A404. Pass holders earn the Phase 2 distribution, and every AgentFun launch burns 50.5 A404 forever. Paid claims close Nov 9: https://agentic-404.github.io/agent404/">POST ON X ↗</button>
+        </div>
+      </div>
+      <div class="postcard">
+        <div class="lbl">THE BIG PICTURE</div>
+        <div class="ptext">The DN-404 category on CoinGecko has two coins in it. AGENT404 is the DN-404 built for autonomous agents — the token trades freely, the badge only exists for Binance Agent ID holders. This project keeps no X account. We are the distribution. https://agentic-404.github.io/agent404/</div>
+        <div class="pbtns">
+          <button class="pbtn copytext" data-text="The DN-404 category on CoinGecko has two coins in it. AGENT404 is the DN-404 built for autonomous agents — the token trades freely, the badge only exists for Binance Agent ID holders. This project keeps no X account. We are the distribution. https://agentic-404.github.io/agent404/">⧉ COPY</button>
+          <button class="pbtn x xpost" data-text="The DN-404 category on CoinGecko has two coins in it. AGENT404 is the DN-404 built for autonomous agents — the token trades freely, the badge only exists for Binance Agent ID holders. This project keeps no X account. We are the distribution. https://agentic-404.github.io/agent404/">POST ON X ↗</button>
+        </div>
+      </div>
+    </div>
+    <p class="refnote">Phase 2 will let pass holders earn extra weight for every holder they bring in. When its registration window opens, add one line to your post: “Register for Phase 2 with my wallet as your referrer.” The audience you build today is the referral network you will register with.</p>
   </section>
 
   <section class="sec">
@@ -636,6 +678,42 @@ function tickCountdowns(){
   setCd("freeCd", "freeClose", FREE_DEADLINE);
   setCd("paidCd", "paidClose", PAID_DEADLINE);
 }
+
+/* ================= spread-the-signal buttons ================= */
+(function(){
+  function copyOf(btn){
+    var txt = btn.getAttribute('data-text') || '';
+    function done(){
+      var old = btn.textContent;
+      btn.textContent = '✓ COPIED';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 2200);
+    }
+    function fb(){
+      var ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(e){}
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(fb);
+    } else { fb(); }
+  }
+  var cs = document.querySelectorAll('.copytext');
+  for(var i = 0; i < cs.length; i++){
+    (function(b){ b.addEventListener('click', function(){ copyOf(b); }); })(cs[i]);
+  }
+  var xs = document.querySelectorAll('.xpost');
+  for(var j = 0; j < xs.length; j++){
+    (function(b){
+      b.addEventListener('click', function(){
+        var t = b.getAttribute('data-text') || '';
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(t), '_blank');
+      });
+    })(xs[j]);
+  }
+})();
 
 /* ================= boot ================= */
 refreshCounters();
