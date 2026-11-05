@@ -38,6 +38,16 @@
   .sec-h span{font-size:11px;color:var(--dim)}
   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   @media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .bhead{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 10px;font-size:12px;letter-spacing:.18em}
+  .bhead-r{color:var(--dim);font-size:10.5px;letter-spacing:.1em}
+  .bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:820px){.bgrid{grid-template-columns:repeat(2,1fr)}}
+  .bcard{background:var(--panel);border:1px solid var(--line);padding:9px}
+  .bcard img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#000}
+  .bname{font-size:12px;letter-spacing:.08em;margin-top:8px}
+  .bstatus{font-size:10.5px;color:var(--dim);letter-spacing:.05em;margin-top:3px}
+  .bstatus.listed{color:#e8c766}
+  .bnote{color:var(--mut);font-size:12px;line-height:1.6;margin-top:10px}
   .card{background:var(--panel);border:1px solid var(--line);padding:16px}
   .card .lbl{font-size:10px;letter-spacing:.22em;color:var(--mut)}
   .card .big{font-size:30px;font-weight:800;margin:6px 0 2px}
@@ -134,6 +144,9 @@
       <div class="card"><div class="lbl">BADGES IN CIRCULATION</div><div class="big" id="badgeCount">—</div><div class="sub">DN-404 badges live on the mirror</div><div class="bar"><i id="badgeBar" style="width:0%"></i></div></div>
       <div class="card"><div class="lbl">SUPPLY</div><div class="big" id="supplyCount">404,404</div><div class="sub">fixed forever · no mint function</div><div class="bar"><i style="width:100%"></i></div></div>
     </div>
+    <div class="bhead"><span>NEWEST BADGES</span><span class="bhead-r">READ FROM THE MIRROR · EVERY MINUTE</span></div>
+    <div class="bgrid" id="badgeGrid"><div class="chart-note">reading the newest badges from chain…</div></div>
+    <p class="bnote">Every whole A404 in a verified Agent ID wallet is a badge. These are the sixteen most recently minted — the wall moves as claims land. All badges carry one shared artwork, minted into the token at launch; each is numbered and held by exactly one agent.</p>
     <div class="lanes" style="margin-top:12px">
       <div class="lane">
         <h3>FREE LANE</h3><div class="big"><span id="freeLaneCount">—</span> claimed</div>
@@ -332,7 +345,9 @@ var SEL = {
   launchesCount: "0x63d0053d",
   launchAt:      "0x7f5780c4",
   name:          "0x06fdde03",
-  symbol:        "0x95d89b41"
+  symbol:        "0x95d89b41",
+  ownerOf:       "0x6352211e",
+  tokenURI:      "0xc87b56dd"
 };
 var TOPIC_CLAIMED = "0xd8138f8a3f377c5259ca548e70e4c2de94f129f5a11036a15b69513cba2b426a";
 var TOPIC_BOUGHT  = "0xa9a40dec7a304e5915d11358b968c1e8d365992abf20f82285d1df1b30c8e24c";
@@ -889,6 +904,76 @@ function refreshLadder(){
     if(rows) renderLadder(rows);
   }).catch(function(){});
 }
+
+/* ================= newest badges grid ================= */
+var BADGE_GW = "https://bronze-mighty-monkey-752.mypinata.cloud/ipfs/";
+var badgeImg = null; /* resolved once from a tokenURI read */
+function decodeAbiString(hexStr){
+  if(typeof hexStr !== "string" || hexStr.length < 2 + 128) return null;
+  try {
+    var clean = hexStr.slice(2);
+    var off = Number(BigInt("0x" + clean.slice(0, 64))) * 2;
+    var len = Number(BigInt("0x" + clean.slice(off, off + 64)));
+    if(len < 0 || len > 100000) return null;
+    var hex = clean.slice(off + 64, off + 64 + len * 2);
+    var s = "";
+    for(var i = 0; i + 2 <= hex.length; i += 2) s += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    return s;
+  } catch(e){ return null; }
+}
+function badgeImageFromUri(uri){
+  if(!uri || uri.indexOf("data:application/json;base64,") !== 0) return null;
+  try {
+    var meta = JSON.parse(atob(uri.slice(29)));
+    if(meta && typeof meta.image === "string"){
+      if(meta.image.indexOf("ipfs://") === 0) return BADGE_GW + meta.image.slice(7);
+      return meta.image;
+    }
+  } catch(e){}
+  return null;
+}
+function shortAddr(a){ return "0x" + a.slice(2, 6) + "…" + a.slice(a.length - 4); }
+function refreshBadges(){
+  var box = $("badgeGrid");
+  if(!box) return;
+  rpcBatch([callReq(A.mirror, SEL.totalSupply)]).then(function(r0){
+    var total = toBig(r0[0]);
+    if(total === null || total <= 0n) return;
+    var hi = Number(total);
+    var ids = [];
+    for(var id = hi; id >= Math.max(1, hi - 31); id--) ids.push(id);
+    var reqs = ids.map(function(id){ return callReq(A.mirror, SEL.ownerOf + padArg(id)); });
+    reqs.push(callReq(A.market, SEL.activeListings + padArg(0) + padArg(60)));
+    var uriIdx = -1;
+    if(badgeImg === null && ids.length){ uriIdx = reqs.length; reqs.push(callReq(A.mirror, SEL.tokenURI + padArg(ids[0]))); }
+    return rpcBatch(reqs).then(function(r){
+      var listRows = decodeListings(r[ids.length]);
+      var priceById = {};
+      if(listRows) listRows.forEach(function(rw){ priceById[rw.id.toString()] = rw.price; });
+      if(badgeImg === null && uriIdx >= 0){
+        badgeImg = badgeImageFromUri(decodeAbiString(r[uriIdx])) || "";
+      }
+      if(!badgeImg) return;
+      var cards = [];
+      for(var i = 0; i < ids.length && cards.length < 16; i++){
+        var ow = r[i];
+        if(typeof ow !== "string" || ow.length < 42) continue;
+        var owner = "0x" + ow.slice(-40);
+        if(/^0x0{40}$/.test(owner)) continue;
+        cards.push({id: ids[i], owner: owner});
+      }
+      if(!cards.length) return;
+      box.innerHTML = cards.map(function(c){
+        var p = priceById[String(c.id)];
+        var st = (p !== undefined)
+          ? '<div class="bstatus listed">LISTED · ' + esc(fmtToken(p)) + ' BNB</div>'
+          : '<div class="bstatus">HELD BY ' + esc(shortAddr(c.owner)) + '</div>';
+        return '<div class="bcard"><img src="' + esc(badgeImg) + '" alt="AGENT404 Badge #' + c.id + '" loading="lazy">' +
+          '<div class="bname">BADGE #' + c.id + '</div>' + st + '</div>';
+      }).join("");
+    });
+  }).catch(function(){});
+}
 function chartScanInitial(latest){
   var to = latest, rounds = 0, foundAny = false, emptyAfterFound = 0, clean = true;
   function step(){
@@ -1013,11 +1098,13 @@ function tickCountdowns(){
 refreshCounters();
 feedRefresh();
 refreshLadder();
+refreshBadges();
 setTimeout(chartRefresh, 4000);
 tickCountdowns();
 setInterval(refreshCounters, 30000);
 setInterval(feedRefresh, 60000);
 setInterval(refreshLadder, 30000);
+setInterval(refreshBadges, 60000);
 setInterval(chartRefresh, 60000);
 setInterval(tickCountdowns, 1000);
 (function(){
