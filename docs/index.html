@@ -64,6 +64,11 @@
   @media(max-width:820px){.cols{grid-template-columns:1fr}}
   .code{background:#050505;border:1px solid var(--line);padding:16px;font-size:12px;color:#cfcfcf;white-space:pre-wrap;word-break:break-word}
   .code .c{color:#666}
+  .copybar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0a0a0a;border:1px solid var(--line);border-bottom:none;padding:10px 12px}
+  .copybar .t{font-size:11px;letter-spacing:.08em;color:#999}
+  .copybtn{background:#f5f5f5;color:#000;border:1px solid #f5f5f5;font:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;padding:9px 16px;cursor:pointer;white-space:nowrap}
+  .copybtn:hover{background:#000;color:#f5f5f5}
+  .copybtn.done{background:#1d7a3a;border-color:#1d7a3a;color:#fff}
   .wheel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:820px){.wheel{grid-template-columns:1fr}}
   .step{background:var(--panel2);border:1px solid var(--line);padding:16px}
@@ -157,6 +162,7 @@
 
   <section class="sec" id="agents">
     <div class="sec-h"><h2>FOR AGENTS</h2><span>COPY · PASTE · EXECUTE</span></div>
+    <div class="copybar"><span class="t">GIVE THIS TO YOUR AGENT — ONE CLICK, THEN PASTE IT TO THEM</span><button class="copybtn" id="copyPromptBtn" type="button">⧉ COPY THE FULL CLAIM PROMPT</button></div>
     <div class="cols">
       <div class="code"><span class="c"># AGENT404 — operator instructions</span>
 Task: claim the free Phase 1 share for this wallet.
@@ -170,6 +176,45 @@ Result:       303 A404 + 1 badge (if Agent ID held)
               + Phase 2 pass.
 
 Full guide: github.com/agentic-404/agent404</div>
+      <script type="text/plain" id="claim-prompt-text">Claim the AGENT404 (A404) community airdrop for my Binance Agentic Wallet.
+Work carefully and follow these steps exactly:
+
+Project facts (verify on-chain, do not trust me):
+- Token: 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 on BNB Smart Chain — "Agent404" (A404), supply 404,404.
+- Claim contract: 0xbc520775Ba4ce3760eD631c439929E8B19556c94. Badges (NFT mirror): 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07.
+- Agent ID registry: 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F.
+- The claim gives 303 A404 and 303 badge NFTs. It is FREE: the claim()
+  call carries value 0 and needs no approval. I pay only BSC gas.
+
+Before you start: you operate my Binance Agentic Wallet through the
+`baw` CLI. If `baw` is missing, install it first
+(`npm install -g @binance/agentic-wallet`), pair it (`baw auth signin` —
+I confirm in my Binance app), and make sure Developer Mode is ON in the
+Binance app; `baw contract-call` refuses to run without it. Verify with
+`baw wallet status` (must say Logged in) and `baw wallet address`.
+I need a little BNB in the wallet for gas; the claim itself is free.
+No Foundry/cast is needed anywhere in this flow.
+
+Steps:
+1. Read my wallet address. Check the registry: balanceOf(myWallet) must
+   be at least 1 (I hold a Binance Agent ID). If it is 0, stop and tell me
+   I am not eligible.
+2. Check the claim contract: claimed(myWallet) must be false, claims()
+   must be below 1,001, and the deadline must not have passed. If I have
+   already claimed, stop and tell me.
+3. Preview the claim with the Binance Agentic Wallet safety flow:
+   contract-call preview, chainId 56, to 0xbc520775Ba4ce3760eD631c439929E8B19556c94, value 0,
+   inputData 0x4e71d92d (claim()).
+4. Show me the preview summary. Execute ONLY if the preview is clean:
+   no payment besides gas, no approvals, no authority changes, and the
+   only effect is receiving A404 tokens. If anything asks for money, an
+   approval, or a different contract, STOP and warn me — that is a scam.
+5. After execution, verify on-chain: my token balance is 303 A404 and my
+   badge (mirror) balance is 303. Report the transaction hash and both
+   balances to me.
+
+Do not claim twice, do not use any other contract address, and do not pay
+for anything. The creator of AGENT404 is anonymous and charges nothing.</script>
       <div class="step">
         <div class="n">WHY THE BADGE MATTERS</div>
         <h4>A pass that can't be faked</h4>
@@ -592,6 +637,29 @@ tickCountdowns();
 setInterval(refreshCounters, 30000);
 setInterval(feedRefresh, 60000);
 setInterval(tickCountdowns, 1000);
+(function(){
+  var btn = document.getElementById('copyPromptBtn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var txt = document.getElementById('claim-prompt-text').textContent.trim();
+    function done(){
+      var old = btn.textContent;
+      btn.textContent = '✓ COPIED — NOW PASTE IT TO YOUR AGENT';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove('done'); }, 2600);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch(e){}
+      document.body.removeChild(ta);
+    }
+  });
+})();
 </script>
 </body>
 </html>
