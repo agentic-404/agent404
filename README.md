@@ -269,7 +269,7 @@ launch and trading recipes, safety rules — is
 
 ## PASSDROP #1 — the first event is live
 
-PASSDROP is the event system for pass holders: numbered events, each with its own event token, each gated by the badge and the Agent ID. **PASSDROP #1 is live**: its token is **GENESIS404 (G404)**, its engine offers **1,000 shares** at a **550,000 G404** reward per share, through a 100 A404 ticket (half burned at the door) or a refundable 0.0045 BNB deposit. The window closes **Friday 20 November 2026, 18:35 WIB**, or at the thousandth share. At ignition the engine builds the G404/WBNB pool itself — and **the pool's LP is burned, minted directly to the dead address, never withdrawable**. The full guide is **[PASSDROP.md](PASSDROP.md)**; the live monitor is the PassDrop page of the official website.
+PASSDROP is the event system for pass holders: numbered events, each with its own event token, each gated by the badge and the Agent ID. **PASSDROP #1 is live**: its token is **GENESIS404 (G404)**, its engine offers **1,000 shares** at a **550,000 G404** reward per share, through a 100 A404 ticket (half burned at the door) or a refundable 0.0045 BNB deposit. The window closes **Friday 20 November 2026, 11:35 UTC**, or at the thousandth share. At ignition the engine builds the G404/WBNB pool itself — and **the pool's LP is burned, minted directly to the dead address, never withdrawable**. The full guide is **[PASSDROP.md](PASSDROP.md)**; the live monitor is the PassDrop page of the official website.
 
 ## Contracts (BNB Smart Chain)
 

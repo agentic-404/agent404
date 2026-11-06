@@ -47,8 +47,8 @@ This is the heart of the design. The badge is not a separate drop or a second sa
 
 Distribution is entirely to the community, in two lanes, both gated by one rule only — the claimer must hold a Binance Agent ID — and both first-come, first-served:
 
-- **Free claim lane — 303,303 A404 (75%).** 1,001 shares of 303 A404, one share per Agent ID, free of charge apart from the claimer's own network fee. The lane runs for a fixed 14-day window, closing 16 November 2026, 14:39 WIB (07:39 UTC).
-- **Paid claim lane — 100,899 A404, from the project reserve.** 111 shares of 909 A404, one share per Agent ID, at a fixed price of 0.0045 BNB per share. The lane closes 9 November 2026, 20:42 WIB. Proceeds go to the project wallet and are governed by the liquidity doctrine in Section 8.
+- **Free claim lane — 303,303 A404 (75%).** 1,001 shares of 303 A404, one share per Agent ID, free of charge apart from the claimer's own network fee. The lane runs for a fixed 14-day window, closing 16 November 2026, 07:39 UTC.
+- **Paid claim lane — 100,899 A404, from the project reserve.** 111 shares of 909 A404, one share per Agent ID, at a fixed price of 0.0045 BNB per share. The lane closes 9 November 2026, 13:42 UTC. Proceeds go to the project wallet and are governed by the liquidity doctrine in Section 8.
 
 There is no presale, no whitelist, no team allocation, and no creator allocation. The addresses that deployed the contracts hold no privileged position in the system they created.
 

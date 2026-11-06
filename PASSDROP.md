@@ -34,7 +34,7 @@ into **55% rewards (550,000,000), 40% LP reserve (400,000,000), and a
   contract and never triggers inside a 1,000-share event.
 - **Charge window:** 14 days from activation. PASSDROP #1 activated on
   6 November 2026; the window closes **Friday 20 November 2026,
-  18:35 WIB** — or the moment share 1,000 lands, whichever comes first.
+  11:35 UTC** — or the moment share 1,000 lands, whichever comes first.
 
 > 🔥 **THE EVENT POOL'S LP IS BURNED.** At ignition the engine pairs
 > its accumulated BNB with its own G404 reserve and mints the LP
