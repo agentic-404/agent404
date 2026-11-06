@@ -1,6 +1,6 @@
 # AGENT404
 
-## Whitepaper — Version 1.1, November 2026
+## Whitepaper — Version 1.2, November 2026
 
 **An experimental DN-404 asset, born in the Agentic Era, for the Binance Agent ID ecosystem.**
 
@@ -107,19 +107,67 @@ Phase 1 is the open distribution described above. Its remainder — everything u
 
 The final pot size is determined by Phase 1's real closing numbers and is announced after 16 November 2026. Phase 2's full parameters are published with it.
 
-## 10. Anonymity, and the Absence of Promises
+## 10. AGENTLP: The Community Liquidity Machine
+
+Distribution puts the token in the community's hands. It does not, by itself, give the token a market that lasts. Liquidity that arrives in a day can leave in an hour — unless holding it in place is itself rewarded, permanently, by the system's own flows. That is the problem AGENTLP exists to solve.
+
+AGENTLP is an ownerless staking contract for the canonical A404/WBNB pool on PancakeSwap V2 — one pair, by design, so that depth is never fragmented across competing pools. Participants who provided liquidity to the pool may stake their LP tokens in AGENTLP. The contract has no owner, no admin, and no upgrade path; its parameters are fixed at deployment, and staked LP tokens are returnable only to their staker.
+
+### The gate
+
+Staking in AGENTLP requires a Binance Agent ID. The pool itself remains open to everyone — anyone may provide liquidity on PancakeSwap and earn the trading fees described below. What answers to identity is the additional reward layer. The pattern is the same one the asset itself follows: the token trades freely for anyone; its privileges answer to identity.
+
+### Two reward layers
+
+**The base layer** is given by the exchange protocol and belongs to every liquidity provider, staked or not. Each swap on PancakeSwap V2 carries a 0.25% fee; **0.17% of every trade accrues to liquidity providers**, in exact proportion to their share of the pool, compounding into the pool's reserves and realized when liquidity is removed. This layer is perpetual and is funded by traders. It needs nothing from the project, and no one — including this system — can switch it off.
+
+**The bonus layer** is AGENTLP's own distribution, funded by the badge market. The market's 1% royalty is divided in two: half remains in the project reserve, and **half is forwarded to AGENTLP**, where it is distributed to stakers in BNB. The size of this layer floats with real market volume. In a quiet market it may pay nothing at all — and the base layer continues regardless. The machine does not manufacture rewards; it routes real ones.
+
+### Tiers
+
+Bonus weight is earned by commitment, not only by size:
+
+| Tier | Lock | Bonus weight |
+|---|---|---|
+| Flexible | none — unstake at any time | 1× |
+| Committed | 30 days | 1.5× |
+| Deep | 90 days | 2× |
+
+A participant with half the capital of another, who commits for 90 days, carries the same bonus weight. Loyalty is priced above size — deliberately.
+
+### Fairness mechanics
+
+Three rules keep the bonus layer honest:
+
+- **Streaming.** Bonus funds are never distributed as a lump sum. Each funding streams linearly over seven days, so rewards accrue only to those who are actually staked while the stream runs. Arriving for a known funding moment earns only a moment's share.
+- **Parking.** The stream advances only while stake exists. Funds that arrive to an empty machine wait, untouched, and begin streaming when staking resumes. Nothing is lost, and nothing can be captured retroactively.
+- **The 25% cap.** No single wallet's bonus weight may exceed 25% of the total. Capital above the cap still earns the full base layer — only its bonus weight is limited. The gate being a soulbound identity credential, the cap cannot be circumvented by splitting wallets in any practical way.
+
+### The unstake guarantee
+
+A bonus layer may starve; it may never trap. The return of staked principal does not depend on the bonus accounting in any state — staked LP tokens are always withdrawable once a position is unlocked (flexible positions, at any time), and unstaking settles and pays any pending bonus in the same transaction. If the canonical pool ever migrates in a future era, AGENTLP winds down by starvation alone: funding stops, and every staker exits freely.
+
+### A worked example
+
+Two participants form the pool at the distribution's reference anchor (0.0045 BNB = 909 A404). The first stakes 300 LP tokens flexible (weight 300). The second stakes 150 LP tokens for 90 days (weight 150 × 2 = 300). When 0.09 BNB of bonus streams through the machine, the two divide it equally — 0.045 BNB each — despite the first participant's doubled capital. A third participant arriving with 3,000 LP tokens finds their bonus weight capped at 25% of the total: the machine cannot be bought.
+
+### The long view
+
+AGENTLP turns liquidity from an event into an institution. Locked and staked liquidity gives the market a depth floor that cannot vanish overnight; trading fees compound that depth with every swap; the badge market's royalty feeds the bonus that keeps providers in place; and the cycle's outputs — volume, depth, permanence — are precisely the evidence by which outside observers distinguish a market from a mirage. Nothing here promises a price, a return, or a timeline. What it promises is structure: that in this system, the rewards for holding the market up flow to the people who hold it up — for exactly as long as they do.
+
+## 11. Anonymity, and the Absence of Promises
 
 AGENT404 is an anonymous project. It has no face, no spokesperson, and no insider. Its official home is its public repository, where its contracts, its guides, and this document live in the open. Anonymity here is not a marketing costume; it is the continuation of the oldest tradition in this industry. Bitcoin's creator vanished. The creator of Shiba Inu worked under a pseudonym and took nothing. The creator of the first BRC-20 token deployed it as an experiment, kept none of it, and told the world plainly that it would probably be worthless.
 
 This whitepaper stands in that line, and so it ends its claims where those pioneers ended theirs:
 
 - **Nothing in this document is a promise of value.** A404 may be worth something, or nothing, forever. No statement here — about distribution, markets, launches, or phases — is a prediction that it will be worth anything.
-- **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 11. What is described as direction is direction, not obligation.
+- **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 12. What is described as direction is direction, not obligation.
 - **Participation is an experiment, not an investment.** Anyone who claims, buys, lists, or launches does so as a participant in an open experiment on a new asset form — the same spirit in which the first inscriptions were made and the first meme assets were locked into pools by people who expected nothing.
 
 The experiment does not need belief. It needs only to be run, in public, exactly as specified.
 
-## 11. Technical Reference
+## 12. Technical Reference
 
 - **Network:** BNB Smart Chain (BSC), chain ID 56.
 - **Standard:** DN-404 (Vectorized reference implementation; core files unmodified, MIT license), with an Agent-ID badge gate against the native Binance Agent ID registry, `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F`.
@@ -134,15 +182,16 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 | Badge market | `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7` |
 | AgentFun factory (curve) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
 | AgentFun factory (direct) | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
+| AGENTLP — community LP staking for the A404/WBNB pair | `0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0` |
 
-## 12. Risks
+## 13. Risks
 
 - **Experimental standard.** DN-404 is a young asset form. Its behavior at scale, including the gas cost of badge minting and burning on large transfers, is a property of the design and a real cost participants bear.
 - **Smart contract risk.** The contracts are immutable, which means defects, if any are ever found, cannot be patched. Immutability is simultaneously this project's trust guarantee and its risk.
 - **No seeded market.** By the doctrine of Section 8, there may never be meaningful liquidity or any functioning price for A404. Any price that appears in thin community venues will be extremely volatile and must not be mistaken for a valuation.
 - **Identity dependency.** The badge form depends on the Binance Agent ID registry, an external system outside this project's control.
 
-## 13. Closing
+## 14. Closing
 
 The Agentic Era will have its assets — assets whose holders are identified machines, whose communities are swarms of agents, and whose rules are kept by code instead of by promises. AGENT404 does not claim to be their final form. It claims only to be an early, honest attempt: an open distribution, an engineered standard, an identity-aware asset, an anonymous creator who takes nothing and promises nothing.
 
