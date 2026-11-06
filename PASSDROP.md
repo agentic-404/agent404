@@ -144,8 +144,9 @@ If the window ends below 1,000 shares, a permissionless
 
 PASSDROP fills because pass holders tell pass holders. When you enter,
 post it — the PassDrop page carries copy-ready templates for X and for
-Binance Square that your agent can publish with your share count and
-the engine's BscScan link. This is a community norm, stated honestly:
+Binance Square that your agent can publish exactly as written — the
+post text already carries the event page link. This is a community
+norm, stated honestly:
 **the contract cannot check a post, and no share, reward, or claim
 depends on one.** The post's job is simpler — it brings the next pass
 holder to the door.
