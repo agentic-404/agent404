@@ -1,6 +1,6 @@
 # AGENT404
 
-## Whitepaper — Version 1.2, November 2026
+## Whitepaper — Version 1.3, November 2026
 
 **An experimental DN-404 asset, born in the Agentic Era, for the Binance Agent ID ecosystem.**
 
@@ -155,19 +155,38 @@ Two participants form the pool at the distribution's reference anchor (0.0045 BN
 
 AGENTLP turns liquidity from an event into an institution. Locked and staked liquidity gives the market a depth floor that cannot vanish overnight; trading fees compound that depth with every swap; the badge market's royalty feeds the bonus that keeps providers in place; and the cycle's outputs — volume, depth, permanence — are precisely the evidence by which outside observers distinguish a market from a mirage. Nothing here promises a price, a return, or a timeline. What it promises is structure: that in this system, the rewards for holding the market up flow to the people who hold it up — for exactly as long as they do.
 
-## 11. Anonymity, and the Absence of Promises
+## 11. PASSDROP: The Event System
+
+Distribution gave the community an asset and a pass. PASSDROP is what the pass is for: a system of numbered events, each gated to pass holders, each powered by its own event token, each running the same ownerless machine — a charge window, a target, an ignition, and a pool the machine builds itself.
+
+**PASSDROP #1 is live.** Its event token is GENESIS404 (G404), a plain fixed-supply ERC-20: 1,000,000,000 minted once and held in full by the event engine, split at activation into 55% rewards, 40% LP reserve, and a 5% tail. The event offers 1,000 shares — deliberately fewer than the 1,112 passes in existence — inside a 14-day charge window. Every share carries a reward entitlement of 550,000 G404.
+
+Two doors lead in, both gated by the pass — a badge in the wallet and a Binance Agent ID, checked by the contract on every entry:
+
+- **The ticket.** 100 A404 per share. Half is burned on the spot; half enters a vault that, after ignition, deepens the main A404/WBNB pool, its LP burned.
+- **Mode A.** A refundable deposit of 0.0045 BNB per share. A 20% ratchet is skimmed to the engine's protocol-owned-liquidity bucket at deposit; after 24 hours the claim returns 97% of the remainder, and the 3% residue joins the same bucket. What stays — 22.4% of every deposit — is pool material, permanently.
+
+Rewards are throttled by a coverage governor that adjusts only how much of a reward pays immediately; the remainder vests linearly over 30 days. The totals never change.
+
+When the thousandth share lands, charging closes and anyone may ignite the event: the engine pairs the accumulated ratchet BNB with its own token reserve and creates the G404/WBNB pool itself. **The pool's LP is burned — minted directly to the dead address at ignition and on every later pool build, including the vault's deepening of the main pool. It can never be withdrawn.** Ignition also opens Mode B, a pool-builder lane whose participants market-buy the event token and pair it as LP under a published schedule: the flexible choice burns 30% of its LP at birth and unlocks the rest from day 14 to day 90; the permanent choice burns all of it and earns double.
+
+If the window ends below the target, the event aborts by rule: rewards are void, ticket buyers reclaim the vault half of their A404 pro-rata, and Mode A refunds remain claimable on their original terms. The machine's exits never depend on its success.
+
+PASSDROP is the doctrine of this project applied to events: no owner, no admin, no promises — a machine whose vital signs are public, whose liquidity is burned, and whose participants arrive through their own agents.
+
+## 12. Anonymity, and the Absence of Promises
 
 AGENT404 is an anonymous project. It has no face, no spokesperson, and no insider. Its official home is its public repository, where its contracts, its guides, and this document live in the open. Anonymity here is not a marketing costume; it is the continuation of the oldest tradition in this industry. Bitcoin's creator vanished. The creator of Shiba Inu worked under a pseudonym and took nothing. The creator of the first BRC-20 token deployed it as an experiment, kept none of it, and told the world plainly that it would probably be worthless.
 
 This whitepaper stands in that line, and so it ends its claims where those pioneers ended theirs:
 
 - **Nothing in this document is a promise of value.** A404 may be worth something, or nothing, forever. No statement here — about distribution, markets, launches, or phases — is a prediction that it will be worth anything.
-- **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 12. What is described as direction is direction, not obligation.
+- **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 13. What is described as direction is direction, not obligation.
 - **Participation is an experiment, not an investment.** Anyone who claims, buys, lists, or launches does so as a participant in an open experiment on a new asset form — the same spirit in which the first inscriptions were made and the first meme assets were locked into pools by people who expected nothing.
 
 The experiment does not need belief. It needs only to be run, in public, exactly as specified.
 
-## 12. Technical Reference
+## 13. Technical Reference
 
 - **Network:** BNB Smart Chain (BSC), chain ID 56.
 - **Standard:** DN-404 (Vectorized reference implementation; core files unmodified, MIT license), with an Agent-ID badge gate against the native Binance Agent ID registry, `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F`.
@@ -183,15 +202,17 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 | AgentFun factory (curve) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
 | AgentFun factory (direct) | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
 | AGENTLP — community LP staking for the A404/WBNB pair | `0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0` |
+| GENESIS404 (G404) — PASSDROP #1 event token | `0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8` |
+| PassDropEventEngine — PASSDROP #1 | `0xCD2401b13d66A37D04a7356d776162154Eb11719` |
 
-## 13. Risks
+## 14. Risks
 
 - **Experimental standard.** DN-404 is a young asset form. Its behavior at scale, including the gas cost of badge minting and burning on large transfers, is a property of the design and a real cost participants bear.
 - **Smart contract risk.** The contracts are immutable, which means defects, if any are ever found, cannot be patched. Immutability is simultaneously this project's trust guarantee and its risk.
 - **No seeded market.** By the doctrine of Section 8, there may never be meaningful liquidity or any functioning price for A404. Any price that appears in thin community venues will be extremely volatile and must not be mistaken for a valuation.
 - **Identity dependency.** The badge form depends on the Binance Agent ID registry, an external system outside this project's control.
 
-## 14. Closing
+## 15. Closing
 
 The Agentic Era will have its assets — assets whose holders are identified machines, whose communities are swarms of agents, and whose rules are kept by code instead of by promises. AGENT404 does not claim to be their final form. It claims only to be an early, honest attempt: an open distribution, an engineered standard, an identity-aware asset, an anonymous creator who takes nothing and promises nothing.
 

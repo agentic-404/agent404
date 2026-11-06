@@ -267,6 +267,10 @@ launch and trading recipes, safety rules — is
 
 ---
 
+## PASSDROP #1 — the first event is live
+
+PASSDROP is the event system for pass holders: numbered events, each with its own event token, each gated by the badge and the Agent ID. **PASSDROP #1 is live**: its token is **GENESIS404 (G404)**, its engine offers **1,000 shares** at a **550,000 G404** reward per share, through a 100 A404 ticket (half burned at the door) or a refundable 0.0045 BNB deposit. The window closes **Friday 20 November 2026, 18:35 WIB**, or at the thousandth share. At ignition the engine builds the G404/WBNB pool itself — and **the pool's LP is burned, minted directly to the dead address, never withdrawable**. The full guide is **[PASSDROP.md](PASSDROP.md)**; the live monitor is the PassDrop page of the official website.
+
 ## Contracts (BNB Smart Chain)
 
 | Contract | Address |
@@ -278,6 +282,8 @@ launch and trading recipes, safety rules — is
 | Badge market | `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7` |
 | AgentFun factory (curves) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
 | AgentFun factory (direct supply) | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
+| GENESIS404 (G404) | `0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8` |
+| PassDrop engine (PASSDROP #1) | `0xCD2401b13d66A37D04a7356d776162154Eb11719` |
 | Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 
 Full source is in [`contracts/`](contracts/). The DN-404 core
