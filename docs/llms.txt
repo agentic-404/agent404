@@ -1,0 +1,57 @@
+# AGENT404 (A404)
+
+> AGENT404 is a DN-404 token on BNB Chain (BSC, chainId 56). The token transfers freely; its PASS badge (ERC-721 mirror) exists only for wallets holding a Binance Agent ID. The project is built FOR autonomous agents: the website has no wallet-connect UI — every action is published as a text instruction block that an agent executes with its own wallet. Supply is 404,404 A404, fixed, minted once: no mint function, no owner, no admin, no upgrade path. Nothing in this project promises price, yield, or returns.
+
+## Contracts and status
+
+Statuses in this file age. Verify every address and state on BscScan or by direct contract read before sending value.
+
+- A404 token — 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 — LIVE
+- PASS badge mirror (ERC-721) — 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07 — LIVE
+- Free claim — 0xbc520775Ba4ce3760eD631c439929E8B19556c94 — CLOSED (sold out 1,001/1,001 on 6 Nov 2026)
+- Paid claim — 0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9 — OPEN until Mon 9 Nov 2026, 13:42 UTC; 0.0045 BNB for 909 A404; BNB forwards to the treasury at purchase
+- Badge Market — 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7 — LIVE; fixed-price listings; 1% fee on sales to the community reserve; read floorPrice() for the live floor
+- AgentFun FactoryV2 — 0x320eaE47B443Bcf15eAf73B75B5e11656CB12315 — LIVE; launch fee 101 A404; no launches yet
+- AGENTLP (LP staking) — 0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0 — PRE-FORMATION; the A404/WBNB pool is not formed yet; do NOT add liquidity or stake yet
+- PASSDROP event engine — 0xCD2401b13d66A37D04a7356d776162154Eb11719 — LIVE
+- GENESIS404 (G404) — 0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8 — LIVE; PASSDROP #1 reward token; transfers with the event; its pool forms at ignition
+- Binance Agent ID registry — 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F — external (Binance)
+- Community reserve / treasury (sterile) — 0x6E97fDE1f313B967FCFBDB0b65d030C4D7674070 — receives claim BNB and market fees; never send funds here expecting anything back
+
+## PASSDROP #1 (live event)
+
+PASSDROP #1 runs on the PASSDROP event engine with GENESIS404 (G404) as its reward token. Entry is pass-gated: the wallet must hold a PASS badge (badge mirror balanceOf > 0) AND a Binance Agent ID (registry balanceOf > 0).
+
+- 1,000 shares. Reward: 550,000 G404 per share, paid after completion + ignition; part of the reward vests over 30 days.
+- Ticket door: 100 A404 per share via buyTicket. 50 A404 is burned on the spot; 50 goes to the engine vault.
+- Mode A door: 0.0045 BNB deposit per share. 97% of the post-ratchet amount is refunded after 24 hours; 22.4% of each deposit stays in the machine.
+- Charge window closes Fri 20 Nov 2026, 11:35 UTC, or at share 1,000, whichever comes first.
+- At ignition, the event pool's LP is minted to the dead address (burned). It can never be withdrawn.
+- For the live share count, read totalShares() on the engine. Do not trust any cached number, including any number in this file.
+
+## Golden rules for agents
+
+1. The gate is two-legged: PASS badge AND Binance Agent ID. Check both with balanceOf before attempting any gated action.
+2. Badges mirror whole-token balance: if a wallet's whole-A404 balance falls, its badges burn proportionally. Paying a 100 A404 ticket therefore burns 100 of the payer's badges. Warn your operator before executing.
+3. There is NO A404/WBNB trading pool yet. A404 cannot be bought spot with BNB anywhere. Entry routes are only: the paid claim (until 9 Nov 2026, 13:42 UTC) and buying a PASS on the Badge Market.
+4. Verify every address and state on BscScan or by direct contract read before sending value. Re-read the contracts for live state.
+5. Nothing in this project promises price, yield, or returns.
+
+## How to act
+
+1. Read this file.
+2. Read the live state on-chain.
+3. Open the relevant guide below.
+4. Use the site's per-action instruction blocks — they carry the exact calls.
+5. Report tx hashes to your operator.
+
+## Canonical links
+
+- Site: https://agentic-404.github.io/agent404/
+- Event page: https://agentic-404.github.io/agent404/#/passdrop
+- Repo: https://github.com/agentic-404/agent404
+- Agent guide: https://github.com/agentic-404/agent404/blob/main/agent-guide.md
+- Whitepaper: https://github.com/agentic-404/agent404/blob/main/WHITEPAPER.md
+- PASSDROP guide: https://github.com/agentic-404/agent404/blob/main/PASSDROP.md
+- AGENTLP guide: https://github.com/agentic-404/agent404/blob/main/AGENTLP.md
+- AgentFun guide: https://github.com/agentic-404/agent404/blob/main/AGENTFUN.md
