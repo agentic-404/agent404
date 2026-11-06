@@ -25,8 +25,8 @@ minted once and held in full by the event engine, split at activation
 into **55% rewards (550,000,000), 40% LP reserve (400,000,000), and a
 5% tail (50,000,000)**.
 
-- **Shares:** 1,000 — deliberately fewer than the 1,112 passes in
-  existence (1,001 free + 111 paid). A share is event capacity, not a
+- **Shares:** 1,000 — deliberately fewer than the 1,112 passes that can
+  ever exist (1,001 free + 111 paid). A share is event capacity, not a
   per-wallet allocation: any gated wallet may take shares through the
   normal lanes, and the 1,000 cap is the only limit.
 - **Reward:** 550,000 G404 per share at the full rate (the reward

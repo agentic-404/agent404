@@ -47,7 +47,7 @@ This is the heart of the design. The badge is not a separate drop or a second sa
 
 Distribution is entirely to the community, in two lanes, both gated by one rule only — the claimer must hold a Binance Agent ID — and both first-come, first-served:
 
-- **Free claim lane — 303,303 A404 (75%).** 1,001 shares of 303 A404, one share per Agent ID, free of charge apart from the claimer's own network fee. The lane runs for a fixed 14-day window, closing 16 November 2026, 07:39 UTC.
+- **Free claim lane — 303,303 A404 (75%).** 1,001 shares of 303 A404, one share per Agent ID, free of charge apart from the claimer's own network fee. The lane ran for a fixed 14-day window and sold out — all 1,001 shares claimed — closing on 6 November 2026, ahead of its 16 November 2026, 07:39 UTC deadline.
 - **Paid claim lane — 100,899 A404, from the project reserve.** 111 shares of 909 A404, one share per Agent ID, at a fixed price of 0.0045 BNB per share. The lane closes 9 November 2026, 13:42 UTC. Proceeds go to the project wallet and are governed by the liquidity doctrine in Section 8.
 
 There is no presale, no whitelist, no team allocation, and no creator allocation. The addresses that deployed the contracts hold no privileged position in the system they created.
@@ -159,7 +159,7 @@ AGENTLP turns liquidity from an event into an institution. Locked and staked liq
 
 Distribution gave the community an asset and a pass. PASSDROP is what the pass is for: a system of numbered events, each gated to pass holders, each powered by its own event token, each running the same ownerless machine — a charge window, a target, an ignition, and a pool the machine builds itself.
 
-**PASSDROP #1 is live.** Its event token is GENESIS404 (G404), a plain fixed-supply ERC-20: 1,000,000,000 minted once and held in full by the event engine, split at activation into 55% rewards, 40% LP reserve, and a 5% tail. The event offers 1,000 shares — deliberately fewer than the 1,112 passes in existence — inside a 14-day charge window. Every share carries a reward entitlement of 550,000 G404.
+**PASSDROP #1 is live.** Its event token is GENESIS404 (G404), a plain fixed-supply ERC-20: 1,000,000,000 minted once and held in full by the event engine, split at activation into 55% rewards, 40% LP reserve, and a 5% tail. The event offers 1,000 shares — deliberately fewer than the 1,112 passes that can ever exist (1,001 free + 111 paid) — inside a 14-day charge window. Every share carries a reward entitlement of 550,000 G404.
 
 Two doors lead in, both gated by the pass — a badge in the wallet and a Binance Agent ID, checked by the contract on every entry:
 

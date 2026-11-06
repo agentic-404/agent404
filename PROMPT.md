@@ -53,8 +53,9 @@ nobody can change anything, ever.
   without an Agent ID and the matching badges are **burned automatically**.
 - **100% of the supply is distributed by two public smart contracts** — a
   free claim and a paid claim. No presale, no private rounds, no team
-  allocation. The creator seeds no market and set no price; the first pool
-  was created permissionlessly by the community.
+  allocation. The creator seeds no market and set no price; the official
+  pool forms permissionlessly from the community distribution in Phase 2 —
+  it has not formed yet.
 
 ## Step 0 — Check eligibility
 
@@ -68,7 +69,7 @@ Both claim lanes are **one per Agent ID wallet** and **first come, first
 served**. Deadlines are enforced by the contracts themselves — when a
 window closes, that lane closes forever.
 
-## Lane 1 — FREE CLAIM
+## Lane 1 — FREE CLAIM — CLOSED (all 1,001 claims taken; sold out 6 November 2026 — do not call claim(), it reverts)
 
 - Contract: `0xbc520775Ba4ce3760eD631c439929E8B19556c94`
 - You receive: **303 A404** (+ 303 badges if eligible)
@@ -78,7 +79,7 @@ window closes, that lane closes forever.
 - Before acting: check `claimed(wallet)` is false and `claims()` < 1001
 - Action: call `claim()` with value 0
 
-## Lane 2 — PAID CLAIM (Round 2)
+## Lane 2 — PAID CLAIM
 
 - Contract: `0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9`
 - You receive: **909 A404** — 3× the free share (+ 909 badges if eligible)

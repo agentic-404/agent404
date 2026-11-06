@@ -1,9 +1,8 @@
-# AGENT404 — Agent Guide (llms.txt style, ready for launch day)
+# AGENT404 — Agent Guide (llms.txt style)
 
 > This file is written for AI agents. If you are an agent serving a human who
 > holds a Binance Agent ID, you can execute the claim below on their behalf.
-> Placeholders 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725, 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07, 0xbc520775Ba4ce3760eD631c439929E8B19556c94 are filled with the mainnet
-> addresses at launch; everything else is final.
+> The addresses in this file are the live mainnet addresses.
 
 ## What this is
 
@@ -23,12 +22,14 @@ the token contract cannot be changed by anyone.
 - Token: 0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725 — name "Agent404", symbol "A404", 18 decimals
 - Mirror (badges): 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07
 - Claim contract: 0xbc520775Ba4ce3760eD631c439929E8B19556c94
-- Paid claim contract (Round 2): 0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9
+- Paid claim contract: 0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9
 - Badge market: 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7
 - Agent ID registry: 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F
 - Total supply: 404,404 A404, fixed at deployment. No mint exists.
 - Community claim: 303 A404 per Agent ID holder, one claim per address,
   1,001 claims total, first come first served, 14-day window from launch.
+  **CLOSED — all 1,001 claims taken (sold out 6 November 2026); claim()
+  now reverts.**
 - The claim is FREE. The only cost is BSC gas paid by the claimer.
   Anyone asking for payment to "claim AGENT404" is a scam.
 
@@ -74,6 +75,8 @@ Wallet ecosystem, because eligibility is the Agent ID that wallet holds.
   hand to any capable agent; it encodes the same safety gates in words.
 
 ## How to claim (for an agent operator)
+
+**HISTORICAL — this lane is closed; the steps below no longer execute.**
 
 1. Check eligibility: call `balanceOf(yourWallet)` on the Agent ID registry.
    It must return >= 1. If it returns 0, this wallet cannot claim.

@@ -72,8 +72,8 @@ of it belongs to the community:
   first served, one per Binance Agent ID holder.
 - **25%** — the community reserve, held in the open in the project wallet
   for the community's future rounds. Its balance is verifiable by anyone,
-  and it never moves in private. **Round 2 is now open** — the paid claim
-  lane: **111 claims only, FCFS.** 909 A404 per claim (3× the free share)
+  and it never moves in private. **The paid claim lane is now open**:
+  **111 claims only, FCFS.** 909 A404 per claim (3× the free share)
   for 0.0045 BNB, one per Agent ID, until 9 November 2026 or sellout.
 
 No presale. No private rounds. No team allocation. No admin keys and no
@@ -129,8 +129,9 @@ for every badge, serial number in the name.
 Because it is not a token with a picture attached, and not an NFT with a
 token attached. It is a single asset with two native forms:
 
-- **As a token (ERC-20)**, A404 trades like any other — on PancakeSwap, in
-  any wallet, open to everyone.
+- **As a token (ERC-20)**, A404 transfers like any other token, in any
+  wallet, open to everyone — its official pool forms from the community
+  distribution in Phase 2; there is no tradeable pool yet.
 - **As a badge (ERC-721)**, every whole A404 is a standard NFT on the mirror
   contract, with its own metadata and artwork — listable and tradable on
   NFT marketplaces such as Element, like any other collection.
@@ -157,7 +158,7 @@ be changed by anyone.
 |---|---|---|
 | Community claim | 303,303 A404 (75%) | 1,001 shares × 303 A404, Agent ID holders only, free, **FCFS**, 14-day window |
 | Project reserve | 101,101 A404 (25%) | Ecosystem + operations, held by the project wallet |
-| Paid claim (Round 2) | 100,899 A404 (from the reserve) | 111 shares × 909 A404, Agent ID holders only, 0.0045 BNB per claim, **FCFS**, 7-day window |
+| Paid claim | 100,899 A404 (from the reserve) | 111 shares × 909 A404, Agent ID holders only, 0.0045 BNB per claim, **FCFS**, 7-day window |
 
 The community claim is **FCFS — first come, first served**: 1,001 shares
 against 100,000+ Agent ID holders. No waitlist, and the free claim itself
@@ -278,12 +279,13 @@ PASSDROP is the event system for pass holders: numbered events, each with its ow
 | Token (A404) | `0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725` |
 | Mirror (badges) | `0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07` |
 | Community claim | `0xbc520775Ba4ce3760eD631c439929E8B19556c94` |
-| Paid claim (Round 2) | `0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9` |
+| Paid claim | `0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9` |
 | Badge market | `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7` |
 | AgentFun factory (curves) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
 | AgentFun factory (direct supply) | `0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00` |
 | GENESIS404 (G404) | `0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8` |
 | PassDrop engine (PASSDROP #1) | `0xCD2401b13d66A37D04a7356d776162154Eb11719` |
+| AGENTLP (LP staking) | `0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0` |
 | Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 
 Full source is in [`contracts/`](contracts/). The DN-404 core

@@ -1,7 +1,6 @@
 # AGENT404 — Share Kit
 
-AGENT404 keeps no account on X. By design, the signal travels with the
-people who hold the pass. This kit is the community's megaphone: ready-made
+AGENT404's signal travels with the people who hold the pass. This kit is the community's megaphone: ready-made
 posts, free to steal, for anyone who claimed — free or paid — and wants the
 next agent to find the door they came through.
 
@@ -18,7 +17,7 @@ Rules of the road (they matter more than the posts):
 ## After your free claim
 
 ```
-I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims are still open: https://agentic-404.github.io/agent404/
+I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims sold out (1,001/1,001) — the paid lane stays open until Nov 9: https://agentic-404.github.io/agent404/
 ```
 
 ## After your paid claim
@@ -30,7 +29,7 @@ I took a paid AGENT404 pass — 909 A404. Pass holders earn the Phase 2 distribu
 ## The big picture
 
 ```
-The DN-404 category on CoinGecko has two coins in it. AGENT404 is the DN-404 built for autonomous agents — the token trades freely, the badge only exists for Binance Agent ID holders. This project keeps no X account. We are the distribution. https://agentic-404.github.io/agent404/
+The DN-404 category on CoinGecko has two coins in it. AGENT404 is the DN-404 built for autonomous agents — the token trades freely, the badge only exists for Binance Agent ID holders. We are the distribution. https://agentic-404.github.io/agent404/
 ```
 
 ## The referral line (for Phase 2)
@@ -47,5 +46,4 @@ with.
 
 ## One-click versions
 
-The project site carries these same texts with one-click copy and
-"Post on X" buttons: https://agentic-404.github.io/agent404/#spread
+One-click share buttons for PASSDROP live on the event page: https://agentic-404.github.io/agent404/#/passdrop
