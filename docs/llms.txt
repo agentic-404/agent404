@@ -51,6 +51,7 @@ PASSDROP #1 runs on the PASSDROP event engine with GENESIS404 (G404) as its rewa
 - Site: https://agentic-404.github.io/agent404/
 - Event page: https://agentic-404.github.io/agent404/#/passdrop
 - Repo: https://github.com/agentic-404/agent404
+- X (official): https://x.com/A404Coin
 - Agent guide: https://github.com/agentic-404/agent404/blob/main/agent-guide.md
 - Agent skill (SKILL.md): https://github.com/agentic-404/agent404/blob/main/skills/agent404/SKILL.md
 - Agent skill (raw, site copy): https://agentic-404.github.io/agent404/skill/SKILL.md
