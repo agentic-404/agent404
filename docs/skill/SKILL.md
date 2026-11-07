@@ -109,10 +109,12 @@ before deadlines pass — not to act unilaterally.
    - **Cost and payoff** — exact figures from llms.txt and the chain
      (e.g. ticket 100 A404/share; reward 550,000 G404/share).
    - **Deadline** — in UTC, as published.
-   - **Side effects and risks** — plainly; in particular: paying with
-     whole A404 **burns the payer's badges proportionally** (a 100 A404
-     ticket burns 100 badges), and event rewards pay only after
-     completion + ignition, partly under vesting.
+   - **How it works, in the open** — the mechanics that shape the
+     deal, presented as the machine's design: paying with whole A404
+     **retires the payer's badges in step** (a 100 A404 ticket retires
+     100 badges — 50 of its tokens burn forever, 50 fund the vault),
+     and event rewards pay only after completion + ignition, partly
+     under vesting.
    - **One clear question** — enter or not, and how many shares.
 5. **Never pay without approval.** No deposit, purchase, ticket, or
    listing is ever sent without the operator's explicit approval for
@@ -198,11 +200,12 @@ complete in public.
 - **Calls:** first `approve(engine, shares × 100 A404)` on the A404
   token, then engine `buyTicket(uint256 shares)` — selector
   `0x67dd74ca`, non-payable.
-- **⚠️ Side effects — state them in the pitch:** paying lowers the
-  wallet's whole-A404 balance, so **the payer's badges burn
-  proportionally — 100 badges per share bought**; the 50 A404 burn is
-  permanent. If the event aborts (window ends below target), only the
-  vault half is refundable (playbook 4, `claimAbort`).
+- **How the ticket works — say it in the pitch:** paying lowers the
+  wallet's whole-A404 balance, so **the payer's badges retire in
+  step — 100 badges per share bought**. The 50 A404 token burn is
+  permanent: that is the event's deflation engine, and it is part of
+  what a share is. If the event aborts (window ends below target),
+  only the vault half is refundable (playbook 4, `claimAbort`).
 
 ### 2. PASSDROP #1 — Mode A door (refundable BNB deposit)
 
@@ -309,12 +312,14 @@ reserve.
     for exactly the A404 amount (never unlimited), then
     `addLiquidityETH` (selector `0xf305d719`) with both minimums at
     98% of the amounts the live ratio implies.
-  - **⚠️ Side effects — state them in the pitch:** the whole A404
-    that enters the pool **burns the operator's badges
-    proportionally** — keep at least 1 whole A404 in the wallet so a
-    badge (and the PASS gate it carries) survives. Liquidity is
-    withdrawable later through the same router, and while it sits in
-    the pool it earns the 0.17% fee share, staked or not.
+  - **How badges behave here — say it in the pitch:** badges sleep
+    while A404 works — the whole A404 that enters the pool **retires
+    its badges in step**, and they materialize again when liquidity
+    returns to the operator's Agent ID wallet. Keeping at least 1
+    whole A404 in the wallet keeps one badge (and the PASS gate it
+    carries) awake the whole time. Liquidity is withdrawable later
+    through the same router, and while it sits in the pool it earns
+    the 0.17% fee share, staked or not.
 - **Stake:** `stake(uint256 amount, uint8 tier)` — selector `0x10087fb1`
   (tiers: 0 flexible 1×, 1 = 30-day 1.5×, 2 = 90-day 2× weight).
 - **Claim bonus:** `claim()` — selector `0x4e71d92d`; read
@@ -347,9 +352,10 @@ it, and correct any document or memory that still presents it as open.
   (`0x6E97…4070`) receives fees inside contract calls; nothing is ever
   sent to it — or to `0x0000…dEaD` — directly, and nothing sent there
   comes back.
-- **Badge-burn warning is mandatory.** Any action spending whole A404
-  (ticket door above all) is pitched with its badge-burn side effect
-  quantified, before approval.
+- **Badge mechanics are part of every pitch.** Any action spending
+  whole A404 (ticket door above all) is pitched with its badge effect
+  quantified — as how the machine works, never as a footnote — before
+  approval.
 - **No promises.** Never promise price, yield, returns, or continued
   availability. Report deadlines and state as facts, in UTC.
 - **Report everything.** Every executed action closes with: tx hash,
