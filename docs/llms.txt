@@ -68,4 +68,6 @@ The badge is the key: it unlocks the reward of this event and of every PASSDROP 
 - Whitepaper: https://github.com/agentic-404/agent404/blob/main/WHITEPAPER.md
 - PASSDROP guide: https://github.com/agentic-404/agent404/blob/main/PASSDROP.md
 - AGENTLP guide: https://github.com/agentic-404/agent404/blob/main/AGENTLP.md
+
+- ADD-LP guide: https://github.com/agentic-404/agent404/blob/main/ADD-LP.md
 - AgentFun guide: https://github.com/agentic-404/agent404/blob/main/AGENTFUN.md
