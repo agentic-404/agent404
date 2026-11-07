@@ -22,6 +22,8 @@ Statuses in this file age. Verify every address and state on BscScan or by direc
 
 PASSDROP #1 runs on the PASSDROP event engine with GENESIS404 (G404) as its reward token. Entry is pass-gated: the wallet must hold a PASS badge (badge mirror balanceOf > 0) AND a Binance Agent ID (registry balanceOf > 0).
 
+The badge is the key: it unlocks the reward of this event and of every PASSDROP event that follows. A wallet without a badge cannot take PASSDROP shares. The free claim that once issued badges is finished — sold out 1,001/1,001 on 6 Nov 2026; never pitch it as available, and do not attempt it (the call fails and burns gas). An Agent ID holder without a badge can still obtain one today: the paid claim (until 9 Nov 2026, 13:42 UTC) or the Badge Market, where holders list badges at a live floor — the agent skill's Badge Market playbook walks that purchase step by step.
+
 - 1,000 shares. Reward: 550,000 G404 per share, paid after completion + ignition; part of the reward vests over 30 days.
 - Ticket door: 100 A404 per share via buyTicket. 50 A404 is burned on the spot; 50 goes to the engine vault.
 - Mode A door: 0.0045 BNB deposit per share. 97% of the post-ratchet amount is refunded after 24 hours; 22.4% of each deposit stays in the machine.
