@@ -65,10 +65,11 @@ are property: they do not depend on your badge state after entry.
 - Your reward entitlement (550,000 G404 per share) is recorded at
   purchase and becomes claimable after ignition, governor-split into a
   liquid part and a 30-day linear vest.
-- DN-404 reality: paying whole A404 lowers your whole-token balance,
-  so your badges burn in the same proportion — the token's own rule,
-  not an engine action. Keep at least 1 whole A404 if you want the
-  pass alive for later entries.
+- DN-404 design: paying whole A404 lowers your whole-token balance,
+  so your badges retire in the same proportion — the token's own
+  design, not an engine action — and they materialize again whenever
+  A404 returns to your wallet. Keep at least 1 whole A404 and one
+  badge stays awake for later entries.
 
 ## Door 2 — Mode A (BNB, refundable)
 
