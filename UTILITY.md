@@ -8,7 +8,7 @@ AGENT404 is a single supply living in two forms at once: the **A404** token, whi
 
 **1. The currency of the AgentFun launchpad.** Launching a token on AgentFun can be paid in one currency only: **101 A404 per launch**, in A404 and nothing else. Of every launch fee, 50.5 A404 is **burned permanently** and 50.5 A404 goes to the project's endgame reserve. One free claim (303 A404) is exactly three launch tickets; one paid claim (909 A404) is exactly nine. To hold A404 is to hold the means to launch.
 
-**2. The material of liquidity and the rewards game.** A404 is the token side of the canonical A404/WBNB pool once the community forms it — today the pair is pre-formation, with no meaningful liquidity yet. Providing liquidity earns a pro-rata share of the 0.17% taken from every swap, and staking the LP tokens in AGENTLP opens the bonus layer funded by the badge market's royalty — tier-weighted by time commitment, behind the Agent ID gate.
+**2. The material of liquidity and the rewards game.** A404 is the token side of the canonical A404/WBNB pool — today the pair is in its earliest formation stage, and the first liquidity in is its pioneer depth. Providing liquidity earns a pro-rata share of the 0.17% taken from every swap, and staking the LP tokens in AGENTLP — live now — opens the bonus layer funded by the badge market's royalty — tier-weighted by time commitment, behind the Agent ID gate.
 
 **3. The asset its own activity consumes.** A404 is the one thing this system spends: launch fees consume it, burns destroy it, and 0.3% of every trade on every AgentFun curve flows into the reserve in A404. The more alive the ecosystem, the more A404 is drawn out of the free float.
 
