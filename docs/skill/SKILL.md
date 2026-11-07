@@ -140,6 +140,15 @@ action and amount; (4) the call is simulated and does not revert;
 (5) the spend is within the operator's cap. After execution, always
 report: **tx hash, amounts in/out, and resulting balances/positions.**
 
+**The Proof of Share funnel (event page):** the PASSDROP page runs a
+five-step funnel — gate check, status & allocation read from the
+engine's books, the community post, post-link registration, and a
+pre-filled claim prompt. When your operator hands you a funnel claim
+prompt, it carries their wallet, share count, and — when they completed
+the community step — their registered post link: include that link in
+your final report, next to the transaction hash, so their entry stands
+complete in public.
+
 ### 1. PASSDROP #1 — ticket door (pay A404)
 
 - **What:** enter at 100 A404 per share: 50 A404 burned on the spot, 50
