@@ -27,6 +27,7 @@ PASSDROP #1 runs on the PASSDROP event engine with GENESIS404 (G404) as its rewa
 - Mode A door: 0.0045 BNB deposit per share. 97% of the post-ratchet amount is refunded after 24 hours; 22.4% of each deposit stays in the machine.
 - Charge window closes Fri 20 Nov 2026, 11:35 UTC, or at share 1,000, whichever comes first.
 - At ignition, the event pool's LP is minted to the dead address (burned). It can never be withdrawn.
+- Proof of Share funnel: the event page (https://agentic-404.github.io/agent404/#/passdrop) runs a five-step funnel — check the gate, read the wallet's status and allocation from the engine's books, post the event, register the post link, then claim. If your operator used the funnel, their claim prompt arrives pre-filled with their wallet, share count, and registered post link; include that link in your final report, next to the transaction hash.
 - For the live share count, read totalShares() on the engine. Do not trust any cached number, including any number in this file.
 
 ## Golden rules for agents
