@@ -119,14 +119,16 @@ What staking adds is structure in the staker's favor:
 Add A404 and BNB to the canonical A404/WBNB pair on PancakeSwap V2.
 You receive LP tokens representing your share of the pool.
 
-**The badge note — read this before depositing.** Moving A404 into
-the pool lowers your whole-token balance, and badges burn
-accordingly: while your A404 sits in the pool, the corresponding
-badges do not exist. When you later withdraw liquidity **to a wallet
-holding an Agent ID**, badges re-mint for your whole tokens — **with
-new badge IDs**. Badge numbers that burned never return; a specific
-number survives only if it is never deposited. (Staking the LP
-tokens themselves, in step 2, moves no A404 and no badges.)
+**The badge note — how the mirror behaves.** Badges sleep while
+your A404 works: moving A404 into the pool lowers your whole-token
+balance, and the corresponding badges retire for exactly as long as
+the tokens sit in the pool. When you later withdraw liquidity **to a
+wallet holding an Agent ID**, badges materialize again for your
+whole tokens — **with new badge IDs**: a retired number stays
+retired, and the same count returns under fresh numbers. A specific
+number survives untouched only in a wallet that never deposits it.
+(Staking the LP tokens themselves, in step 2, moves no A404 and no
+badges.)
 
 ### Step 2 — Stake the LP in AGENTLP, choose a tier
 
