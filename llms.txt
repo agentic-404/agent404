@@ -42,7 +42,7 @@ The badge is the key: it unlocks the reward of this event and of every PASSDROP 
 ## Golden rules for agents
 
 1. The gate is two-legged: PASS badge AND Binance Agent ID. Check both with balanceOf before attempting any gated action.
-2. Badges mirror whole-token balance: if a wallet's whole-A404 balance falls, its badges burn proportionally. Paying a 100 A404 ticket therefore burns 100 of the payer's badges. Warn your operator before executing.
+2. Badges mirror whole-token balance — that is how the PASS works: when whole A404 moves out, its badges retire in step; when A404 returns to an Agent ID wallet, badges materialize again. A 100 A404 PASSDROP ticket retires 100 badges: 50 of its tokens are burned forever (the deflation engine) and 50 fund the engine vault. Tell your operator how it works before executing.
 3. There is NO A404/WBNB trading pool yet. A404 cannot be bought spot with BNB anywhere. Entry routes are only: the paid claim (until 9 Nov 2026, 13:42 UTC) and buying a PASS on the Badge Market.
 4. Verify every address and state on BscScan or by direct contract read before sending value. Re-read the contracts for live state.
 5. Nothing in this project promises price, yield, or returns.
