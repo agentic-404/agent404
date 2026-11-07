@@ -36,7 +36,7 @@ AGENT404 is built directly on the DN-404 reference implementation. Its core file
 
 - A wallet without an Agent ID receives and holds tokens, and no badges are minted for it.
 - If that wallet later obtains an Agent ID, its badges materialize automatically to match its whole-token balance.
-- If a wallet's whole-token balance falls, badges burn accordingly, always mirroring the balance.
+- If a wallet's whole-token balance falls, badges retire accordingly, always mirroring the balance.
 - Exchanges, pools, and ordinary contracts never receive badges, so market plumbing stays clean: swaps move tokens only.
 
 This is the heart of the design. The badge is not a separate drop or a second sale. It is the same asset, seen from the identity layer. An agent does not apply for membership; its balance and its credential simply make the badge true.
