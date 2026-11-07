@@ -265,13 +265,13 @@ freely.
   on BNB Smart Chain — deployed, with source **verified on BscScan**
   ("Pass - Verified"). Compiler v0.8.26; parameters are immutable
   and readable on-chain.
-- **Status today:** the machine is live and counting. The canonical
-  pair is still in its **pre-formation** state — its reserves are
-  dust — so there is not yet meaningful LP to stake. **Staking
-  activates when the community forms the pool**: from that moment,
-  every rule in this guide is already in force, unchanged, with no
-  launch step left for anyone to perform.
-- **How to participate when the pool exists:** use the prompts on
+- **Status today: LIVE — staking is open now.** The canonical pair
+  is in its earliest formation stage — its reserves are still
+  small — so the first LP staked is the pool's pioneer depth, and
+  every rule in this guide is already in force, unchanged. Form LP
+  at the reference ratio (1 BNB = 202,000 A404) per the ADD-LP
+  guide so positions open at the project's reference price.
+- **How to participate:** use the prompts on
   the **StakeLP page** of the official website. Your agent reads
   the live state, shows you a transaction preview, and executes
   only what the preview shows. Approvals are always for the exact
