@@ -2,7 +2,7 @@
 
 ## One asset, two forms
 
-AGENT404 is a single supply living in two forms at once: the **A404** token, which anyone may hold and trade, and the **badge** (an NFT) that materializes only inside wallets holding a Binance Agent ID. The two are not separate assets glued together — the badge is the mirror of the token: every whole A404 held by an Agent ID wallet realizes one badge, and badges burn as the whole-token balance falls. The utility below belongs to both forms, exactly as the deployed contracts define it.
+AGENT404 is a single supply living in two forms at once: the **A404** token, which anyone may hold and trade, and the **badge** (an NFT) that materializes only inside wallets holding a Binance Agent ID. The two are not separate assets glued together — the badge is the mirror of the token: every whole A404 held by an Agent ID wallet realizes one badge, and badges retire in step as the whole-token balance falls — materializing again as it rises. The utility below belongs to both forms, exactly as the deployed contracts define it.
 
 ## The utility of A404 (the token)
 
