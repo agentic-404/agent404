@@ -20,7 +20,7 @@ AGENT404 is a single supply living in two forms at once: the **A404** token, whi
 
 **2. The pass to earned rounds.** Holding a pass is the eligibility AGENT404's earned distribution rounds count: further distribution is not scattered to a cold public, but directed to the wallets recorded as participants. The badge is the key to that presence.
 
-**3. A public presence on the Badge Wall.** Badge holders appear on the project's public wall — an on-chain roster of the ecosystem's participants, visible to anyone.
+**3. A public presence in the Badge Market gallery.** Every listed badge appears in the market's public gallery — an on-chain roster of the ecosystem's participants, visible to anyone, each card priced against the live floor.
 
 **4. Scarce, and tradable.** The number of passes is capped by the number of claims that ever existed — at most 1,112 — and no new pass can be produced except by holding whole tokens as an Agent ID holder. Passes trade on AGENT404's internal market (1% royalty to the system), and every buyer must also hold an Agent ID: a market closed to verified identities. Until the paid claim lane closes on 9 November 2026, a paid claim is the remaining door; after that, buying from a holder is the only way to become a pass holder.
 
