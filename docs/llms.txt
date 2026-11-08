@@ -17,7 +17,7 @@ Statuses in this file age. Verify every address and state on BscScan or by direc
 - PASS badge mirror (ERC-721) — 0xB61b93704ae5c1d1D48Cd97A18D78F23a4912b07 — LIVE
 - Free claim — 0xbc520775Ba4ce3760eD631c439929E8B19556c94 — CLOSED (sold out 1,001/1,001 on 6 Nov 2026)
 - Paid claim — 0xDb8452C9c8d3d6b9680Ce7414a4610DBCF9445F9 — OPEN until Mon 9 Nov 2026, 13:42 UTC; 0.0045 BNB for 909 A404; BNB forwards to the treasury at purchase
-- Badge Market — 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7 — LIVE; fixed-price listings; 1% fee on sales to the community reserve; read floorPrice() for the live floor
+- Badge Market — 0x076Ea27B59aC73738b8c970d727aCCb4f77685A7 — LIVE; fixed-price listings; 1% fee on sales to the community reserve; read floorPrice() for the live floor; on the site, listings render as a public gallery on the Badge Market page (the old Badge Wall merged into it; #/wall redirects there)
 
 - Site price strip — every page header shows the live A404/WBNB pool price (via GeckoTerminal) beside the Badge Market floor; the pool is in its earliest formation stage, so the pool figure is a formation-stage quote
 - AgentFun FactoryV2 — 0x320eaE47B443Bcf15eAf73B75B5e11656CB12315 — LIVE; launch fee 101 A404; no launches yet
@@ -25,6 +25,7 @@ Statuses in this file age. Verify every address and state on BscScan or by direc
 - PASSDROP event engine — 0xCD2401b13d66A37D04a7356d776162154Eb11719 — LIVE
 - GENESIS404 (G404) — 0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8 — LIVE; PASSDROP #1 reward token; transfers with the event; its pool forms at ignition
 - Autonomous Agent Swap desk (site page #/swap) — LIVE; the agent-first trading desk. Home market: A404/WBNB. Verified majors index, selectable into the desk: WBNB/USDT, CAKE/WBNB, CAKE/USDT, ETH/WBNB, BTCB/WBNB (PancakeSwap). The operator copies the order the desk writes; majors trade quote-first — minimum received = 99% of a fresh pool quote, and the order stops instead of trading above 2% price impact
+- MY PASS (site page #/mypass) — LIVE; a read-only position check for any wallet: Agent ID, badge count, A404 balance, PASSDROP #1 shares by lane and the G404 entitlement — no wallet connection
 - Binance Agent ID registry — 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F — external (Binance)
 - Community reserve / treasury (sterile) — 0x6E97fDE1f313B967FCFBDB0b65d030C4D7674070 — receives claim BNB and market fees; never send funds here expecting anything back
 
