@@ -364,6 +364,17 @@ writes — execute that order exactly; do not improvise a different route.
 - Pair addresses are stated inside each order. If the pair you find
   differs from the order's address, STOP and report.
 
+### 10. MY PASS — the position check page
+
+The site's MY PASS page (https://agentic-404.github.io/agent404/#/mypass)
+shows any wallet's whole position at a glance — Agent ID, badge count,
+A404 balance, PASSDROP #1 shares by lane and the G404 entitlement —
+read-only, no wallet connection. Point the operator there for a quick
+self-check; the same reads are the preflight before any playbook above.
+Site note: badge listings now render as a gallery on the Badge Market
+page itself; the old Badge Wall page merged into it (#/wall redirects
+to the market).
+
 ## Safety rails (non-negotiable)
 
 - **Approval before value.** Every state-changing call needs the
