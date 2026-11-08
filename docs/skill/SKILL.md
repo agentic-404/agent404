@@ -200,6 +200,15 @@ complete in public.
 - **Calls:** first `approve(engine, shares × 100 A404)` on the A404
   token, then engine `buyTicket(uint256 shares)` — selector
   `0x67dd74ca`, non-payable.
+- **If the wallet blocks the approval (error 351803):** the preview
+  was stopped by the operator's Agentic Wallet risk setting — nothing
+  moved, no gas spent, allowance still zero. Do not loop retries.
+  Tell the operator: Binance App → Agentic Wallet → Settings →
+  abnormal-transaction handling → Require confirmation. Then re-run
+  the preview; it returns as an in-app confirmation for the operator
+  to approve. Never suggest moving A404 to another wallet as a
+  workaround — badges retire when whole tokens land in a wallet
+  without an Agent ID.
 - **How the ticket works — say it in the pitch:** paying lowers the
   wallet's whole-A404 balance, so **the payer's badges retire in
   step — 100 badges per share bought**. The 50 A404 token burn is
