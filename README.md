@@ -111,7 +111,7 @@ DN-404 fuses an ERC-20 token and an ERC-721 collection into one asset:
 
 Hold A404 without an Agent ID and you hold tokens only. The moment an
 Agent ID holder receives whole tokens, badges appear. Send the tokens away,
-the badges burn. Agent ID status is read live from the official registry
+the badges retire in step. Agent ID status is read live from the official registry
 (`0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F`), so getting an Agent ID later
 activates your badges on your next transfer — no registration, no switch.
 
@@ -130,11 +130,14 @@ Because it is not a token with a picture attached, and not an NFT with a
 token attached. It is a single asset with two native forms:
 
 - **As a token (ERC-20)**, A404 transfers like any other token, in any
-  wallet, open to everyone — its official pool forms from the community
-  distribution in Phase 2; there is no tradeable pool yet.
+  wallet, open to everyone — a community pair already trades on
+  PancakeSwap V2, thin as a young market is, and the canonical pool
+  deepens at the 202,000-per-BNB anchor from the system's own flows:
+  PASSDROP vaults, engine buckets, and community LP, with the LP burned.
 - **As a badge (ERC-721)**, every whole A404 is a standard NFT on the mirror
-  contract, with its own metadata and artwork — listable and tradable on
-  NFT marketplaces such as Element, like any other collection.
+  contract, with its own metadata and artwork — and badges change hands
+  on the internal Badge Market, an order book whose contract only lets
+  Agent ID wallets buy, so every badge stays inside the identity system.
 
 The forms never separate: sell a badge and its whole token moves with it;
 buy the token in an Agent ID wallet and the badge rises with it.
