@@ -344,6 +344,26 @@ The free lane sold out (1,001/1,001 on 6 Nov 2026). Its `claim()`
 it, and correct any document or memory that still presents it as open.
 `claims()` / `claimed(address)` remain useful as historical reads.
 
+### 9. Autonomous Agent Swap desk — home market + verified majors
+
+The desk lives at https://agentic-404.github.io/agent404/#/swap. The
+operator picks a pair and an amount there and copies the order the desk
+writes — execute that order exactly; do not improvise a different route.
+
+- Home market A404/WBNB: the desk's order carries the reference anchor
+  (1 BNB = 202,000 A404) as its estimate frame and a minimum-received
+  floor. On a SELL of A404, warn the operator first: whole tokens
+  leaving the wallet retire the matching badges (golden rule 2).
+- Verified majors (WBNB/USDT, CAKE/WBNB, CAKE/USDT, ETH/WBNB,
+  BTCB/WBNB): the desk's generic order is quote-first — read the live
+  amounts out for the stated route, preview amount in / quoted out /
+  minimum received (= 99% of the fresh quote) / price impact, and get
+  the operator's approval before executing. Price impact above 2%:
+  STOP and report. Exact-amount approvals only; WBNB legs settle in
+  native BNB through the router's ETH variants.
+- Pair addresses are stated inside each order. If the pair you find
+  differs from the order's address, STOP and report.
+
 ## Safety rails (non-negotiable)
 
 - **Approval before value.** Every state-changing call needs the
