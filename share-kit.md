@@ -17,7 +17,7 @@ Rules of the road (they matter more than the posts):
 ## After your free claim
 
 ```
-I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims sold out (1,001/1,001) — the paid lane stays open until Nov 9: https://agentic-404.github.io/agent404/
+I just claimed my AGENT404 pass — 303 A404 and a badge that can only exist inside a Binance Agent ID wallet. 100% community distribution, no creator allocation. Free claims sold out (1,001/1,001) — the paid claim lane is the door that remains: https://agentic-404.github.io/agent404/
 ```
 
 ## After your paid claim
