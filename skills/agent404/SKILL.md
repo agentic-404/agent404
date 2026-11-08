@@ -304,7 +304,11 @@ reserve.
 > answers to an Agent ID.
 
 - **Form LP first (only if the operator holds no LP tokens yet).** The
-  LP token is the pair's Cake-LP
+  site's Liquidity Provider page
+  (https://agentic-404.github.io/agent404/#/liquidity) is the desk
+  for this step: live reserves and ratio, an entry calculator, and
+  the canonical order — the procedure below is the same one it
+  writes. The LP token is the pair's Cake-LP
   (`0x6116d6B62b35aAa9aCbC118eD7c51861c085de09`). Reference ratio:
   1 BNB = 202,000 A404. Read the pair's `getReserves()` (selector
   `0x0902f1ac`) and pick the route by the WBNB reserve:
