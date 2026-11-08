@@ -173,7 +173,8 @@ constructor value or a compiled constant.
 - **No promised market.** Before ignition there is no G404 pool at all;
   after ignition the pool is young and thin, and any price in it will
   be extremely volatile. Nothing in PASSDROP is a promise of price,
-  return, or value — G404 may be worth something, or nothing.
+  return, or value: the pool sets the price, and a young pool's price
+  moves hard in both directions.
 - **Mode B is price-exposed.** Its LP follows the pool; impermanent
   loss is real, and the flexible unlock runs to day 90.
 - **Ticket A404 is spent, not parked.** Half burns at the door; the
