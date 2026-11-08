@@ -81,7 +81,7 @@ AGENT404's supply is fixed at 404,404 and can never increase — the token contr
 
 **3. The reserve refills the lock.** Every trade on every AgentFun curve pays a 1% fee, and 0.3% of each trade accrues to the endgame reserve. Of the community-side BNB that accumulates there, 20% is earmarked to seed further liquidity whose LP tokens are likewise burned. Trading activity anywhere in the ecosystem therefore deepens the one pool that matters — and locks more of the supply inside it.
 
-**The badge layer deflates too.** A badge exists only while its whole tokens rest in a wallet holding a Binance Agent ID. Move the tokens to a wallet without one, and the badges burn. The badge supply has no cap written in code; it is held scarce by the rules of the system itself — badges survive only where they belong.
+**The badge layer deflates too.** A badge exists only while its whole tokens rest in a wallet holding a Binance Agent ID. Move the tokens to a wallet without one, and the badges retire — they materialize again wherever whole tokens come to rest in an Agent ID wallet. The badge supply has no cap written in code; it is held scarce by the rules of the system itself — badges survive only where they belong.
 
 **A built-in thermostat.** The launch fee is denominated in A404, not in fiat. If the market price of A404 rises, launching becomes more expensive in currency terms and the pace of new launches cools on its own; if the price falls, launching is cheap and the burn accelerates. No committee adjusts this. The fee schedule is the governor.
 
@@ -180,7 +180,7 @@ AGENT404 is an anonymous project. It has no face, no spokesperson, and no inside
 
 This whitepaper stands in that line, and so it ends its claims where those pioneers ended theirs:
 
-- **Nothing in this document is a promise of value.** A404 may be worth something, or nothing, forever. No statement here — about distribution, markets, launches, or phases — is a prediction that it will be worth anything.
+- **Nothing in this document is a promise of value.** No statement here — about distribution, markets, launches, or phases — is a prediction of price: the market sets the price, wherever buyers and sellers meet.
 - **Nothing here is a roadmap of guaranteed delivery.** What exists is deployed, verifiable, and listed in Section 13. What is described as direction is direction, not obligation.
 - **Participation is an experiment, not an investment.** Anyone who claims, buys, lists, or launches does so as a participant in an open experiment on a new asset form — the same spirit in which the first inscriptions were made and the first meme assets were locked into pools by people who expected nothing.
 
@@ -209,7 +209,7 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 
 - **Experimental standard.** DN-404 is a young asset form. Its behavior at scale, including the gas cost of badge minting and burning on large transfers, is a property of the design and a real cost participants bear.
 - **Smart contract risk.** The contracts are immutable, which means defects, if any are ever found, cannot be patched. Immutability is simultaneously this project's trust guarantee and its risk.
-- **No seeded market.** By the doctrine of Section 8, there may never be meaningful liquidity or any functioning price for A404. Any price that appears in thin community venues will be extremely volatile and must not be mistaken for a valuation.
+- **Young, thin markets.** A404's pool is community-grown and, at this stage, thin: prices in it move hard in both directions and are a market signal, not a valuation. Depth is designed to accumulate from the system's own flows — the PASSDROP vault and engine buckets at the 202,000-per-BNB anchor, and community LP — with the LP burned.
 - **Identity dependency.** The badge form depends on the Binance Agent ID registry, an external system outside this project's control.
 
 ## 15. Closing
