@@ -200,7 +200,7 @@ deposits at exactly 0.002 BNB for Agent ID holders — no ticket
 lane, no PASS badge required. 24 hours after each deposit, one
 claim pays back 0.001552 BNB (97% of the post-ratchet remainder)
 plus the share's reward of 20 A404; rewards halve every 1,000
-total shares. Target 750 shares: reaching it completes the event
+total shares. Target 1,000 shares: reaching it completes the event
 early, otherwise ignition runs at day 14 with whatever was
 collected — the event has no fail state. Ignition creates the
 official A404/BNB pool at the anchor (1 BNB = 202,000 A404) with
