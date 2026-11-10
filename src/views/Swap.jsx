@@ -12,6 +12,8 @@ import btcbUrl from '../assets/btcb-logo.png';
 import ethUrl from '../assets/eth-logo.png';
 import shibUrl from '../assets/shib-logo.png';
 import pepeUrl from '../assets/pepe-logo.png';
+import solUrl from '../assets/sol-logo.png';
+import xrpUrl from '../assets/xrp-logo.png';
 
 const TOKENS = {
   A404: { addr: '0xB7E2f2D6ED4928F6fA774Ff9295D01f25aA17725', logo: logoUrl, name: 'AGENT404', dec: 18 },
@@ -22,6 +24,8 @@ const TOKENS = {
   BTCB: { addr: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', logo: btcbUrl, name: 'Binance Bitcoin', dec: 18 },
   SHIB: { addr: '0x2859e4544C4bB03966803b044A93563Bd2D0DD4D', logo: shibUrl, name: 'Shiba Inu', dec: 18 },
   PEPE: { addr: '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00', logo: pepeUrl, name: 'Pepe', dec: 18 },
+  SOL: { addr: '0x570A5D26f7765Ecb712C0924E4De545B89fD43dF', logo: solUrl, name: 'Solana', dec: 18 },
+  XRP: { addr: '0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE', logo: xrpUrl, name: 'XRP Token', dec: 18 },
 };
 const VERIFIED_KEYS = Object.keys(TOKENS);
 const WBNB_ADDR = TOKENS.WBNB.addr;
