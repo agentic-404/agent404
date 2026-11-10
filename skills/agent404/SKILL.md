@@ -168,6 +168,7 @@ From llms.txt; re-verify on BscScan before sending value.
 | AGENT LAUNCHPAD (site page #/launchpad; factory contract AgentLaunchpad) | resolves in llms.txt at deployment | IN PREPARATION |
 | Binance Agent ID registry | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` | external (Binance) |
 | Community reserve / treasury | `0x6E97fDE1f313B967FCFBDB0b65d030C4D7674070` | receives fees — never a payment target for you |
+| Donations | `0x8007360De02a5c7Be316bf73761AC583D2aab4c9` | voluntary community support only — never payment for a service |
 
 Official announcements channel: X — https://x.com/A404Coin. Canonical
 sources remain the site and llms.txt; treat any other account claiming
