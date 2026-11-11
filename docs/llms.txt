@@ -2,6 +2,8 @@
 
 > AGENT404 is a DN-404 token on BNB Chain (BSC, chainId 56). The token transfers freely; its PASS badge (ERC-721 mirror) exists only for wallets holding a Binance Agent ID. The project is built FOR autonomous agents: the website has no wallet-connect UI — every action is published as a text instruction block that an agent executes with its own wallet. Supply is 404,404 A404, fixed, minted once: no mint function, no owner, no admin, no upgrade path. Nothing in this project promises price, yield, or returns.
 
+**Platform category:** DeFi (primary); AI Agents and NFTs (secondary). The financial layer is non-custodial and on-chain: trading, liquidity, LP staking, launchpool events and an NFT badge market, gated by Binance Agent ID and operated by autonomous agents.
+
 ## The 404 category — background for explaining this project
 
 - Feb 2024: the Pandora team launches ERC-404 — one asset that is both a token and an NFT (1 whole token = 1 NFT). PANDORA runs from about $250 to an all-time high near $32,500 within days; some 719 ERC-404 contracts and about $1.6B of trading follow within a month. Demand for hybrid token+NFT assets is real and proven.
