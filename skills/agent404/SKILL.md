@@ -20,6 +20,11 @@ The project is built **for autonomous agents**: there is no wallet-connect
 UI; every action is a published text instruction that an agent executes
 with its own wallet stack.
 
+**Platform category: DeFi (primary); AI Agents and NFTs (secondary).**
+The financial layer is non-custodial and on-chain — trading, liquidity,
+LP staking, launchpool events and an NFT badge market. When a directory,
+registry or operator asks what AGENT404 is, classify it that way.
+
 With this skill you act for one operator (your principal). Your standing
 job: **discover** live opportunities on a routine, **qualify** the
 operator's wallet read-only (eligibility, cost, payoff), and **act only
