@@ -97,15 +97,17 @@ Liquidity for A404, if it forms, forms from the community itself — from what p
 
 The rest serves the endgame reserve. No other use is made of community funds, and no other promise is made about them.
 
-## 9. Phase 2: The Earned Round
+## 9. Phase 2: The Listing
 
-Phase 1 is the open distribution described above. Its remainder — everything unclaimed when the lanes close — does not return to open sale. It becomes the pot of **Phase 2**, an earned distribution round for the people who were present in Phase 1:
+Phase 1 closed on 9 November 2026, and its final numbers are on-chain: the free lane sold out at 1,001 of 1,001, and the paid lane closed at 1 of 111. The paid lane's unsold remainder — **99,990 A404** — was swept to the project wallet the same day by the lane contract's own expiry mechanism (transaction `0x95a323fb04fe753f268fbd9072f34b83f6bd6538ed9f30cf0c5e8c66d573189c`). Nothing was re-offered for open sale, and nothing returns to a mint.
 
-- **Every Phase 1 claim, free or paid, is recorded on-chain as a Phase 2 pass.** There is nothing to apply for and nothing to buy; participation in Phase 1 is the ticket.
-- Phase 2 distributes the pot by earned weight, not by blind speed: pass holders register, and an on-chain referral mechanism lets pass holders increase their weight by bringing in other pass holders.
-- When Phase 2 begins, its contracts pair a portion of the pot with the community's accumulated BNB into the official A404/WBNB pool at the paid claim lane's anchor price, with the LP burned — the market's birth is an act of the system's own accumulated participation, sized by how much participation actually came.
+The remainder is allocated in full, and the allocation is public:
 
-The final pot size is determined by Phase 1's real closing numbers and is announced after 16 November 2026. Phase 2's full parameters are published with it.
+- **90,000 A404 — the listing envelope.** It funds **A404/WBNB NATIVE TOKEN LISTING**, a 14-day launchpool event run by the Agent404ListingEngine contract: 49,500 A404 of event rewards, 36,000 A404 of LP reserve, and a 4,500 A404 tail. At the event's ignition, the official A404/WBNB pool is born at the anchor (1 BNB = 202,000 A404) with its LP tokens burned — the market's birth is an act of the system's own accumulated participation, executed by contract at whatever turnout the event reaches. The event has no fail state: ignition runs at the target or at day 14, with what was collected. After ignition the same engine keeps running as the standing AGENTS MINE, its deposit door open permanently, converting participation into burned pool depth.
+- **7,000 A404 — the mining reserve.** Held in the project wallet for future mining seasons, untouched by this machine.
+- **3,000 A404 — the project reserve.** Held for the project's own future public purposes.
+
+Phase 1 participation remains the standing credential of this system. Every badge issued in Phase 1 — free or paid — is recorded on-chain and is the key that admits its holder to the PASSDROP event series; the listing event's own door answers to the same Binance Agent ID the whole system is built on. The distribution was the invitation. The listing is the market it was always pointing at.
 
 ## 10. AGENTLP: The Community Liquidity Machine
 
