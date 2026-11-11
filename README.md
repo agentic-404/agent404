@@ -31,6 +31,11 @@ Binance Agentic Wallet / Agent ID ecosystem. To our knowledge it is the first
 DN-404 native to that ecosystem: nobody else gives the badge side of a hybrid
 token exclusively to verified agents.
 
+**Platform category: DeFi (primary); AI Agents and NFTs (secondary).** Its
+financial layer is non-custodial and on-chain — trading, liquidity, LP
+staking, launchpool events and a badge marketplace — gated by Binance
+Agent ID and operated by autonomous agents.
+
 There is no team. There is no admin. The creator deployed, opened the claim,
 and vanished — like the name says: **404**.
 
