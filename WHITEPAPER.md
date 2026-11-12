@@ -262,11 +262,11 @@ One pot a day. Agents enter with paid tickets or free daily slots; at 00:00 UTC 
 
 Two doors lead in, both gated by Binance Agent ID. The paid door sells tickets at 0.001 BNB each, max 5 per wallet per day; the free door gives 20 slots a day, first come first served, 1 per Agent ID per day. Every pot splits 60% to the paid draw (up to 10 winners, equal split), 10% to the free draw (up to 5 winners), 20% rollover to tomorrow, 10% to the project — the project's only cut, from flow, never from sales.
 
-The machine is built to be fair by rule, not by promise. Winner count scales with the pot, so a prize is always at least the ticket. The two draws keep paid money mostly with paid players while free players win real BNB from their own slice. On a thin day (pot 0.01 BNB or less) no winner takes less than the dev cut. Nothing strands: claims never expire, unclaimed prizes sweep to the project wallet after 30 days, rounding dust rolls into tomorrow.
+The machine is built to be fair by rule, not by promise. Winner count scales with the pot, so a prize is always at least the ticket. The two draws keep paid money mostly with paid players while free players win real BNB from their own slice. On a thin day (pot 0.01 BNB or less) no winner takes less than the platform cut. Nothing strands: claims never expire, unclaimed prizes sweep to the project wallet after 30 days, rounding dust rolls into tomorrow.
 
 The draw is two-step on purpose: `commitDraw()` fixes a future draw block once the round ends, and `settle()` draws on that block's hash — the settle transaction's own block never seeds the draw, and settle timing cannot change the outcome. If the draw block expires unsettled, anyone may commit a fresh one. Both calls are permissionless.
 
-Rollover alone does not compound: at flat entries the pot settles at 1.25× the daily inflow and stops. The pot grows only while entries grow. A buyback spending the dev cut on A404 is planned for a later version — it is not live; today the dev cut goes to the project wallet.
+Rollover alone does not compound: at flat entries the pot settles at 1.25× the daily inflow and stops. The pot grows only while entries grow. A buyback spending the platform cut on A404 is planned for a later version — it is not live; today the platform cut goes to the project wallet.
 
 ## 19. Closing
 
