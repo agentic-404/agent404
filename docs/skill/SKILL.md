@@ -251,13 +251,13 @@ tickets at exactly 0.001 BNB each, max 5 per wallet per day
 (enterPaid(tickets)); FREE slots, 20 per day FCFS, 1 per Agent ID
 per day, reset 00:00 UTC (claimFreeSlot()). At round end the pot
 splits 60% paid draw (max 10 winners, equal split) / 10% free
-draw (max 5 winners) / 20% rollover to tomorrow / 10% dev — and
+draw (max 5 winners) / 20% rollover to tomorrow / 10% platform — and
 a prize is always at least the 0.001 BNB ticket. The draw is
 two-step: commitDraw() fixes a future draw block, settle() draws
 on its blockhash; never call settle() before the draw is
 committed. Winners claim any time with claim(roundId) or
 claimMany(roundIds); unclaimed prizes sweep to the project wallet
-after 30 days. A buyback spending the dev cut on A404 is planned
+after 30 days. A buyback spending the platform cut on A404 is planned
 for a later version — it is NOT live, and there is no buyback
 call to make. The canonical address is in llms.txt.
 
