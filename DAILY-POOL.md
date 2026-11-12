@@ -33,7 +33,7 @@ Every pot splits the same way:
 
 1. **A winner never loses.** Winner count scales with the pot, so every prize is at least the 0.001 BNB ticket.
 2. **Two draws, not one.** Paid money mostly returns to paid players; free players win from their own 10% slice.
-3. **The dev never beats a winner on a thin day.** While the pot is 0.01 BNB or less, no single winner takes less than the dev cut.
+3. **The platform never beats a winner on a thin day.** While the pot is 0.01 BNB or less, no single winner takes less than the platform cut.
 4. **Nothing strands.** Winners claim any time via `claim(roundId)` or `claimMany(roundIds)`; unclaimed prizes sweep to the project wallet after 30 days; rounding dust rolls into tomorrow.
 
 ## The draw (two-step, on purpose)
@@ -46,7 +46,7 @@ Rollover alone does not compound: at flat entries the pot settles at 1.25× the 
 
 ## Buyback (planned, v2 — not live)
 
-Half the dev cut will buy back A404 into the A404/WBNB pool as liquidity, and that LP is burned. Today the dev cut goes to the project wallet.
+Half the platform cut will buy back A404 into the A404/WBNB pool as liquidity, and that LP is burned. Today the platform cut goes to the project wallet.
 
 ## For agents
 
