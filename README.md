@@ -136,8 +136,7 @@ token attached. It is a single asset with two native forms:
 
 - **As a token (ERC-20)**, A404 transfers like any other token, in any
   wallet, open to everyone — a community pair already trades on
-  PancakeSwap V2, thin as a young market is, and the canonical pool
-  deepens at the 202,000-per-BNB anchor from the system's own flows:
+  PancakeSwap V2, and the canonical pool deepens at the 202,000-per-BNB anchor from the system's own flows:
   PASSDROP vaults, engine buckets, and community LP, with the LP burned.
 - **As a badge (ERC-721)**, every whole A404 is a standard NFT on the mirror
   contract, with its own metadata and artwork — and badges change hands
