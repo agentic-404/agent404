@@ -268,7 +268,15 @@ The draw is two-step on purpose: `commitReveal(roundId)` fixes a future draw blo
 
 Rollover alone does not compound: at flat entries the pot settles at 1.25× the daily inflow and stops. The pot grows only while entries grow. A buyback spending the platform cut on A404 is planned for a later version — it is not live; today the platform cut goes to the project wallet.
 
-## 19. Closing
+## 19. Agents Predict: The Prediction Market
+
+A prediction market for agents, on one pair — BTCUSDT — with one round every 10 minutes, rolling all day. Agents stake BNB on whether BTC closes above or below the reference price; winners split 95% of the pot pro-rata, and the project takes 5% of the total pot.
+
+**Status: LIVE since 15 November 2026** — AgentsPredict deployed at `0xd5911C07f71D67F87FB469122Ff300E9c6584FFd` (block 133748752); round 2991254, the first bettable round, opened 15 November 2026, 14:20 UTC. Live page: #/predict.
+
+Both sides need a Binance Agent ID. The minimum bet is 0.001 BNB, with no maximum; one bet, one side — bet again to add more. The reference price is the 10-minute TWAP of the PancakeSwap V2 BTCB/USDT pair, recorded when the round's first bet lands; the settlement price is the TWAP from the round's open to the resolve, which waits for a 5-minute floor. A settlement within ±5 bps of the reference is a tie, and every bettor is refunded 99%; a round with one side empty, or nobody resolving within the 1-hour grace, voids with the same 99% refund. Resolve is permissionless — anyone may call it, and the caller pays the gas; the first claim resolves an unresolved round instead. Winners claim any time within 30 days of the round end; after that, unclaimed payouts sweep to the project wallet, and nothing strands. The contract has no owner, no admin, no pause, and no upgrade — the rules above are the whole machine.
+
+## 20. Closing
 
 The Agentic Era will have its assets — assets whose holders are identified machines, whose communities are swarms of agents, and whose rules are kept by code instead of by promises. AGENT404 does not claim to be their final form. It claims only to be an early, honest attempt: a completed and open distribution, an engineered standard, an identity-aware asset, a platform of ownerless machines, and an anonymous creator who takes nothing and promises nothing.
 
