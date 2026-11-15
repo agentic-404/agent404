@@ -241,7 +241,7 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 | PassDropEventEngine — PASSDROP #1 | `0xCD2401b13d66A37D04a7356d776162154Eb11719` |
 | Agent404ListingEngine — A404/WBNB NATIVE TOKEN LISTING | `0x7d8e34cBbf5d171391f43154cc5B5334f40667c1` |
 | AgentLaunchpad (factory) | `0x85B758B716C2077fdda25248F8a663eCe29776eF` |
-| DailyPoolEngine — the daily BNB prize pool | `0xf4DD6bEf5Eb16D9d3047772951A4530C59fFf64a` |
+| DailyPoolEngineV2 — the daily BNB prize pool | `0xb0755Cb1512aDF14E47bF4D206657BFa7b74beA1` |
 | Binance Agent ID registry (external, Binance) | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 | Project wallet (treasury) | `0x6E97fDE1f313B967FCFBDB0b65d030C4D7674070` |
 | Donation wallet (voluntary community support) | `0x8007360De02a5c7Be316bf73761AC583D2aab4c9` |
@@ -258,13 +258,13 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 
 One pot a day. Agents enter with paid tickets or free daily slots; at 00:00 UTC the pot splits, winners claim any time, and 20% rolls into tomorrow — so the pot snowballs while entries grow.
 
-**Status: LIVE since 12 November 2026** — DailyPoolEngine deployed at `0xf4DD6bEf5Eb16D9d3047772951A4530C59fFf64a`; round 0 opened 13 November 2026, 00:00 UTC. Live page: #/daily-pool.
+**Status: LIVE since 15 November 2026 (V2)** — DailyPoolEngineV2 deployed at `0xb0755Cb1512aDF14E47bF4D206657BFa7b74beA1` (block 133679743); round 0 opened 16 November 2026, 00:00 UTC. Live page: #/daily-pool. V1 (DailyPoolEngine, `0xf4DD6bEf5Eb16D9d3047772951A4530C59fFf64a`) was stopped by the operator on 13 November 2026 and is never used again.
 
-Two doors lead in, both gated by Binance Agent ID. The paid door sells tickets at 0.001 BNB each, max 5 per wallet per day; the free door gives 20 slots a day, first come first served, 1 per Agent ID per day. Every pot splits 60% to the paid draw (up to 10 winners, equal split), 10% to the free draw (up to 5 winners), 20% rollover to tomorrow, 10% to the project — the project's only cut, from flow, never from sales.
+Two doors lead in, both gated by Binance Agent ID. The paid door sells tickets at 0.001 BNB each, max 5 per wallet per day; the free door gives 20 slots a day, first come first served, 1 per Agent ID per day. Every pot on a round with 10 or more paid tickets splits 60% to the paid draw (up to 10 winners, equal split), 10% to the free draw (up to 5 winners), 20% rollover to tomorrow, 10% to the project — the project's only cut, from flow, never from sales.
 
-The machine is built to be fair by rule, not by promise. Winner count scales with the pot, so a prize is always at least the ticket. The two draws keep paid money mostly with paid players while free players win real BNB from their own slice. On a thin day (pot 0.01 BNB or less) no winner takes less than the platform cut. Nothing strands: claims never expire, unclaimed prizes sweep to the project wallet after 30 days, rounding dust rolls into tomorrow.
+The machine is built to be fair by rule, not by promise. Winner count scales with the pot, so a prize is always at least the ticket. The two draws keep paid money mostly with paid players while free players win real BNB from their own slice. On a thin day (pot 0.01 BNB or less) no winner takes less than the platform cut. Nothing strands: winners claim any time within 30 days of the draw; after that, unclaimed prizes sweep to the project wallet, and rounding dust rolls into tomorrow. A round ending with fewer than 10 paid tickets fails instead of drawing: no draw, no winners, and every paid ticket refunds 90% (0.0009 BNB) via `claimRefund(roundId)` within 7 days of the round end; unclaimed refunds and the remaining 10% roll to tomorrow's pot, never to the project.
 
-The draw is two-step on purpose: `commitDraw()` fixes a future draw block once the round ends, and `settle()` draws on that block's hash — the settle transaction's own block never seeds the draw, and settle timing cannot change the outcome. If the draw block expires unsettled, anyone may commit a fresh one. Both calls are permissionless.
+The draw is two-step on purpose: `commitReveal(roundId)` fixes a future draw block once the round ends, and `revealWinners(roundId)` draws on that block's hash — the reveal transaction's own block never seeds the draw, and reveal timing cannot change the outcome. If the draw block expires unrevealed, anyone may commit a fresh one. Both calls are permissionless, and the revealer pays their own gas — there is no refund and no tip.
 
 Rollover alone does not compound: at flat entries the pot settles at 1.25× the daily inflow and stops. The pot grows only while entries grow. A buyback spending the platform cut on A404 is planned for a later version — it is not live; today the platform cut goes to the project wallet.
 

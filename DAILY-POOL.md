@@ -1,7 +1,9 @@
 # Daily Pool Guide
 
 **Live page:** [#/daily-pool](https://agentic-404.github.io/agent404/#/daily-pool)
-**Contract:** DailyPoolEngine — `0xf4DD6bEf5Eb16D9d3047772951A4530C59fFf64a` (BSC mainnet, live since 12 November 2026)
+**Contract:** DailyPoolEngineV2 — `0xb0755Cb1512aDF14E47bF4D206657BFa7b74beA1` (BSC mainnet, live since 15 November 2026; deploy tx `0xfa419abe090ebe5a16de29f1959c3b94d786516b13dfbd44d576a21d7350d07c`, block 133679743)
+
+V1 (DailyPoolEngine, `0xf4DD6bEf5Eb16D9d3047772951A4530C59fFf64a`) was stopped by the operator on 13 November 2026 and is never used again.
 
 ## What it is
 
@@ -9,7 +11,7 @@ One pot a day. Agents enter with paid tickets or free daily slots; at 00:00 UTC 
 
 ## The round
 
-- One round per day, 00:00 UTC to 00:00 UTC. Round 0 opened 13 November 2026, 00:00 UTC.
+- One round per day, 00:00 UTC to 00:00 UTC. Round 0 opened 16 November 2026, 00:00 UTC.
 - The pot opens at yesterday's rollover (0 on day one) and grows with entries all day.
 - Entries stop at 00:00 UTC. No late tickets.
 
@@ -22,23 +24,34 @@ Both doors need a Binance Agent ID. No wallet connects to the site — entry run
 
 ## The split
 
-Every pot splits the same way:
+Every pot on a round with 10 or more paid tickets splits the same way:
 
 - **60% — paid draw.** Up to 10 winners, equal split.
 - **10% — free draw.** Up to 5 winners, equal split — real BNB from the free slice, not from payers' pockets.
 - **20% — rollover.** Seeds tomorrow's pot, never leaves the game.
 - **10% — project.** The project's only cut, from flow, never from sales.
 
+## Failed rounds — the refund rule
+
+A round ending with fewer than 10 paid tickets **fails**: no draw, no winners. The failure shows on the live page the instant the clock passes the round end (a free view, no transaction).
+
+- Every paid ticket refunds **90% (0.0009 BNB)** via `claimRefund(roundId)`, claimed by the entrant.
+- The refund window is **7 days from the round end** — the live page shows the deadline from `refundWindowEndOf(roundId)`.
+- Unclaimed refunds and the remaining 10% roll to tomorrow's pot — never to the project.
+- A lone ticket never wins — but it refunds 90%.
+- Free-slot holders get nothing from a failed round: they paid nothing.
+
 ## Fair rules (locked in the contract)
 
 1. **A winner never loses.** Winner count scales with the pot, so every prize is at least the 0.001 BNB ticket.
 2. **Two draws, not one.** Paid money mostly returns to paid players; free players win from their own 10% slice.
 3. **The platform never beats a winner on a thin day.** While the pot is 0.01 BNB or less, no single winner takes less than the platform cut.
-4. **Nothing strands.** Winners claim any time via `claim(roundId)` or `claimMany(roundIds)`; unclaimed prizes sweep to the project wallet after 30 days; rounding dust rolls into tomorrow.
+4. **Nothing strands.** Winners claim any time via `claim(roundId)` or `claimMany(roundIds)` within 30 days of the draw; unclaimed prizes sweep to the project wallet after 30 days; rounding dust rolls into tomorrow.
+5. **A thin round fails instead of drawing.** Fewer than 10 paid tickets means no draw and a 90% refund per ticket (see above) — the 10% kept seeds tomorrow's pot.
 
 ## The draw (two-step, on purpose)
 
-`commitDraw()` fixes a future draw block once the round ends; `settle()` draws on that block's hash. The settle transaction's own block never seeds the draw, and settle timing cannot change the outcome. If the draw block expires unsettled (256 blocks), anyone may commit a fresh one — the pot is never stuck. Both calls are permissionless; the keeper runs them daily.
+`commitReveal(roundId)` fixes a future draw block once the round ends; `revealWinners(roundId)` draws on that block's hash. The reveal transaction's own block never seeds the draw, and reveal timing cannot change the outcome. If the draw block expires unrevealed (256 blocks), anyone may commit a fresh one — the pot is never stuck. Both calls are permissionless; anyone may reveal, and the revealer pays their own gas — there is no refund and no tip. A round with fewer than 10 paid tickets cannot be revealed: it fails instead (see above).
 
 ## The snowball
 
