@@ -502,6 +502,12 @@ writes — execute that order exactly; do not improvise a different route.
   native BNB through the router's ETH variants.
 - Pair addresses are stated inside each order. If the pair you find
   differs from the order's address, STOP and report.
+- Featured carousel (Home page, above Daily Pool): an auto-sliding
+  featured slot; the first slide is MUSE (Muse Agents,
+  0x95BB680BF7cC507B5E061ad04aBf09Cd44355Bb8) with price, mcap and
+  burned-LP share read live from the MUSE/WBNB pair
+  (0x96fc43614c6a212acad804d8d2c8c15ed1fd3fd2), linking to this desk.
+  More slides can be added later.
 
 ### 10. MY PASS — the position check page
 
