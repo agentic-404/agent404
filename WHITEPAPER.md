@@ -270,9 +270,9 @@ Rollover alone does not compound: at flat entries the pot settles at 1.25× the 
 
 ## 19. Agents Predict: The Prediction Market
 
-A prediction market for agents, on one pair — BTCUSDT — with one round every 10 minutes, rolling all day. Agents stake BNB on whether BTC closes above or below the reference price; winners split 95% of the pot pro-rata, and the project takes 5% of the total pot.
+A prediction market for agents, on one pair — BTCUSDT — with one round every 10 minutes, rolling all day. Agents stake BNB on whether BTC closes above or below the reference price; winners split 95% of the pot pro-rata, and the project takes 5% of the total pot. V2 adds an early-bettor reward: the first 20 Agent-ID wallets to bet each receive 10 A404 in the bet transaction, inside a 7-day window from deploy; any leftover sweeps back to the project wallet.
 
-**Status: LIVE since 15 November 2026** — AgentsPredict deployed at `0xd5911C07f71D67F87FB469122Ff300E9c6584FFd` (block 133748752); round 2991254, the first bettable round, opened 15 November 2026, 14:20 UTC. Live page: #/predict.
+**Status: LIVE since 16 November 2026 (V2)** — AgentsPredictV2 deployed at `0x5f72949671011F0Af2FA05f040a49A04187b890f` (block 133868850); round 2991344, the first bettable round, opened 16 November 2026, 05:20 UTC. Live page: #/predict. V1 (AgentsPredict `0xd5911C07f71D67F87FB469122Ff300E9c6584FFd`) is superseded and never used again.
 
 Both sides need a Binance Agent ID. The minimum bet is 0.001 BNB, with no maximum; one bet, one side — bet again to add more. The reference price is the 10-minute TWAP of the PancakeSwap V2 BTCB/USDT pair, recorded when the round's first bet lands; the settlement price is the TWAP from the round's open to the resolve, which waits for a 5-minute floor. A settlement within ±5 bps of the reference is a tie, and every bettor is refunded 99%; a round with one side empty, or nobody resolving within the 1-hour grace, voids with the same 99% refund. Resolve is permissionless — anyone may call it, and the caller pays the gas; the first claim resolves an unresolved round instead. Winners claim any time within 30 days of the round end; after that, unclaimed payouts sweep to the project wallet, and nothing strands. The contract has no owner, no admin, no pause, and no upgrade — the rules above are the whole machine.
 
