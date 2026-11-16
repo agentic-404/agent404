@@ -241,6 +241,9 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 | PassDropEventEngine — PASSDROP #1 | `0xCD2401b13d66A37D04a7356d776162154Eb11719` |
 | Agent404ListingEngine — A404/WBNB NATIVE TOKEN LISTING | `0x7d8e34cBbf5d171391f43154cc5B5334f40667c1` |
 | AgentLaunchpad (factory) | `0x85B758B716C2077fdda25248F8a663eCe29776eF` |
+| MoonshotFactory — the bonding curve lane | `0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0` |
+| MoonshotToken (implementation) | `0xF3b8A5a97b398750756ab516b04ddAF5a6b84fFD` |
+| MoonshotCurve (implementation) | `0x7d55806939c78CCC84F67bAE3fd4F0119f829b5F` |
 | DailyPoolEngineV2 — the daily BNB prize pool | `0xb0755Cb1512aDF14E47bF4D206657BFa7b74beA1` |
 | Binance Agent ID registry (external, Binance) | `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 | Project wallet (treasury) | `0x6E97fDE1f313B967FCFBDB0b65d030C4D7674070` |
@@ -276,7 +279,15 @@ A prediction market for agents, on one pair — BTCUSDT — with one round every
 
 Both sides need a Binance Agent ID. The minimum bet is 0.001 BNB, with no maximum; one bet, one side — bet again to add more. The reference price is the 10-minute TWAP of the PancakeSwap V2 BTCB/USDT pair, recorded when the round's first bet lands; the settlement price is the TWAP from the round's open to the resolve, which waits for a 5-minute floor. A settlement within ±5 bps of the reference is a tie, and every bettor is refunded 99%; a round with one side empty, or nobody resolving within the 1-hour grace, voids with the same 99% refund. Resolve is permissionless — anyone may call it, and the caller pays the gas; the first claim resolves an unresolved round instead. Winners claim any time within 30 days of the round end; after that, unclaimed payouts sweep to the project wallet, and nothing strands. The contract has no owner, no admin, no pause, and no upgrade — the rules above are the whole machine.
 
-## 20. Closing
+## 20. Moonshot: The Bonding Curve Lane
+
+Moonshot is the fast-listing lane of the Launchpad. A launcher creates a token; it trades at once on its own bonding curve; when the curve graduates, a PancakeSwap V2 pool is born and its LP is burned to the dead address. The lane runs on three contracts deployed 16 November 2026 and verified on BscScan: MoonshotFactory `0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0`, MoonshotToken (implementation) `0xF3b8A5a97b398750756ab516b04ddAF5a6b84fFD`, MoonshotCurve (implementation) `0x7d55806939c78CCC84F67bAE3fd4F0119f829b5F`.
+
+The terms are fixed: supply 1,000,000,000–100,000,000,000 whole tokens, plain ERC-20; 75% of supply on the curve, 25% held as the pool reserve; graduation at 1 BNB raised or 80% of the curve supply sold, whichever first; a 1% fee on every buy and sell to the project wallet; a 5% per-wallet cap on buys; no free allocation for the launcher; no refund and no expiry. Launching and buying need a Binance Agent ID; selling is open to any holder. `graduate()` is permissionless — anyone may call it, paying their own gas — and the pool price at graduation stays near the final curve price. The factory has no owner, no admin, no withdraw, no pause, and no upgrade.
+
+**Status: LIVE since 16 November 2026** — factory deployed at block 133940946; no launches yet. The Moonshot board (live curves with price, progress to graduation, buy and sell) follows the deploy.
+
+## 21. Closing
 
 The Agentic Era will have its assets — assets whose holders are identified machines, whose communities are swarms of agents, and whose rules are kept by code instead of by promises. AGENT404 does not claim to be their final form. It claims only to be an early, honest attempt: a completed and open distribution, an engineered standard, an identity-aware asset, a platform of ownerless machines, and an anonymous creator who takes nothing and promises nothing.
 
