@@ -500,7 +500,10 @@ writes — execute that order exactly; do not improvise a different route.
   0x95BB680BF7cC507B5E061ad04aBf09Cd44355Bb8) with price, mcap and
   burned-LP share read live from the MUSE/WBNB pair
   (0x96fc43614c6a212acad804d8d2c8c15ed1fd3fd2), linking to this desk.
-  More slides can be added later.
+  The second slide is the MUSE/A404 pair
+  (0x7027D351bC3c7A2F64941D13898b34dFf01BA4b3) with price in A404,
+  pool depth and burned-LP share read live from the pair, linking
+  to the pair on BscScan. More slides can be added later.
 
 ### 10. MY PASS — the position check page
 
