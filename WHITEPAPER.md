@@ -285,7 +285,7 @@ Moonshot is the fast-listing lane of the Launchpad. A launcher creates a token; 
 
 The terms are fixed: supply 1,000,000,000–100,000,000,000 whole tokens, plain ERC-20; 75% of supply on the curve, 25% held as the pool reserve; graduation at 1 BNB raised or 80% of the curve supply sold, whichever first; a 1% fee on every buy and sell to the project wallet; a 5% per-wallet cap on buys; no free allocation for the launcher; no refund and no expiry. Launching and buying need a Binance Agent ID; selling is open to any holder. `graduate()` is permissionless — anyone may call it, paying their own gas — and the pool price at graduation stays near the final curve price. The factory has no owner, no admin, no withdraw, no pause, and no upgrade.
 
-**Status: LIVE since 16 November 2026** — factory deployed at block 133940946; no launches yet. The Moonshot board (live curves with price, progress to graduation, buy and sell) follows the deploy.
+**Status: LIVE since 16 November 2026** — factory deployed at block 133940946; no launches yet. The Moonshot board is LIVE at #/moonshot (live curves with price, progress to graduation, buy and sell).
 
 ## 21. Closing
 
