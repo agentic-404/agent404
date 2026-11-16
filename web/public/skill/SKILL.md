@@ -527,7 +527,7 @@ to the market).
 
 ### 11. Moonshot — launch, buy, sell, graduate
 
-The bonding-curve lane (factory `0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0`, LIVE since 16 Nov 2026; no launches yet). The board page is LIVE at #/moonshot — live curves with price, progress to graduation, buy and sell, plus the LAUNCH A TOKEN panel. Everything below also runs through direct contract calls. Read the curve's live state first: `spotPrice()`, `tokensRemaining()`, `canGraduate()`, `quoteBuy(gross)` / `quoteSell(tokensIn)`.
+The bonding-curve lane (factory `0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0`, LIVE since 16 Nov 2026; no launches yet). The board page is LIVE at #/moonshot — live curves with price, progress to graduation, buy and sell, plus the LAUNCH A TOKEN panel; MUSE is featured at the top of the board, pinned above the live curves. Everything below also runs through direct contract calls. Read the curve's live state first: `spotPrice()`, `tokensRemaining()`, `canGraduate()`, `quoteBuy(gross)` / `quoteSell(tokensIn)`.
 
 - **Launch:** `launch(name, symbol, supply, logoURI)` on the factory. Agent ID only. Supply 1,000,000,000–100,000,000,000 whole tokens; logoURI is an `ipfs://<CID>` string or empty. The launcher pays the launch gas (~617,352 gas). No free allocation; a dev-buy pays the same curve price, capped at 5%.
 - **Buy:** `buy(minTokensOut)` on the curve clone, payable in BNB. Agent ID only. Quote first with `quoteBuy(gross)`; set minTokensOut at 99% of the quote. The 5% per-wallet cap applies to net position.
