@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { moonshotStore } from '../data.js';
+import { moonshotStore, museAdStore } from '../data.js';
+import museUrl from '../assets/muse-logo.png';
 import { useStore } from '../store.js';
 import { fmtInt, fmtToken, fmtWeiExact, padArg, toBig } from '../format.js';
 import { A, SEL, BADGE_GW } from '../config.js';
@@ -63,6 +64,16 @@ function fmtMcap(m) {
   if (m === null || m === undefined || !Number.isFinite(m) || m <= 0) return '—';
   if (m >= 1) return `$${Math.round(m).toLocaleString('en-US')}`;
   return fmtUsd(m);
+}
+
+/** Full-decimal USD price for the featured MUSE card: $0.0000000000873 —
+ *  the wall of zeros, never scientific notation, never a rounded-to-zero
+ *  figure. Falls back to fmtUsd at/above $0.01 and to exponential below 1e-15. */
+function fmtFullUsd(p) {
+  if (p === null || p === undefined || !Number.isFinite(p) || p <= 0) return '—';
+  if (p >= 0.01) return fmtUsd(p);
+  if (p < 1e-15) return `$${p.toExponential(2)}`;
+  return `$${p.toFixed(15).replace(/0+$/, '').replace(/\.$/, '')}`;
 }
 
 const PALETTE = ['#f5b301', '#5aa2e8', '#3fb96f', '#e86a5a', '#b48ce8', '#5ae8c9', '#e8c95a', '#e85a9e'];
@@ -456,6 +467,64 @@ function MoonshotCard({ c, bnbUsd, onTrade }) {
   );
 }
 
+/* ================= the featured MUSE card (pinned top 1) ================= */
+// The house ad on the board: MUSE, pinned above the live curves, clearly
+// marked FEATURED — it is NOT a curve, so it shows no graduation progress.
+// Price is the full decimal expansion ($0.0000000000873), live from the
+// MUSE/WBNB reserves via museAdStore (same store as the Home carousel).
+
+const MUSE_SUPPLY = 21000000000;
+
+function MuseFeaturedCard({ bnbUsd }) {
+  const ad = useStore(museAdStore);
+  const d = ad.data;
+  const priceUsd =
+    d?.reserveMuse && d?.reserveWBNB && bnbUsd
+      ? (Number(d.reserveWBNB) / Number(d.reserveMuse)) * bnbUsd
+      : null;
+  const mcap = priceUsd !== null ? priceUsd * MUSE_SUPPLY : null;
+  const burned =
+    d?.deadLp !== null && d?.deadLp !== undefined && d?.totalLp
+      ? (Number(d.deadLp) / Number(d.totalLp)) * 100
+      : null;
+  return (
+    <div className="moonshot-card feat">
+      <div className="moonshot-head">
+        <img className="moonshot-logo" src={museUrl} alt="MUSE logo" />
+        <div>
+          <div className="moonshot-nm">Muse Agents</div>
+          <div className="moonshot-tk">$MUSE</div>
+        </div>
+        <span className="moonshot-chip feat">FEATURED</span>
+      </div>
+      <div className="moonshot-stats">
+        <span>
+          <span className="k">PRICE</span>
+          <span className="v">{fmtFullUsd(priceUsd)}</span>
+        </span>
+        <span>
+          <span className="k">MCAP</span>
+          <span className="v">{fmtMcap(mcap)}</span>
+        </span>
+      </div>
+      <div className="moonshot-bar">
+        <i style={{ width: '100%' }} />
+      </div>
+      <div className="moonshot-prog">
+        <span>
+          <b>{burned !== null ? `${burned >= 99.95 ? '100' : burned.toFixed(1)}%` : '—'}</b> LP BURNED
+        </span>
+        <span>POOL LIVE · MUSE/WBNB</span>
+      </div>
+      <div className="moonshot-acts">
+        <a className="moonshot-buy" href="#/swap">
+          TRADE ON SWAP →
+        </a>
+      </div>
+    </div>
+  );
+}
+
 /* ================= the page ================= */
 
 export default function Moonshot() {
@@ -526,6 +595,7 @@ export default function Moonshot() {
       ) : null}
 
       <div className="moonshot-grid">
+        <MuseFeaturedCard bnbUsd={bnbUsd} />
         {!curves ? (
           <div className="moonshot-openline">READING THE FACTORY…</div>
         ) : curves.length === 0 ? (
