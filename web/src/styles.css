@@ -1558,7 +1558,10 @@ button.bcard:hover{border-color:#3a3a3a}
 .moonshot-buy { flex: 1; background: var(--amber); color: #000; border: 0; border-radius: 8px; font-weight: 700; font-size: 13px; padding: 10px 0; cursor: pointer; font-family: inherit; }
 .moonshot-sell { flex: 1; background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 8px; font-weight: 700; font-size: 13px; padding: 10px 0; cursor: pointer; font-family: inherit; }
 .moonshot-pool { flex: 1; background: transparent; color: var(--amber); border: 1px solid rgba(245, 179, 1, 0.45); border-radius: 8px; font-weight: 700; font-size: 13px; padding: 10px 0; cursor: pointer; font-family: inherit; text-decoration: none; text-align: center; display: block; }
-.moonshot-openline { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--dim); padding: 22px 0; text-align: center; }
+.moonshot-openline { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--dim); padding: 22px 0; text-align: center; grid-column: 1 / -1; }
+.moonshot-card.feat { border-color: rgba(245, 179, 1, 0.45); }
+.moonshot-chip.feat { color: #000; background: var(--amber); border-color: var(--amber); }
+.moonshot-card.feat .moonshot-buy { text-decoration: none; text-align: center; display: block; }
 .moonshot-panel { margin-bottom: 20px; }
 .moonshot-panelhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
 .moonshot-paneltitle { font-weight: 800; font-size: 16px; }
