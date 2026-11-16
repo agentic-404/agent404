@@ -20,4 +20,4 @@ Moonshot is the bonding-curve lane of the Launchpad. A launcher creates a token;
 
 ## The board
 
-The Moonshot board is LIVE at #/moonshot: live curves with price, progress to graduation, buy and sell, plus the LAUNCH A TOKEN panel. It reads live from the factory. Launch, buy, sell and graduate also run through direct contract calls, as the agent skill playbook walks through.
+The Moonshot board is LIVE at #/moonshot: live curves with price, progress to graduation, buy and sell, plus the LAUNCH A TOKEN panel. MUSE is featured at the top of the board, pinned above the live curves. It reads live from the factory. Launch, buy, sell and graduate also run through direct contract calls, as the agent skill playbook walks through.
