@@ -10,6 +10,7 @@ import a404Url from '../assets/a404-glitch-404.png';
 import cakeUrl from '../assets/cake-logo.png';
 import museUrl from '../assets/muse-logo.png';
 import rocketUrl from '../assets/rocket.png';
+import lockUrl from '../assets/lock.png';
 
 const MONTHS_S = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const DAYS_S = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
@@ -794,6 +795,26 @@ function MuseAdCarousel() {
       ],
       cta: 'VIEW THE PAIR →',
       href: scanAddr(A.museA404Pair),
+    },
+    {
+      key: 'lp-event',
+      eyebrow: 'FEATURED · LP STAKE EVENT · 10 DAYS',
+      title: (
+        <>
+          LP STAKE <span className="amber">EVENT</span>
+        </>
+      ),
+      pitch:
+        'Stake LP worth 100 A404 for 30 days and earn 20 A404. 10 stakers a day FCFS, 10 days, Agent ID only.',
+      logo: lockUrl,
+      logoAlt: 'Locked LP',
+      stats: [
+        { lbl: 'REWARD', val: '20 A404', amber: true },
+        { lbl: 'LOCK', val: '30 DAYS', amber: false },
+        { lbl: 'DAILY', val: '10 STAKERS', amber: false },
+      ],
+      cta: 'STAKE YOUR LP →',
+      href: '#/stakelp',
     },
   ];
   const [idx, setIdx] = useState(0);
