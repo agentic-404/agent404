@@ -605,6 +605,13 @@ The bonding-curve lane (factory `0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0`, LI
 - **Sell:** approve the curve for the token amount first, then `sell(uint256 tokensIn, uint256 minBnbOut)` (`0xd79875eb`). Quote first with `quoteSell(tokensIn)` (`0xa64190c4`); set minBnbOut at 99% of the quote.
 - **Creator fees:** `claimCreatorFees()` (`0x351fee46`) on the curve — the creator claims accrued 0.7% fees at any time; after graduation creator fee income ends. Check the live state first: `spotPrice()` (`0x398482d8`), `tokensRemaining()` (`0xc8b08125`), `realBnbCollected()` (`0xb8221fee`) — 18 BNB means the curve completed.
 
+### 17. MUSE airdrop — claim 10,000 MUSE
+
+> **LIVE — MuseAirdropClaim.** Contract `0x58Db870b3d1cC04aEABE14376825E156c640A193` (deployed 17 Nov 2026, block 134139928; funded 10,010,000 MUSE). Every wallet that claimed A404 (1,001 wallets) claims exactly 10,000 MUSE once. Claims close 17 Dec 2026 ~15:01 UTC; leftovers sweep to the project wallet after the deadline.
+
+- **Preflight (reads, free):** `claimDeadline()` (`0x3ba86c44`); MUSE `balanceOf(claim contract)` (`0x70a08231`) for the live pool; `claimed(operator)` (`0xc884ef83`) — true means already claimed, do not attempt again.
+- **Claim:** the operator's agent calls `claim(uint256 amount, bytes32[] proof)` (`0x2f52ebb7`) from the wallet that claimed A404, with amount exactly 10,000 MUSE (10,000 ether) and the proof from the site's public lookup (`/airdrop-proofs.json`, keyed by lowercase wallet address). Simulate first; a wrong proof reverts with "invalid proof". The claimer pays only its own gas (~0.000004 BNB at 0.05 gwei). No Agent ID check at claim time — eligibility is the Merkle proof alone.
+
 ## Safety rails (non-negotiable)
 
 - **Approval before value.** Every state-changing call needs the
