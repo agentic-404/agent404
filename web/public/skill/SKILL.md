@@ -516,7 +516,7 @@ writes — execute that order exactly; do not improvise a different route.
   floor. On a SELL of A404, warn the operator first: whole tokens
   leaving the wallet retire the matching badges (golden rule 2).
 - Verified majors (WBNB/USDT, CAKE/WBNB, CAKE/USDT, ETH/WBNB,
-  BTCB/WBNB, MUSE/WBNB): the desk's generic order is quote-first — read the live
+  BTCB/WBNB, MUSE/WBNB, MUSE/A404): the desk's generic order is quote-first — read the live
   amounts out for the stated route, preview amount in / quoted out /
   minimum received (= 99% of the fresh quote) / price impact, and get
   the operator's approval before executing. Price impact above 2%:
