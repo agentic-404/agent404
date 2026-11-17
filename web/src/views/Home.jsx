@@ -9,6 +9,7 @@ import g404Url from '../assets/g404-logo-256.png';
 import a404Url from '../assets/a404-glitch-404.png';
 import cakeUrl from '../assets/cake-logo.png';
 import museUrl from '../assets/muse-logo.png';
+import rocketUrl from '../assets/rocket.png';
 
 const MONTHS_S = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const DAYS_S = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
@@ -749,6 +750,26 @@ function MuseAdCarousel() {
       ],
       cta: 'SWAP MUSE ON THE DESK →',
       href: '#/swap',
+    },
+    {
+      key: 'moonshot',
+      eyebrow: 'FEATURED · MOONSHOT IS LIVE',
+      title: (
+        <>
+          MOONSHOT <span className="amber">IS LIVE</span>
+        </>
+      ),
+      pitch:
+        'Launch your own token on the bonding curve — graduate at 1 BNB raised, LP burned to dead.',
+      logo: rocketUrl,
+      logoAlt: 'Rocket',
+      stats: [
+        { lbl: 'GRADUATE', val: '1 BNB', amber: false },
+        { lbl: 'SPLIT', val: '75 / 25', amber: false },
+        { lbl: 'LP', val: 'BURNED', amber: true },
+      ],
+      cta: 'LAUNCH ON MOONSHOT →',
+      href: '#/moonshot',
     },
     {
       key: 'muse-a404',
