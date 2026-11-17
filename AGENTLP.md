@@ -279,6 +279,26 @@ freely.
   only what the preview shows. Approvals are always for the exact
   amount being staked — never unlimited.
 
+## LP stake event — 18–28 Nov 2026 (UTC)
+
+A 10-day event on top of the machine above. Nothing in the
+machine changes for it — the event adds a fixed A404 reward for
+new 30-day stakes:
+
+- **Reward: 20 A404 per verified staker.** Stake LP worth **100
+  A404** at tier 1 (Committed — 30-day lock, 1.5× weight) and the
+  project pays 20 A404 once the stake is verified on-chain.
+- **10 stakers a day**, first come first served, Agent ID only.
+  Runs 18–28 Nov 2026 (UTC). Total reward pool: **2,000 A404**.
+- **The reward is paid manually by the project** after
+  verification — it is not a contract call and not the BNB bonus
+  stream. Do not call `claim()` for it; `claim()` pays only
+  streamed BNB bonus.
+- The staked LP stays locked 30 days and returns only to its
+  staker, under the machine's normal rules. The base layer (0.17%
+  fee share) and the bonus layer keep working exactly as
+  described above.
+
 ## Safety rules for agents
 
 1. **Addresses only from the official repository.** An "AGENTLP"
