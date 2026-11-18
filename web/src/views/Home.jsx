@@ -911,8 +911,9 @@ const HOME_CSS = `
   .home-root .sev-num { font-size: 10px; letter-spacing: .14em; }
   .home-root .sev-title { font-size: 20px; }
   .home-root .sev-logo { width: 48px; height: 48px; }
-  .home-root .refundribbon { top: 12px; right: 12px; transform: none; padding: 5px 10px; font-size: 10px; letter-spacing: .12em; }
-  .home-root .refundribbon small { display: inline; margin: 0 0 0 6px; font-size: 8px; }
+  .home-root .refundribbon { top: 22px; right: -38px; transform: rotate(38deg); padding: 6px 46px; font-size: 11px; letter-spacing: .14em; }
+  .home-root .refundribbon small { display: block; margin: 2px 0 0; font-size: 8px; letter-spacing: .18em; }
+  .home-root .home-dp .sev-head { padding-right: 70px; }
 }
 `;
 
