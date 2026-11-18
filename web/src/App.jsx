@@ -71,6 +71,7 @@ function parseHash() {
   if (head === 'launches' || head === 'create') return { view: 'launchpad' }; // merged — the Launch board and the Create page became the Launchpad
   if (head === 'launchpad')
     return { view: 'launchpad', token: sub && /^0x[0-9a-fA-F]{40}$/.test(sub) ? sub.toLowerCase() : null };
+  if (head === 'passdrop') return { view: 'passdrop' }; // no nav entry — the page is only a closure notice
   if (VIEWS.some((v) => v.key === head)) return { view: head };
   return { view: 'home' };
 }
