@@ -43,7 +43,3 @@ Register for Phase 2 with my wallet as your referrer.
 
 The audience you build today is the referral network you will register
 with.
-
-## One-click versions
-
-One-click share buttons for PASSDROP live on the event page: https://agentic-404.github.io/agent404/#/passdrop
