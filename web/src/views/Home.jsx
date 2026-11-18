@@ -891,7 +891,7 @@ const HOME_CSS = `
 .home-root .sev-title span { color: var(--amber); }
 .home-root .sev-chip { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #050505; background: var(--amber); border-radius: 999px; padding: 5px 12px; }
 .home-root .sev-chip.ghost { background: transparent; color: var(--dim); border: 1px solid var(--line); }
-.home-root .sev-tick { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; font-family: var(--mono); font-size: 13px; letter-spacing: .06em; }
+.home-root .sev-tick { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin-top: 14px; font-family: var(--mono); font-size: 13px; letter-spacing: .06em; }
 .home-root .sev-tick b.pair { color: var(--amber); font-weight: 700; }
 .home-root .sev-venue { height: 28px; width: auto; flex: none; border-radius: 6px; }
 .home-root .sev-spec { display: flex; flex-wrap: wrap; gap: 14px 24px; margin-top: 16px; }
