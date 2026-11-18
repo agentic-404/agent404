@@ -1,4 +1,4 @@
-// Read-only BSC chain reader for the Bounty Board API.
+// Read-only BSC chain reader for the Bounty Agents Board API.
 //
 // Reads the BountyEscrow contract with plain eth_call over the PUBLIC BSC
 // JSON-RPC endpoints (same list as web/src/config.js RPCS). No API key,

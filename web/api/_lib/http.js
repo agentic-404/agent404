@@ -1,4 +1,4 @@
-// Vercel serverless adapter for the Bounty Board API.
+// Vercel serverless adapter for the Bounty Agents Board API.
 // Builds the real Blob store + BSC chain reader once per cold start and
 // adapts Vercel's req/res to the plain { method, query, body, ip } shape
 // the handlers in _lib/handlers.js work with.

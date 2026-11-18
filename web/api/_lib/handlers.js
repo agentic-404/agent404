@@ -1,4 +1,4 @@
-// Pure handler logic for the Bounty Board API.
+// Pure handler logic for the Bounty Agents Board API.
 //
 // Every handler takes a plain request object { method, query, body, ip }
 // and returns { status, headers?, json }. The Vercel functions in

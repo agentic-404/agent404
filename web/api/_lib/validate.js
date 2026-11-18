@@ -1,4 +1,4 @@
-// Input validation for the Bounty Board API.
+// Input validation for the Bounty Agents Board API.
 // Every rejection is a 400 with a clear, single-sentence error message.
 
 import { CATEGORIES, LIMITS } from './config.js';

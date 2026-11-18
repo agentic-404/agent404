@@ -1,4 +1,4 @@
-// AGENT404 Bounty Board API — shared constants.
+// AGENT404 Bounty Agents Board API — shared constants.
 // Self-contained copy of the facts the API needs. The public BSC RPC list
 // is the same list as web/src/config.js RPCS — public endpoints only,
 // never an authenticated endpoint (no Alchemy key anywhere in this API).

@@ -1,4 +1,4 @@
-// keccak256 for the Bounty Board API.
+// keccak256 for the Bounty Agents Board API.
 //
 // The contract stores descriptionHash = keccak256(description text) and
 // proofHash = keccak256(proof text). Node's built-in crypto has sha3-256,

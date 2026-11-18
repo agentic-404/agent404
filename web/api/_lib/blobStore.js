@@ -1,4 +1,4 @@
-// Vercel Blob store for the Bounty Board API.
+// Vercel Blob store for the Bounty Agents Board API.
 //
 // Durable free-tier storage: one JSON blob per bounty
 // (`bounties/<id>.json`) and one JSON blob per bounty submission list
