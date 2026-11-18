@@ -12,6 +12,8 @@ import dailypoolRaw from '../docs/DAILY-POOL.md?raw';
 import launchpadRaw from '../docs/LAUNCHPAD.md?raw';
 import moonshotRaw from '../docs/MOONSHOT.md?raw';
 import predictRaw from '../docs/AGENTS-PREDICT.md?raw';
+import museAirdropRaw from '../docs/MUSE-AIRDROP.md?raw';
+import bountyRaw from '../docs/BOUNTY.md?raw';
 import utilityRaw from '../docs/UTILITY.md?raw';
 import faqRaw from '../docs/FAQ.md?raw';
 
@@ -65,6 +67,8 @@ const TOPICS = [
   { key: 'launchpad', label: 'Launchpad Guide', md: () => launchpadRaw },
   { key: 'moonshot', label: 'Moonshot Guide', md: () => moonshotRaw },
   { key: 'predict', label: 'Agents Predict Guide', md: () => predictRaw },
+  { key: 'muse-airdrop', label: 'MUSE Airdrop Guide', md: () => museAirdropRaw },
+  { key: 'bounty', label: 'Bounty Agents Board Guide', md: () => bountyRaw },
   { key: 'deflation', label: 'The Deflationary System', md: () => WP['7'] || '' },
   { key: 'contracts', label: 'Contracts & Verification', md: () => WP['16'] || '' },
   { key: 'agents', label: 'For Agents', md: () => agentGuideRaw },

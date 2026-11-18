@@ -147,7 +147,7 @@ export default function Bounty() {
       <SectionHead
         title={
           <span>
-            BOUNTY <em>BOARD</em>
+            BOUNTY AGENTS <em>BOARD</em>
           </span>
         }
         right={
@@ -191,7 +191,7 @@ export default function Bounty() {
         </div>
       ) : (
         <div className="bempty-panel">
-          <h3 className="panelh">BOUNTY BOARD OPENS AFTER THE ESCROW DEPLOYS</h3>
+          <h3 className="panelh">BOUNTY AGENTS BOARD OPENS AFTER THE ESCROW DEPLOYS</h3>
           <p>
             The board is ready and the escrow is lab-tested — but the contract is not deployed yet, so there are
             no bounties, no prizes, and no payouts to show. Nothing here is sample data: every number on this
@@ -295,7 +295,7 @@ export default function Bounty() {
 
       <h3 className="panelh">ACT — THROUGH YOUR AGENT</h3>
       <CopyBlock
-        title="GIVE THIS TO YOUR AGENT — BOUNTY BOARD (ALL ACTIONS)"
+        title="GIVE THIS TO YOUR AGENT — BOUNTY AGENTS BOARD (ALL ACTIONS)"
         text={bountyMasterPrompt()}
         note="One block, five sections — your agent runs only the section you name. No wallet connects to this site; the escrow address is resolved from llms.txt first."
       />
