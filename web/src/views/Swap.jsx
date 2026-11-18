@@ -1173,7 +1173,7 @@ export default function Swap() {
             {home ? (
               <div className="buyline">
                 <span>DEPTH</span>
-                <b>Grows with every PASSDROP ignition</b>
+                <b>Grows with every ignition</b>
               </div>
             ) : isCustom ? (
               <div className="buyline">

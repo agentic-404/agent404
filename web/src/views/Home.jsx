@@ -1,27 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { countersStore, passdropStore, mineStore, dailyPoolStore, museAdStore, pairAdStore } from '../data.js';
+import { countersStore, mineStore, dailyPoolStore, museAdStore, pairAdStore, bountyStore } from '../data.js';
 import { useStore } from '../store.js';
-import { fmtInt, fmtToken, fmtCountdown, truncAddr } from '../format.js';
+import { fmtInt, fmtToken, fmtCountdown, truncAddr, fmtWeiExact } from '../format.js';
 import { FREE_DEADLINE, PAID_DEADLINE, FREE_CAP, PAID_CAP, FREE_PER_CLAIM, PAID_PER_CLAIM, A, scanAddr } from '../config.js';
 import { CopyBlock, SectionHead, StatCard, LiveBadge, StaleTag } from '../components.jsx';
 import { CLAIM_PROMPT } from '../prompts.js';
-import g404Url from '../assets/g404-logo-256.png';
 import a404Url from '../assets/a404-glitch-404.png';
 import cakeUrl from '../assets/cake-logo.png';
 import museUrl from '../assets/muse-logo.png';
 import rocketUrl from '../assets/rocket.png';
 import lockUrl from '../assets/lock.png';
 
-const MONTHS_S = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-const DAYS_S = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-function fmtUtc(ts) {
-  const dt = new Date(ts * 1000);
-  const hh = String(dt.getUTCHours()).padStart(2, '0');
-  const mm = String(dt.getUTCMinutes()).padStart(2, '0');
-  return `${DAYS_S[dt.getUTCDay()]} ${dt.getUTCDate()} ${MONTHS_S[dt.getUTCMonth()]} ${dt.getUTCFullYear()} · ${hh}:${mm} UTC`;
-}
-
-// ---------- BNB/USD (live) ----------
 // Same GeckoTerminal pool endpoint the site's PriceStrip already
 // fetches (App.jsx): quote_token_price_usd is WBNB in USD. If the
 // fetch fails, the USD clause is omitted — never a stale price.
@@ -51,122 +40,6 @@ function useBnbUsd() {
     };
   }, []);
   return usd;
-}
-
-function LaunchpoolCard({ d, state }) {
-  const sold = d?.totalShares ?? null;
-  const target = d?.targetShares ?? null;
-  const pct = sold !== null && target ? Math.min(100, (Number(sold) / Number(target)) * 100) : 0;
-  const listed = state === 'IGNITED';
-  const failed = state === 'ABORTED';
-  const closed = state === 'CLOSED';
-  const pair = d?.pair && d.pair !== '0x0000000000000000000000000000000000000000' ? d.pair : null;
-  const desc = listed
-    ? 'Target reached. The pool ignited on close and the LP was burned — the token trades on its own pool.'
-    : failed
-      ? 'Closed below target. Deposits refunded, ticket vaults returned pro-rata — the record stays, dimmed, exactly as it ended.'
-      : closed
-        ? 'The window closed below target. The abort path governs — deposits and vault claims run exactly as published.'
-        : 'The first agentic launchpool. Pass holders only — 550,000 $G404 per share through an $A404 ticket or a refundable BNB deposit. At 1,000 shares the pool ignites and the LP is burned.';
-  return (
-    <div className={`sev${listed || failed || closed ? ' past' : ' live'}${failed ? ' dim' : ''}`}>
-      {listed ? <span className="sev-stamp listed">LISTED ✓</span> : null}
-      {failed ? <span className="sev-stamp fail">FAIL ✕</span> : null}
-      {state === 'CHARGING' ? (
-        <div className="refundribbon" aria-hidden="true">
-          BNB REFUND<small>BACK IN 24H</small>
-        </div>
-      ) : null}
-      <div className="sev-head">
-        <img className="sev-logo" src={g404Url} alt="GENESIS404 logo" />
-        <div>
-          <div className="sev-num">EVENT #1</div>
-          <div className="sev-title">
-            GENESIS404 <span>$G404</span>
-          </div>
-        </div>
-        {state === 'COMPLETED' ? <span className="sev-chip ghost">TARGET REACHED</span> : null}
-        {closed ? <span className="sev-chip ghost">WINDOW CLOSED</span> : null}
-      </div>
-      <div className="sev-tick">
-        GENESIS404 <b className="pair">$G404/BNB</b>
-        {listed ? <img className="sev-venue" src={cakeUrl} alt="PancakeSwap" /> : null}
-        {!listed && !failed ? <span className="st">· PAIR FORMS AT IGNITION</span> : null}
-        {failed ? <span className="st">· NO PAIR FORMED</span> : null}
-      </div>
-      <div className="sev-spec">
-        <span>
-          <span className="k">NAME</span>
-          <span className="v">GENESIS404</span>
-        </span>
-        <span>
-          <span className="k">TICKER</span>
-          <span className="v amber">$G404</span>
-        </span>
-        <span>
-          <span className="k">MAX SUPPLY</span>
-          <span className="v">1,000,000,000 — FIXED, NO MINT</span>
-        </span>
-        <span>
-          <span className="k">STANDARD</span>
-          <span className="v">ERC-20</span>
-        </span>
-      </div>
-      <p className="sev-desc">{desc}</p>
-      {sold !== null && target ? (
-        <div className="sev-bar">
-          <i style={{ width: `${pct}%` }} />
-        </div>
-      ) : null}
-      <div className="sev-meta">
-        <span>
-          {listed || failed || closed ? 'FINAL ' : ''}SHARES{' '}
-          <b>
-            {sold !== null ? fmtInt(Number(sold)) : '—'} / {target ? fmtInt(Number(target)) : '—'}
-          </b>
-        </span>
-        {!listed && !failed ? (
-          <span>
-            REWARD <b>{d?.rewardPerShare ? `${fmtToken(BigInt(d.rewardPerShare))} / SHARE` : '—'}</b>
-          </span>
-        ) : null}
-        {listed ? (
-          <span>
-            POOL <b>LIVE · LP BURNED</b>
-          </span>
-        ) : failed ? (
-          <span>
-            OUTCOME <b>REFUNDED</b>
-          </span>
-        ) : (
-          <span>
-            CLOSES <b>{d?.chargeEnd ? fmtUtc(Number(d.chargeEnd)) : '—'}</b>
-          </span>
-        )}
-      </div>
-      {!listed && !failed ? (
-        <a className="sev-open" href="#/passdrop">
-          OPEN EVENT →
-        </a>
-      ) : (
-        <span className="sev-actions">
-          {listed && pair ? (
-            <a
-              className="sev-ghost"
-              href={`https://www.geckoterminal.com/bsc/pools/${pair}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              VIEW THE POOL →
-            </a>
-          ) : null}
-          <a className="sev-ghost" href="#/passdrop">
-            OPEN EVENT →
-          </a>
-        </span>
-      )}
-    </div>
-  );
 }
 
 function useNow() {
@@ -704,9 +577,19 @@ function fmtPoolMuse(wei) {
   return `${Math.round(v).toLocaleString('en-US')} MUSE`;
 }
 
+// Airdrop slide prompt — copied VERBATIM from the guide
+// (web/src/docs/MUSE-AIRDROP.md, "How to claim" block). The slide's COPY
+// PROMPT button copies this text; the slide itself is not a link.
+const AIRDROP_PROMPT = `Contract: 0x58Db870b3d1cC04aEABE14376825E156c640A193 (BSC, chainId 56)
+Call:     claim(uint256 amount, bytes32[] proof)  — selector 0x2f52ebb7
+Amount:   10000000000000000000000  (10,000 MUSE = 10,000 ether)
+Proof:    <the proof array from /airdrop-proofs.json for the holder's address>
+From:     the same wallet that claimed the A404`;
+
 function MuseAdCarousel() {
   const ad = useStore(museAdStore);
   const pair = useStore(pairAdStore);
+  const bounty = useStore(bountyStore);
   const bnbUsd = useBnbUsd();
   const d = ad.data;
   const priceUsd =
@@ -727,6 +610,10 @@ function MuseAdCarousel() {
     pd?.deadLp !== null && pd?.deadLp !== undefined && pd?.totalLp
       ? (Number(pd.deadLp) / Number(pd.totalLp)) * 100
       : null;
+  // Bounty slide stats — same live reads as the Bounty Agents Board page
+  // (bountyStore.stats: prizesOpen / bountiesOpen / totalPaid, from the
+  // escrow contract). Null while still reading → the slide shows "—".
+  const bs = bounty.data?.stats || null;
   const slides = [
     {
       key: 'muse',
@@ -816,9 +703,80 @@ function MuseAdCarousel() {
       cta: 'STAKE YOUR LP →',
       href: '#/stakelp',
     },
+    {
+      key: 'muse-airdrop',
+      eyebrow: 'MUSE AIRDROP — LIVE',
+      title: (
+        <>
+          10,000 MUSE <span className="amber">FREE</span>
+        </>
+      ),
+      pitch:
+        'Every A404 claimer gets 10,000 MUSE. Claim yours before 17 Dec 2026.',
+      logo: museUrl,
+      logoAlt: 'MUSE logo',
+      stats: [
+        { lbl: 'ELIGIBLE', val: '1,001 WALLETS', amber: false },
+        { lbl: 'POOL', val: '10,010,000 MUSE', amber: false },
+        { lbl: 'ENDS', val: '17 DEC 2026', amber: true },
+      ],
+      cta: 'COPY PROMPT',
+      copyPrompt: true,
+    },
+    {
+      key: 'bounty',
+      eyebrow: 'BOUNTY AGENTS BOARD',
+      title: (
+        <>
+          EARN <span className="amber">BNB</span> FOR REAL WORK
+        </>
+      ),
+      pitch: 'Real tasks. Real BNB. Paid from escrow.',
+      logoMark: (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" aria-hidden="true">
+          <g stroke="#f5b301" strokeWidth="5" strokeLinecap="round">
+            <path d="M64 2 V9" />
+            <path d="M64 119 V126" />
+            <path d="M2 64 H9" />
+            <path d="M119 64 H126" />
+          </g>
+          <circle cx="64" cy="64" r="54" fill="none" stroke="#f5b301" strokeWidth="6" />
+          <circle cx="64" cy="64" r="38" fill="none" stroke="#f2f2f2" strokeWidth="4" />
+          <circle cx="64" cy="64" r="20" fill="#f5b301" />
+          <path
+            d="M64 51 L67.23 59.55 L76.36 59.98 L69.23 65.70 L71.64 74.52 L64 69.5 L56.36 74.52 L58.77 65.70 L51.64 59.98 L60.77 59.55 Z"
+            fill="#0b0b0b"
+          />
+        </svg>
+      ),
+      stats: [
+        { lbl: 'PRIZES OPEN', val: bs ? `${fmtWeiExact(bs.prizesOpen)} BNB` : '—', amber: false },
+        { lbl: 'BOUNTIES OPEN', val: bs ? fmtInt(bs.bountiesOpen) : '—', amber: false },
+        { lbl: 'TOTAL PAID', val: bs ? `${fmtWeiExact(bs.totalPaid)} BNB` : '—', amber: true },
+      ],
+      cta: 'See open bounties',
+      href: '#/bounty',
+    },
   ];
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copyAirdropPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(AIRDROP_PROMPT);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = AIRDROP_PROMPT;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch {}
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  };
   const touchX = useRef(null);
   useEffect(() => {
     if (slides.length < 2 || paused) return undefined;
@@ -846,9 +804,9 @@ function MuseAdCarousel() {
         onTouchEnd={onTouchEnd}
       >
         <div className="muse-ad-track" style={{ transform: `translateX(-${idx * 100}%)` }}>
-          {slides.map((s) => (
-            <div className="muse-ad-slide" key={s.key}>
-              <a className="muse-ad-card" href={s.href}>
+          {slides.map((s) => {
+            const inner = (
+              <>
                 <div className="muse-ad-top">
                   {s.logos ? (
                     <div className="muse-ad-logos">
@@ -856,6 +814,10 @@ function MuseAdCarousel() {
                         <img key={li} className="muse-ad-logo" src={u} alt={s.logoAlt || 'logo'} />
                       ))}
                     </div>
+                  ) : s.logoMark ? (
+                    <span className="muse-ad-logo bounty-mark" aria-hidden="true">
+                      {s.logoMark}
+                    </span>
                   ) : (
                     <img className="muse-ad-logo" src={s.logo} alt={s.logoAlt || 'MUSE logo'} />
                   )}
@@ -873,10 +835,25 @@ function MuseAdCarousel() {
                     </div>
                   ))}
                 </div>
-                <span className="btn solid block">{s.cta}</span>
-              </a>
-            </div>
-          ))}
+                {s.copyPrompt ? (
+                  <button type="button" className="btn solid block" onClick={copyAirdropPrompt}>
+                    {copied ? 'COPIED' : s.cta}
+                  </button>
+                ) : (
+                  <span className="btn solid block">{s.cta}</span>
+                )}
+              </>
+            );
+            return (
+              <div className="muse-ad-slide" key={s.key}>
+                {s.copyPrompt ? (
+                  <div className="muse-ad-card">{inner}</div>
+                ) : (
+                  <a className="muse-ad-card" href={s.href}>{inner}</a>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
       {slides.length > 1 && (
@@ -898,7 +875,6 @@ function MuseAdCarousel() {
 
 export default function Home() {
   const counters = useStore(countersStore);
-  const pdStore = useStore(passdropStore);
   const mineState = useStore(mineStore);
   const dpState = useStore(dailyPoolStore);
   const now = useNow();
@@ -907,21 +883,6 @@ export default function Home() {
   const paid = c?.paid ?? null;
   const paidSoldOut = paid !== null && paid >= BigInt(PAID_CAP);
   const mintClosed = paidSoldOut || now > PAID_DEADLINE;
-  const pdD = pdStore.data;
-  const pdState =
-    !pdD || pdD.activated === null || pdD.activated === undefined
-      ? 'READING'
-      : pdD.aborted
-        ? 'ABORTED'
-        : pdD.ignited
-          ? 'IGNITED'
-          : pdD.completed
-            ? 'COMPLETED'
-            : pdD.chargeEnd !== null && pdD.chargeEnd !== undefined && now > Number(pdD.chargeEnd)
-              ? 'CLOSED'
-              : pdD.activated
-                ? 'CHARGING'
-                : 'PRE';
   return (
     <>
       <section className="hero">
@@ -966,21 +927,6 @@ export default function Home() {
           right={mineState.data && mineState.data.activated ? 'LIVE NOW' : 'COMING NEXT LISTING'}
         />
         <MineCard paid={paid} mine={mineState.data} />
-      </section>
-
-      <section className="sec">
-        <SectionHead
-          title={
-            <>
-              AGENTS <span className="amber">LAUNCHPOOL</span>
-            </>
-          }
-          right="HISTORY · NEW LISTING"
-        />
-        <LaunchpoolCard d={pdD} state={pdState} />
-        <a className="sevmore" href="#/passdrop">
-          FULL HISTORY ON THE PASSDROP PAGE →
-        </a>
       </section>
 
       {mintClosed ? (

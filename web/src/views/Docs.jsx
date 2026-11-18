@@ -7,7 +7,6 @@ import agentGuideRaw from '../docs/agent-guide.md?raw';
 import agentfunRaw from '../docs/AGENTFUN.md?raw';
 import agentlpRaw from '../docs/AGENTLP.md?raw';
 import addlpRaw from '../docs/ADD-LP.md?raw';
-import passdropRaw from '../docs/PASSDROP.md?raw';
 import dailypoolRaw from '../docs/DAILY-POOL.md?raw';
 import launchpadRaw from '../docs/LAUNCHPAD.md?raw';
 import moonshotRaw from '../docs/MOONSHOT.md?raw';
@@ -62,7 +61,6 @@ const TOPICS = [
   },
   { key: 'agentlp', label: 'AGENTLP Guide', md: () => agentlpRaw },
   { key: 'addlp', label: 'ADD-LP Guide', md: () => addlpRaw },
-  { key: 'passdrop', label: 'PASSDROP Guide', md: () => passdropRaw },
   { key: 'dailypool', label: 'Daily Pool Guide', md: () => dailypoolRaw },
   { key: 'launchpad', label: 'Launchpad Guide', md: () => launchpadRaw },
   { key: 'moonshot', label: 'Moonshot Guide', md: () => moonshotRaw },
