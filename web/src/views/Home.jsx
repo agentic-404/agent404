@@ -923,10 +923,14 @@ const HOME_CSS = `
 .home-root .sev-spec .v{color:var(--text)}
 .home-root .sev-spec .v.amber{color:var(--amber)}
 .home-root .home-dp .refundribbon{top:22px;right:-38px;font-size:11px;padding:6px 46px}
+.home-root .home-dp .sev-head{padding-right:70px}
 /* NOTE: the original .home-dp ribbon sat at top:4px, which clips its own
    "BNB REFUND" text on narrow cards (verified 360px + 540px) — the
    top:22px position above is the fix dayu already approved ("cocok",
-   20:56 WIB) and live since commit 76e702c. Everything else is original. */
+   20:56 WIB) and live since commit 76e702c. The sev-head padding keeps
+   the header text clear of the diagonal ribbon at 360px (verified:
+   without it, "ONE DRAW EVERY DAY" runs under the ribbon). Both lines
+   are from that same approved ribbon fix; everything else is original. */
 .home-root .home-dp .sev-open{display:block;text-align:center}
 @media (max-width: 640px){.home-root .home-dp .sev-num{font-size:10px;letter-spacing:.14em}}
 `;
