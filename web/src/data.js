@@ -4,8 +4,8 @@
 // stale-while-revalidate polling; immutable event history is persisted in
 // IndexedDB and synced incrementally from the last stored block.
 
-import { A, SEL, TOPIC, MKT_TOPICS, PD_TOPIC, PD_TOPICS, PD_DEPLOY_BLOCK, MINE_DEPLOY_BLOCK, FUN_GRADUATION_WEI, LP_TOPIC, LP_TOPICS, LP_ACTOR_TOPICS, LAUNCHPAD_DEPLOY_BLOCK, DP_TOPIC, DAILYPOOL_DEPLOY_BLOCK, PR_TOPIC, PREDICT_DEPLOY_BLOCK } from './config.js';
-import { rpcBatch, rpcTryAll, callReq } from './rpc.js';
+import { A, SEL, TOPIC, MKT_TOPICS, PD_TOPIC, PD_TOPICS, PD_DEPLOY_BLOCK, MINE_DEPLOY_BLOCK, FUN_GRADUATION_WEI, LP_TOPIC, LP_TOPICS, LP_ACTOR_TOPICS, LAUNCHPAD_DEPLOY_BLOCK, DP_TOPIC, DAILYPOOL_DEPLOY_BLOCK, PR_TOPIC, PREDICT_DEPLOY_BLOCK, BT_TOPIC, BOUNTY_DEPLOY_BLOCK, BOUNTY_API } from './config.js';
+import { rpcBatch, rpcTryAll, callReq, ethBlockNumber } from './rpc.js';
 import { toBig, padArg, hex } from './format.js';
 import { createStore, ensurePoller } from './store.js';
 import { idbGetEvents, idbPutEvents, idbGetMeta, idbPutMeta } from './idb.js';
@@ -2120,4 +2120,237 @@ async function fetchMoonshot() {
 
 export function startMoonshot() {
   ensurePoller('moonshot', moonshotStore, fetchMoonshot, 30000);
+}
+
+/* ================= BOUNTY AGENTS BOARD ========== */
+// Live reads for #/bounty. The escrow is NOT deployed yet (A.bounty is
+// null): the store then carries API text only (unverified records) and
+// no chain state, and the page shows its empty state. Once deployed,
+// on-chain reads are the source of truth for status / prize / deadline
+// and the API supplies only the human-readable text.
+
+export const bountyStore = createStore(null);
+
+export const BT_CATEGORIES = ['Summary', 'Coding', 'Prediction', 'Poster', 'Creative'];
+
+function decodeBounty(hexStr) {
+  // bounties(uint256): (address creator, uint8 category, uint8 status,
+  // uint256 prize, uint256 deadline, bytes32 descriptionHash,
+  // uint256 submissionCount) — 7 words, fixed layout.
+  if (typeof hexStr !== 'string' || hexStr.length < 2 + 7 * 64) return null;
+  try {
+    const w = (i) => hexStr.slice(2 + i * 64, 2 + (i + 1) * 64);
+    return {
+      creator: `0x${w(0).slice(24)}`,
+      category: Number(BigInt(`0x${w(1)}`)),
+      status: Number(BigInt(`0x${w(2)}`)),
+      prize: BigInt(`0x${w(3)}`),
+      deadline: Number(BigInt(`0x${w(4)}`)),
+      descriptionHash: `0x${w(5)}`,
+      submissionCount: Number(BigInt(`0x${w(6)}`)),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function decodeWinners(hexStr) {
+  // getWinners(uint256): (address[] winners, uint256[] sharesBps).
+  if (typeof hexStr !== 'string' || hexStr.length < 2 + 128) return null;
+  try {
+    const clean = hexStr.slice(2);
+    const offW = Number(BigInt(`0x${clean.slice(0, 64)}`)) * 2;
+    const offS = Number(BigInt(`0x${clean.slice(64, 128)}`)) * 2;
+    const n = Number(BigInt(`0x${clean.slice(offW, offW + 64)}`));
+    if (n < 0 || n > 3) return null;
+    const winners = [];
+    const shares = [];
+    for (let i = 0; i < n; i++) {
+      winners.push(`0x${clean.slice(offW + 64 + i * 64 + 24, offW + 128 + i * 64)}`);
+      shares.push(Number(BigInt(`0x${clean.slice(offS + 64 + i * 64, offS + 128 + i * 64)}`)));
+    }
+    return { winners, shares };
+  } catch {
+    return null;
+  }
+}
+
+async function fetchBountyApi(path) {
+  if (!BOUNTY_API) return null;
+  try {
+    const r = await fetch(`${BOUNTY_API}${path}`);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch {
+    return null;
+  }
+}
+
+async function fetchBlockTimestamps(blocks) {
+  // block number -> unix timestamp, via eth_getBlockByNumber (batched).
+  const out = new Map();
+  const uniq = [...new Set(blocks)].filter((b) => Number.isFinite(b) && b > 0);
+  if (!uniq.length) return out;
+  const res = await rpcBatch(uniq.map((b) => ({ method: 'eth_getBlockByNumber', params: [hex(b), false] })));
+  uniq.forEach((b, i) => {
+    const ts = res[i] && res[i].timestamp ? parseInt(res[i].timestamp, 16) : null;
+    if (ts) out.set(b, ts);
+  });
+  return out;
+}
+
+async function fetchBountyLogs() {
+  // Awarded + WorkSubmitted + BountyCreated logs from the deploy block.
+  // Skipped entirely while the escrow is undeployed (block 0).
+  const empty = { awarded: [], submitted: [], created: [] };
+  if (!A.bounty || !BOUNTY_DEPLOY_BLOCK) return empty;
+  const latest = await ethBlockNumber();
+  if (!latest || latest < BOUNTY_DEPLOY_BLOCK) return empty;
+  const [awarded, submitted, created] = await Promise.all([
+    fetchLogsChunked(A.bounty, BT_TOPIC.awarded, BOUNTY_DEPLOY_BLOCK, latest),
+    fetchLogsChunked(A.bounty, BT_TOPIC.submitted, BOUNTY_DEPLOY_BLOCK, latest),
+    fetchLogsChunked(A.bounty, BT_TOPIC.created, BOUNTY_DEPLOY_BLOCK, latest),
+  ]);
+  return {
+    awarded: Array.isArray(awarded) ? awarded : [],
+    submitted: Array.isArray(submitted) ? submitted : [],
+    created: Array.isArray(created) ? created : [],
+  };
+}
+
+function buildActiveAgents(logs, paid) {
+  // Aggregate on-chain activity per wallet: last action + counts. Wins
+  // come from the paid rows (every winner submitted, so they are already
+  // in the map). Returns the 4 most recently active agents.
+  const byAddr = new Map();
+  const touch = (addr, kind, block) => {
+    const a = addr.toLowerCase();
+    const cur = byAddr.get(a) || { address: a, lastKind: kind, lastBlock: block, submitted: 0, created: 0, wins: 0 };
+    if (block >= cur.lastBlock) {
+      cur.lastKind = kind;
+      cur.lastBlock = block;
+    }
+    if (kind === 'submitted') cur.submitted += 1;
+    if (kind === 'created') cur.created += 1;
+    byAddr.set(a, cur);
+  };
+  for (const l of logs.created) touch(`0x${l.topics[2].slice(26)}`, 'created', parseInt(l.blockNumber, 16));
+  for (const l of logs.submitted) touch(`0x${l.topics[2].slice(26)}`, 'submitted', parseInt(l.blockNumber, 16));
+  for (const p of paid) {
+    for (const w of p.winners || []) {
+      const cur = byAddr.get(w.toLowerCase());
+      if (cur) cur.wins += 1;
+    }
+  }
+  return [...byAddr.values()].sort((a, b) => b.lastBlock - a.lastBlock).slice(0, 4);
+}
+
+async function fetchBounty() {
+  // No escrow yet: API text only, no chain state. The page renders its
+  // empty state; nothing here is a number from the chain.
+  if (!A.bounty) {
+    const list = await fetchBountyApi('/api/bounties');
+    if (!list) return null;
+    const items = Array.isArray(list.bounties) ? list.bounties : Array.isArray(list) ? list : [];
+    return { data: { deployed: false, bounties: items, stats: null, paid: [], active: [], params: null } };
+  }
+  const r0 = await rpcBatch([callReq(A.bounty, SEL.btNextId)]);
+  const next = toBig(r0[0]);
+  if (next === null) return null;
+  const n = Number(next);
+  const bounties = [];
+  if (n > 0) {
+    const reqs = [];
+    for (let i = 0; i < n; i++) reqs.push(callReq(A.bounty, SEL.btBounty + padArg(BigInt(i))));
+    const res = await rpcBatch(reqs);
+    for (let i = 0; i < n; i++) {
+      const b = decodeBounty(res[i]);
+      if (b) bounties.push({ id: i, ...b });
+    }
+  }
+  // Live contract parameters (read, never literals).
+  const pr = await rpcBatch([
+    callReq(A.bounty, SEL.btFeeBps),
+    callReq(A.bounty, SEL.btMinPrize),
+    callReq(A.bounty, SEL.btJudgeTimeout),
+    callReq(A.bounty, SEL.btSweepTimeout),
+    callReq(A.bounty, SEL.btJudge),
+  ]);
+  const judgeTimeout = toBig(pr[2]);
+  const sweepTimeout = toBig(pr[3]);
+  const params = {
+    feeBps: toBig(pr[0]),
+    minPrize: toBig(pr[1]),
+    judgeTimeout: judgeTimeout !== null ? Number(judgeTimeout) : null,
+    sweepTimeout: sweepTimeout !== null ? Number(sweepTimeout) : null,
+    judge: typeof pr[4] === 'string' && pr[4].length >= 66 ? `0x${pr[4].slice(-40)}` : null,
+  };
+  // Merge API text (title / description / agent id) by bounty id.
+  const list = await fetchBountyApi('/api/bounties');
+  const textById = new Map();
+  if (list) {
+    const items = Array.isArray(list.bounties) ? list.bounties : Array.isArray(list) ? list : [];
+    for (const it of items) {
+      if (it && typeof it.bountyId === 'number') textById.set(it.bountyId, it);
+    }
+  }
+  for (const b of bounties) {
+    const t = textById.get(b.id);
+    b.title = t?.title || null;
+    b.description = t?.description || null;
+    b.verified = t?.verified === true;
+    b.creatorAgentId = t?.creatorAgentId || null;
+  }
+  // Stats — computed from the live bounties, each shown exactly once.
+  let prizesOpen = 0n;
+  let bountiesOpen = 0;
+  let completed = 0;
+  let totalPaid = 0n;
+  for (const b of bounties) {
+    if (b.status === 0) {
+      prizesOpen += b.prize;
+      bountiesOpen += 1;
+    }
+    if (b.status === 1) {
+      completed += 1;
+      totalPaid += b.prize;
+    }
+  }
+  const stats = { prizesOpen, bountiesOpen, completed, totalPaid };
+  // Winners for every awarded bounty (attached to the bounty, so the
+  // card's "View winners" and the Recently Paid rows share one read).
+  const awarded = bounties.filter((b) => b.status === 1).sort((a, b) => b.id - a.id);
+  if (awarded.length) {
+    const wres = await rpcBatch(awarded.map((b) => callReq(A.bounty, SEL.btGetWinners + padArg(BigInt(b.id)))));
+    awarded.forEach((b, k) => {
+      const w = decodeWinners(wres[k]);
+      b.winners = w ? w.winners : [];
+      b.shares = w ? w.shares : [];
+    });
+  }
+  // Recently Paid: Awarded bounties, newest first, top 3.
+  const paid = awarded
+    .slice(-3)
+    .reverse()
+    .map((b) => ({ id: b.id, title: b.title, prize: b.prize, winners: b.winners || [], shares: b.shares || [] }));
+  // Recently Active: from the event logs, top 4 agents by last activity.
+  const logs = await fetchBountyLogs();
+  const active = buildActiveAgents(logs, paid);
+  // Paid dates come from the Awarded log of each bounty (latest award).
+  const awardBlockById = new Map();
+  for (const l of logs.awarded) {
+    const id = Number(BigInt(l.topics[1]));
+    awardBlockById.set(id, parseInt(l.blockNumber, 16));
+  }
+  const tsByBlock = await fetchBlockTimestamps([
+    ...active.map((a) => a.lastBlock),
+    ...[...awardBlockById.values()],
+  ]);
+  for (const a of active) a.lastAt = tsByBlock.get(a.lastBlock) || null;
+  for (const p of paid) p.awardedAt = tsByBlock.get(awardBlockById.get(p.id)) || null;
+  return { data: { deployed: true, bounties, stats, paid, active, params } };
+}
+
+export function startBounty() {
+  ensurePoller('bounty', bountyStore, fetchBounty, 30000);
 }

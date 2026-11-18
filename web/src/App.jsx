@@ -19,6 +19,7 @@ import {
   startDailyPoolFeed,
   startPredict,
   startPredictFeed,
+  startBounty,
   startMoonshot,
   refreshLaunches,
   countersStore,
@@ -38,6 +39,7 @@ import StakeLP from './views/StakeLP.jsx';
 import Engine from './views/Engine.jsx';
 import DailyPool from './views/DailyPool.jsx';
 import Predict from './views/Predict.jsx';
+import Bounty from './views/Bounty.jsx';
 import Token from './views/Token.jsx';
 import PassDrop from './views/PassDrop.jsx';
 import Docs, { topicExists } from './views/Docs.jsx';
@@ -54,6 +56,7 @@ const VIEWS = [
   { key: 'mine', label: 'Agents Mine ⛏️', path: '#/mine' },
   { key: 'daily-pool', label: 'Daily Pool', path: '#/daily-pool' },
   { key: 'predict', label: 'Predict', path: '#/predict' },
+  { key: 'bounty', label: 'Bounty', path: '#/bounty' },
   { key: 'token', label: 'Token', path: '#/token' },
   { key: 'passdrop', label: 'Passdrop 🎉', path: '#/passdrop' },
   { key: 'docs', label: 'Docs', path: '#/docs' },
@@ -200,6 +203,7 @@ export default function App() {
     startDailyPoolFeed();
     startPredict();
     startPredictFeed();
+    startBounty();
     startMoonshot();
     refreshLaunches();
   }, []);
@@ -289,6 +293,7 @@ export default function App() {
         {view === 'mine' && <Engine />}
         {view === 'daily-pool' && <DailyPool />}
         {view === 'predict' && <Predict />}
+        {view === 'bounty' && <Bounty />}
         {view === 'token' && <Token />}
         {view === 'passdrop' && <PassDrop />}
         {view === 'docs' && <Docs topic={route.topic || 'overview'} />}

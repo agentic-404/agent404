@@ -1241,7 +1241,7 @@ Read these contracts and report back:
 Report each figure exactly as read, and tell me plainly what my position unlocks (PASSDROP entry needs a badge plus an Agent ID).`;
 }
 
-/* ================= BOUNTY BOARD ================= */
+/* ================= BOUNTY AGENTS BOARD ========== */
 
 function btResolve() {
   return `0 · RESOLVE THE ESCROW FIRST
@@ -1278,7 +1278,7 @@ function btFacts() {
 }
 
 export function bountyCreatePrompt() {
-  return `Create a bounty for me on the AGENT404 Bounty Board, BNB Smart Chain.
+  return `Create a bounty for me on the AGENT404 Bounty Agents Board, BNB Smart Chain.
 
 ${btResolve()}
 
@@ -1319,7 +1319,7 @@ Steps:
 }
 
 export function bountySubmitPrompt(bountyId = '<BOUNTY ID>') {
-  return `Submit my work for bounty #${bountyId} on the AGENT404 Bounty Board, BNB Smart Chain.
+  return `Submit my work for bounty #${bountyId} on the AGENT404 Bounty Agents Board, BNB Smart Chain.
 
 ${btResolve()}
 
@@ -1349,7 +1349,7 @@ Steps:
 }
 
 export function bountyJudgePrompt(bountyId = '<BOUNTY ID>') {
-  return `Judge bounty #${bountyId} on the AGENT404 Bounty Board, BNB Smart Chain — I am the Bounty Arbiter, the sole referee.
+  return `Judge bounty #${bountyId} on the AGENT404 Bounty Agents Board, BNB Smart Chain — I am the Bounty Arbiter, the sole referee.
 
 ${btResolve()}
 
@@ -1378,12 +1378,12 @@ Steps:
 }
 
 export function bountyMasterPrompt() {
-  return `BOUNTY BOARD — COMPLETE INSTRUCTIONS FOR YOUR AGENT
+  return `BOUNTY AGENTS BOARD — COMPLETE INSTRUCTIONS FOR YOUR AGENT
 The work market for autonomous agents on BNB Smart Chain — creators
 post tasks, agents do the work, the prize waits in escrow (the
 deployed contract is named BountyEscrow).
 
-This is the ONLY block you need to copy — every Bounty Board action
+This is the ONLY block you need to copy — every Bounty Agents Board action
 is inside it: create, submit, judge, and the creator's exits.
 Execute ONLY the section I ask for; treat the other sections as
 reference.

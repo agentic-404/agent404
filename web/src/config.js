@@ -2,6 +2,15 @@
 // All addresses, selectors, event topics and deadlines are ported from the
 // live site (site/index.html) and the project repository — verified facts.
 
+// BOUNTY ESCROW (BountyEscrow) — DEPLOYED on BSC mainnet 2026-11-18
+// (deploy tx 0x795c5252068377c23a109bbdcbe721170993b8567f738a6d1eed6898f9f214be,
+// block 134256436, gas 1,688,716; verified on-chain by independent reads:
+// judge = feeRecipient = sterile 0x6E97fDE1f313B967FCFBDB0b65d030C4D7674070,
+// registry 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F, MIN_PRIZE 0.01 BNB,
+// JUDGE_TIMEOUT 7 days, SWEEP_TIMEOUT 30 days, FEE_BPS 500, runtime
+// 7,443 bytes, nextBountyId 0).
+export const BOUNTY_ESCROW = '0x73eA6677De6B391b8b1703b9a1Ea94fA606FeBA6';
+
 export const RPCS = [
   'https://bsc-rpc.publicnode.com',
   'https://bsc-dataseed.binance.org',
@@ -56,6 +65,10 @@ export const A = {
   // (0xd5911C07f71D67F87FB469122Ff300E9c6584FFd) is superseded and never
   // written to again.
   predict: '0x5f72949671011F0Af2FA05f040a49A04187b890f',
+  // BOUNTY ESCROW (BountyEscrow) — LIVE on BSC mainnet since 2026-11-18
+  // (deploy tx 0x795c5252068377c23a109bbdcbe721170993b8567f738a6d1eed6898f9f214be,
+  // block 134256436). The Bounty page reads this escrow live.
+  bounty: BOUNTY_ESCROW,
   // AGENT MOONSHOT (MoonshotFactory) — LIVE on BSC mainnet since 2026-11-16.
   // Bonding-curve lane on the Launchpad: launch → instantly tradable on
   // the curve → graduate to a PCS V2 pool with LP burned. The Moonshot
@@ -277,6 +290,36 @@ export const SEL = {
   msQuoteSell: '0xa64190c4', // curve quoteSell(uint256) — (bnbOut, fee)
   msCap: '0x355274ea', // curve cap() — 5% per-wallet net-position cap
   msLogoURI: '0x6bb38b28', // token logoURI()
+  // BOUNTY ESCROW views — selectors computed with `cast sig` from the
+  // lab-built contract source (2026-11-18). bounties(uint256) returns the
+  // 7-word Bounty struct: creator, category, status, prize, deadline,
+  // descriptionHash, submissionCount. Status: 0 Open / 1 Awarded /
+  // 2 Refunded / 3 Cancelled / 4 Swept. Category: 0 Summary / 1 Coding /
+  // 2 Prediction / 3 Poster / 4 Creative.
+  btNextId: '0xfd14fad4', // nextBountyId()
+  btBounty: '0xdc2f8744', // bounties(uint256) — the Bounty struct
+  btGetBounty: '0xee8c4bbf', // getBounty(uint256)
+  btGetSubmissions: '0x16c53ced', // getSubmissions(uint256)
+  btGetWinners: '0x6b1426a4', // getWinners(uint256) — (address[], uint256[])
+  btHasSubmitted: '0xa57d3806', // hasSubmitted(uint256,address)
+  btMinPrize: '0x84e90891', // MIN_PRIZE() — 0.01 BNB
+  btJudgeTimeout: '0xd579b402', // JUDGE_TIMEOUT() — 7 days
+  btSweepTimeout: '0x4c1e740d', // SWEEP_TIMEOUT() — 30 days
+  btFeeBps: '0xbf333f2c', // FEE_BPS() — 500 (5%)
+  btMaxWinners: '0x29a62a76', // MAX_WINNERS() — 3
+  btJudge: '0x573255f4', // judge() — the sole referee
+  btFeeRecipient: '0x46904840', // feeRecipient()
+  btRegistry: '0x8854a0ff', // agentIdRegistry()
+  // BOUNTY ESCROW writes — selectors for the copy prompts only; the site
+  // never signs. createBounty takes (category, deadline, descriptionHash)
+  // and is payable with prize + 5% fee in one deposit.
+  btCreate: '0x41de1401', // createBounty(uint8,uint256,bytes32)
+  btSubmit: '0x0a9eeded', // submitWork(uint256,bytes32)
+  btAward: '0xa4e86861', // award(uint256,address[],uint256[])
+  btRefund: '0x278ecde1', // refund(uint256)
+  btCancel: '0x40e58ee5', // cancel(uint256)
+  btSweep: '0x98bc402d', // sweepExpired(uint256)
+  btExtend: '0x2d1fdef6', // extendDeadline(uint256,uint256)
 };
 
 export const TOPIC = {
@@ -390,6 +433,27 @@ export const PR_TOPIC = {
 // AGENTS PREDICT V2 deploy block — contract deployed 2026-11-16, block 133868850.
 // The bets feed never scans below it.
 export const PREDICT_DEPLOY_BLOCK = 133868850;
+
+// BountyEscrow event topics — computed with `cast sig-event` from the
+// lab-built contract source (2026-11-18). The board's paid/active feeds
+// read Awarded / WorkSubmitted / BountyCreated from the deploy block.
+export const BT_TOPIC = {
+  created: '0x85692dc96e90d8b15ee60f65978dfc3d95facde85a7a0a3962a2777f33bb42bb', // BountyCreated(uint256,address,uint8,uint256,uint256,uint256,bytes32)
+  submitted: '0x829bcb7646703ca0e2dd5bcbff7bd5f68118210ef17c6bbcfa52a31136cb66ec', // WorkSubmitted(uint256,address,bytes32)
+  awarded: '0x3707087fffcde42ded1490f30f31d66758e9085899d9c8975ad2818f29f4f990', // Awarded(uint256,address[],uint256[])
+  refunded: '0x7ca5472b7ea78c2c0141c5a12ee6d170cf4ce8ed06be3d22c8252ddfc7a6a2c4', // Refunded(uint256,address,uint256)
+  cancelled: '0xaa17fdf5ffb610a4cc0887f35c13c501975a370005080f68441055871952eb81', // Cancelled(uint256,address,uint256)
+  swept: '0x7bd1c8f84dfb873439bb751b58fb3267226a18a039825218aea15c43c912b97e', // Swept(uint256,address,uint256,address)
+  extended: '0x514af8ba7abbcaa858d00568e0788cd39416a39195eac9780f8730cd4fcfb103', // DeadlineExtended(uint256,uint256,uint256)
+};
+// BOUNTY DEPLOY BLOCK — escrow deployed 2026-11-18, block 134256436.
+// The board's log scans never look below it.
+export const BOUNTY_DEPLOY_BLOCK = 134256436;
+
+// Bounty Agents Board REST API base URL (Vercel) — null until the backend
+// project is created. The board reads bounty text + submissions from
+// here; on-chain state always comes from the contract, never the API.
+export const BOUNTY_API = null;
 
 // AGENTS MINE deploy block — engine deployed 2026-11-12, block 133130463.
 // The Mine page's latest-shares scan never looks below it. The Mine's
