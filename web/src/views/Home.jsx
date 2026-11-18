@@ -564,7 +564,9 @@ function fmtMusePrice(usd) {
 function fmtPairPrice(ratio) {
   if (ratio === null || ratio === undefined || !Number.isFinite(ratio)) return '—';
   if (ratio >= 0.01) return `${ratio.toFixed(4)} A404`;
-  return `${ratio.toExponential(2)} A404`;
+  if (ratio < 1e-15) return `${ratio.toFixed(18).replace(/0+$/, '').replace(/\.$/, '')} A404`;
+  // Full decimal expansion (0.0000000523), never scientific notation.
+  return `${ratio.toFixed(15).replace(/0+$/, '').replace(/\.$/, '')} A404`;
 }
 
 // Pair slide: MUSE depth of the pool, compact.
@@ -873,6 +875,47 @@ function MuseAdCarousel() {
   );
 }
 
+// Home-only styles for the .sev card family (MineCard, DailyPoolCard,
+// LaunchpadCard). These classes have NO rules in the shared stylesheet,
+// so without this block the cards render unstyled: the refund ribbons
+// escape to the top of the page, the logo/venue images show at their
+// natural 256px, the spec and meta rows jam together with no gaps, and
+// the tranche bar is invisible. Scoped under .home-root, so no other
+// page is affected. Rendered only when Home mounts.
+const HOME_CSS = `
+.home-root .sev { position: relative; overflow: hidden; background: var(--panel); border: 1px solid rgba(245, 179, 1, 0.45); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+.home-root .sev-head { display: flex; align-items: center; gap: 14px; }
+.home-root .sev-logo { width: 56px; height: 56px; flex: none; border-radius: 10px; }
+.home-root .sev-num { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--dim); }
+.home-root .sev-title { font-size: 24px; font-weight: 800; line-height: 1.15; margin-top: 2px; }
+.home-root .sev-title span { color: var(--amber); }
+.home-root .sev-chip { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #050505; background: var(--amber); border-radius: 999px; padding: 5px 12px; }
+.home-root .sev-chip.ghost { background: transparent; color: var(--dim); border: 1px solid var(--line); }
+.home-root .sev-tick { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; font-family: var(--mono); font-size: 13px; letter-spacing: .06em; }
+.home-root .sev-tick b.pair { color: var(--amber); font-weight: 700; }
+.home-root .sev-venue { height: 28px; width: auto; flex: none; border-radius: 6px; }
+.home-root .sev-spec { display: flex; flex-wrap: wrap; gap: 14px 24px; margin-top: 16px; }
+.home-root .sev-spec > span { display: flex; flex-direction: column; gap: 3px; flex: 1 1 40%; min-width: 130px; }
+.home-root .sev-spec .k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--dim); display: block; }
+.home-root .sev-spec .v { font-family: var(--mono); font-size: 14px; font-weight: 700; line-height: 1.4; }
+.home-root .sev-desc { color: var(--sub); font-size: 14px; line-height: 1.6; margin: 14px 0 0; }
+.home-root .sev-bar { height: 6px; background: #1c1c1c; border-radius: 999px; overflow: hidden; margin-top: 14px; }
+.home-root .sev-bar i { display: block; height: 100%; background: var(--amber); border-radius: 999px; }
+.home-root .sev-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--dim); }
+.home-root .sev-meta b { color: var(--text); }
+.home-root .sev-open { display: block; text-align: center; margin-top: 16px; font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .14em; color: var(--amber); }
+.home-root .sev-actions { display: block; text-align: center; margin-top: 16px; }
+.home-root .sev-ghost { display: inline-block; background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 11px 18px; font-family: var(--mono); font-size: 12.5px; letter-spacing: .1em; text-align: center; }
+@media (max-width: 640px) {
+  .home-root .sev { padding: 14px; }
+  .home-root .sev-num { font-size: 10px; letter-spacing: .14em; }
+  .home-root .sev-title { font-size: 20px; }
+  .home-root .sev-logo { width: 48px; height: 48px; }
+  .home-root .refundribbon { top: 12px; right: 12px; transform: none; padding: 5px 10px; font-size: 10px; letter-spacing: .12em; }
+  .home-root .refundribbon small { display: inline; margin: 0 0 0 6px; font-size: 8px; }
+}
+`;
+
 export default function Home() {
   const counters = useStore(countersStore);
   const mineState = useStore(mineStore);
@@ -884,7 +927,8 @@ export default function Home() {
   const paidSoldOut = paid !== null && paid >= BigInt(PAID_CAP);
   const mintClosed = paidSoldOut || now > PAID_DEADLINE;
   return (
-    <>
+    <div className="home-root">
+      <style>{HOME_CSS}</style>
       <section className="hero">
         <div className="kicker amber herocenter">DN-404 · BNB CHAIN · DEFI FOR AUTONOMOUS AGENTS</div>
         <h1 className="heroh1c">
@@ -968,7 +1012,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-    </>
+    </div>
   );
 }
