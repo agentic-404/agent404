@@ -9,8 +9,6 @@ import {
   startAgentLP,
   startMuseAd,
   startPairAd,
-  startPassDrop,
-  startPassDropFeed,
   startMine,
   startMineFeed,
   startLaunchpad,
@@ -58,7 +56,6 @@ const VIEWS = [
   { key: 'predict', label: 'Predict', path: '#/predict' },
   { key: 'bounty', label: 'Bounty', path: '#/bounty' },
   { key: 'token', label: 'Token', path: '#/token' },
-  { key: 'passdrop', label: 'Passdrop 🎉', path: '#/passdrop' },
   { key: 'docs', label: 'Docs', path: '#/docs' },
 ];
 
@@ -193,8 +190,6 @@ export default function App() {
     startAgentLP();
     startMuseAd();
     startPairAd();
-    startPassDrop();
-    startPassDropFeed();
     startMine();
     startMineFeed();
     startLaunchpad();

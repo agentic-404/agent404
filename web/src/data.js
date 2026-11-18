@@ -4,7 +4,7 @@
 // stale-while-revalidate polling; immutable event history is persisted in
 // IndexedDB and synced incrementally from the last stored block.
 
-import { A, SEL, TOPIC, MKT_TOPICS, PD_TOPIC, PD_TOPICS, PD_DEPLOY_BLOCK, MINE_DEPLOY_BLOCK, FUN_GRADUATION_WEI, LP_TOPIC, LP_TOPICS, LP_ACTOR_TOPICS, LAUNCHPAD_DEPLOY_BLOCK, DP_TOPIC, DAILYPOOL_DEPLOY_BLOCK, PR_TOPIC, PREDICT_DEPLOY_BLOCK, BT_TOPIC, BOUNTY_DEPLOY_BLOCK, BOUNTY_API } from './config.js';
+import { A, SEL, TOPIC, MKT_TOPICS, PD_TOPIC, MINE_DEPLOY_BLOCK, FUN_GRADUATION_WEI, LP_TOPIC, LP_TOPICS, LP_ACTOR_TOPICS, LAUNCHPAD_DEPLOY_BLOCK, DP_TOPIC, DAILYPOOL_DEPLOY_BLOCK, PR_TOPIC, PREDICT_DEPLOY_BLOCK, BT_TOPIC, BOUNTY_DEPLOY_BLOCK, BOUNTY_API } from './config.js';
 import { rpcBatch, rpcTryAll, callReq, ethBlockNumber } from './rpc.js';
 import { toBig, padArg, hex } from './format.js';
 import { createStore, ensurePoller } from './store.js';
@@ -746,102 +746,11 @@ export function startPairAd() {
   ensurePoller('pairad', pairAdStore, fetchPairAd, 30000);
 }
 
-/* ================= PassDrop engine state (PASSDROP #1 monitor) ================= */
-
-export const passdropStore = createStore(null);
-
 function decodeAddrWord(hexStr) {
   if (typeof hexStr !== 'string' || hexStr.length < 42) return null;
   const a = `0x${hexStr.slice(-40)}`;
   return /^0x0{40}$/i.test(a) ? null : a; // the zero address reads as "not set"
 }
-
-async function fetchPassDrop() {
-  // No engine address configured: make no reads at all — the store never
-  // loads and the monitor renders its PRE state.
-  if (!A.passdrop) return null;
-  const E = A.passdrop;
-  const r = await rpcBatch([
-    callReq(E, SEL.pdActivated), // 0
-    callReq(E, SEL.pdIgnited), // 1
-    callReq(E, SEL.pdAborted), // 2
-    callReq(E, SEL.pdCompleted), // 3
-    callReq(E, SEL.pdChargeEnd), // 4
-    callReq(E, SEL.pdCurrentRate), // 5
-    callReq(E, SEL.pdPair), // 6
-    callReq(E, SEL.pdTicketPrice), // 7
-    callReq(E, SEL.pdSharePrice), // 8
-    callReq(E, SEL.pdTargetShares), // 9
-    callReq(E, SEL.pdLpReserve), // 10
-    callReq(E, SEL.pdRewardReserve), // 11
-    callReq(E, SEL.pdTailReserve), // 12
-    callReq(E, SEL.pdRewardsOutstanding), // 13
-    callReq(E, SEL.pdVaultA404), // 14
-    callReq(E, SEL.pdTotalShares), // 15
-    callReq(E, SEL.pdTotalAShares), // 16
-    callReq(E, SEL.pdTotalBShares), // 17
-    callReq(E, SEL.pdTotalTicketPaid), // 18
-    callReq(E, SEL.pdPolBNB), // 19
-    callReq(E, SEL.pdAbortVault), // 20
-    callReq(E, SEL.pdCoverageBps), // 21
-    callReq(E, SEL.pdLiquidFracBps), // 22
-    { method: 'eth_getBalance', params: [E, 'latest'] }, // 23 — engine BNB balance
-  ]);
-  const prev = passdropStore.get().data || {};
-  const pick = (i, key) => {
-    const v = toBig(r[i]);
-    return v !== null ? v : prev[key] ?? null;
-  };
-  const flag = (i, key) => {
-    const v = pick(i, key);
-    return v === null ? null : v !== 0n;
-  };
-  const bnbBalance = pick(23, 'bnbBalance');
-  const polBNB = pick(19, 'polBNB');
-  // The engine's BNB balance is exactly escrow (refundable deposits still
-  // held) plus the POL bucket; the contract keeps no other BNB.
-  const escrowBNB =
-    bnbBalance !== null && polBNB !== null ? (bnbBalance >= polBNB ? bnbBalance - polBNB : 0n) : prev.escrowBNB ?? null;
-  const data = {
-    activated: flag(0, 'activated'),
-    ignited: flag(1, 'ignited'),
-    aborted: flag(2, 'aborted'),
-    completed: flag(3, 'completed'),
-    chargeEnd: pick(4, 'chargeEnd'),
-    rewardPerShare: pick(5, 'rewardPerShare'),
-    pair: typeof r[6] === 'string' ? decodeAddrWord(r[6]) : prev.pair ?? null,
-    ticketPrice: pick(7, 'ticketPrice'),
-    sharePrice: pick(8, 'sharePrice'),
-    targetShares: pick(9, 'targetShares'),
-    lpReserve: pick(10, 'lpReserve'),
-    rewardReserve: pick(11, 'rewardReserve'),
-    tailReserve: pick(12, 'tailReserve'),
-    rewardsOutstanding: pick(13, 'rewardsOutstanding'),
-    vaultA404: pick(14, 'vaultA404'),
-    totalShares: pick(15, 'totalShares'),
-    totalAShares: pick(16, 'totalAShares'),
-    totalBShares: pick(17, 'totalBShares'),
-    totalTicketPaid: pick(18, 'totalTicketPaid'),
-    polBNB,
-    abortVault: pick(20, 'abortVault'),
-    coverageBps: pick(21, 'coverageBps'),
-    liquidFracBps: pick(22, 'liquidFracBps'),
-    bnbBalance,
-    escrowBNB,
-  };
-  if (Object.values(data).every((v) => v === null)) return null;
-  return { data };
-}
-
-export function startPassDrop() {
-  ensurePoller('passdrop', passdropStore, fetchPassDrop, 30000);
-}
-
-/* ================= PassDrop activity feed (engine events, IDB-backed) ================= */
-
-export const passdropFeedStore = createStore(null);
-let pdTop = null;
-let pdHydrated = false;
 
 function pdWord(l, i) {
   try {
@@ -849,199 +758,6 @@ function pdWord(l, i) {
   } catch {
     return null;
   }
-}
-
-function parsePdLog(l) {
-  const t0 = (l.topics[0] || '').toLowerCase();
-  const base = {
-    key: `${l.transactionHash}:${l.logIndex}`,
-    stream: 'passdrop',
-    block: parseInt(l.blockNumber, 16),
-    idx: parseInt(l.logIndex, 16),
-    tx: l.transactionHash,
-    who: l.topics[1] ? `0x${l.topics[1].slice(26)}` : null,
-    shares: null,
-    a: null,
-    aUnit: '',
-    b: null,
-    bUnit: '',
-    c: null,
-    cUnit: '',
-    note: null,
-  };
-  try {
-    if (t0 === PD_TOPIC.ticket) {
-      // data: shares, paid, burned, toVault (A404 wei)
-      return { ...base, kind: 'ticket', shares: pdWord(l, 0), a: pdWord(l, 1), aUnit: 'A404 PAID', b: pdWord(l, 2), bUnit: 'BURNED', c: pdWord(l, 3), cUnit: 'TO VAULT' };
-    }
-    if (t0 === PD_TOPIC.depositA) return { ...base, kind: 'depositA', shares: pdWord(l, 0), a: pdWord(l, 1), aUnit: 'G404 REWARD' };
-    if (t0 === PD_TOPIC.depositB) {
-      // data: shares, permanent, lpBurned, lpUser, reward
-      return { ...base, kind: 'depositB', shares: pdWord(l, 0), a: pdWord(l, 4), aUnit: 'G404 REWARD', note: pdWord(l, 1) === '1' ? 'PERMANENT LP' : 'FLEXIBLE LP' };
-    }
-    if (t0 === PD_TOPIC.claimA) return { ...base, kind: 'claimA', a: pdWord(l, 0), aUnit: 'BNB REFUNDED', b: pdWord(l, 1), bUnit: 'G404 LIQUID' };
-    if (t0 === PD_TOPIC.claimEvent) return { ...base, kind: 'claimEvent', a: pdWord(l, 0), aUnit: 'G404 LIQUID' };
-    if (t0 === PD_TOPIC.vest) return { ...base, kind: 'vest', a: pdWord(l, 0), aUnit: 'G404' };
-    if (t0 === PD_TOPIC.claimLP) return { ...base, kind: 'claimLP', a: pdWord(l, 0), aUnit: 'LP' };
-    if (t0 === PD_TOPIC.abortClaimed) return { ...base, kind: 'abortClaim', a: pdWord(l, 0), aUnit: 'A404 RECLAIMED' };
-    if (t0 === PD_TOPIC.ignited) return { ...base, kind: 'ignited', who: null, a: pdWord(l, 0), aUnit: 'BNB PAIRED', b: pdWord(l, 1), bUnit: 'G404 PAIRED' };
-    if (t0 === PD_TOPIC.buildPOL) return { ...base, kind: 'buildPOL', who: null, a: pdWord(l, 0), aUnit: 'BNB PAIRED', b: pdWord(l, 1), bUnit: 'G404 PAIRED' };
-    if (t0 === PD_TOPIC.deepen) return { ...base, kind: 'deepen', who: null, a: pdWord(l, 0), aUnit: 'BNB PAIRED', b: pdWord(l, 1), bUnit: 'A404 PAIRED' };
-    if (t0 === PD_TOPIC.aborted) return { ...base, kind: 'aborted', who: null };
-  } catch {
-    return null;
-  }
-  return null;
-}
-
-function sortPdFeed(events) {
-  return [...events]
-    .sort((x, y) => y.block - x.block || y.idx - x.idx)
-    .slice(0, 14);
-}
-
-async function hydratePdFeed() {
-  if (pdHydrated) return;
-  pdHydrated = true;
-  const [stored, meta] = await Promise.all([idbGetEvents('passdrop'), idbGetMeta('passdropTop')]);
-  if (stored && stored.length) {
-    passdropFeedStore.set({ data: sortPdFeed(stored), loaded: true, updatedAt: Date.now(), stale: true });
-  }
-  if (meta && typeof meta.block === 'number') pdTop = meta.block;
-}
-
-async function pdScanInitial(latest) {
-  // Walk backwards from the head in 50k chunks until a page of activity is
-  // found or the scan reaches the engine's deploy block — the feed never
-  // looks below deployment.
-  let to = latest;
-  let found = [];
-  while (to >= PD_DEPLOY_BLOCK && found.length < 8) {
-    const from = Math.max(PD_DEPLOY_BLOCK, to - 49999);
-    const res = await fetchLogsChunked(A.passdrop, PD_TOPICS, from, to);
-    if (res === null) {
-      if (to === latest) return false;
-      break;
-    }
-    if (res.length) found = found.concat(res.map(parsePdLog).filter(Boolean));
-    to = from - 1;
-  }
-  if (found.length) await idbPutEvents(found);
-  pdTop = latest;
-  await idbPutMeta('passdropTop', { block: latest });
-  const cur = passdropFeedStore.get().data || [];
-  passdropFeedStore.set({ data: sortPdFeed([...cur, ...found]), loaded: true, updatedAt: Date.now(), stale: false });
-  return true;
-}
-
-async function fetchPdFeed() {
-  if (!A.passdrop) return null;
-  await hydratePdFeed();
-  const latestHex = await rpcTryAll('eth_blockNumber', []);
-  if (!latestHex) return passdropFeedStore.get().loaded ? { data: passdropFeedStore.get().data } : null;
-  const latest = parseInt(latestHex, 16);
-  if (pdTop === null) {
-    const ok = await pdScanInitial(latest);
-    if (!ok && !passdropFeedStore.get().loaded) {
-      passdropFeedStore.set({ data: [], loaded: true, updatedAt: Date.now(), stale: true });
-      return { data: [] };
-    }
-    return { data: passdropFeedStore.get().data };
-  }
-  if (latest > pdTop) {
-    const res = await fetchLogsChunked(A.passdrop, PD_TOPICS, pdTop + 1, latest);
-    if (res !== null) {
-      const fresh = res.map(parsePdLog).filter(Boolean);
-      if (fresh.length) await idbPutEvents(fresh);
-      pdTop = latest;
-      await idbPutMeta('passdropTop', { block: latest });
-      if (fresh.length) {
-        const cur = passdropFeedStore.get().data || [];
-        return { data: sortPdFeed([...cur, ...fresh]) };
-      }
-    }
-  }
-  return { data: passdropFeedStore.get().data };
-}
-
-export function startPassDropFeed() {
-  ensurePoller('passdropFeed', passdropFeedStore, fetchPdFeed, 45000);
-}
-
-/* ============ PassDrop per-wallet share tally (eligibility checker) ===== */
-
-// Address-filtered scan of the engine's share-bearing events, from the
-// same deploy block the activity feed syncs. TicketBought, DepositA and
-// DepositB are all indexed by wallet and carry the share count as their
-// first data word — so one wallet's total is a filtered log read, never
-// a guess. Returns a BigInt share total, or null when the chain could
-// not be read.
-function logsForWallet(topic, addrTopic, from, to) {
-  return rpcTryAll('eth_getLogs', [
-    { address: A.passdrop, fromBlock: hex(from), toBlock: hex(to), topics: [topic, addrTopic] },
-  ]);
-}
-
-async function scanWalletTopic(topic, addrTopic, from, to) {
-  const res = await logsForWallet(topic, addrTopic, from, to);
-  if (Array.isArray(res)) return res;
-  if (to - from > 1000) {
-    const mid = from + Math.floor((to - from) / 2);
-    const left = await scanWalletTopic(topic, addrTopic, from, mid);
-    if (left === null) return null;
-    const right = await scanWalletTopic(topic, addrTopic, mid + 1, to);
-    if (right === null) return null;
-    return left.concat(right);
-  }
-  return null;
-}
-
-// Same wallet scan as fetchPdUserShares, bucketed by lane: the Proof of
-// Share funnel shows the split (ticket / Mode A / Mode B), not just the
-// total. Returns { ticket, a, b, total } BigInts, or null on read failure.
-export async function fetchPdUserSharesByLane(address) {
-  if (!A.passdrop || !address) return null;
-  const latestHex = await rpcTryAll('eth_blockNumber', []);
-  if (!latestHex) return null;
-  const latest = parseInt(latestHex, 16);
-  const zero = { ticket: 0n, a: 0n, b: 0n, total: 0n };
-  if (latest < PD_DEPLOY_BLOCK) return zero;
-  const addrTopic = `0x${address.slice(2).toLowerCase().padStart(64, '0')}`;
-  const lanes = [
-    ['ticket', PD_TOPIC.ticket],
-    ['a', PD_TOPIC.depositA],
-    ['b', PD_TOPIC.depositB],
-  ];
-  const out = { ...zero };
-  for (const [key, topic] of lanes) {
-    const logs = await scanWalletTopic(topic, addrTopic, PD_DEPLOY_BLOCK, latest);
-    if (logs === null) return null;
-    for (const l of logs) {
-      const s = pdWord(l, 0);
-      if (s !== null) out[key] += BigInt(s);
-    }
-    out.total += out[key];
-  }
-  return out;
-}
-
-export async function fetchPdUserShares(address) {
-  if (!A.passdrop || !address) return null;
-  const latestHex = await rpcTryAll('eth_blockNumber', []);
-  if (!latestHex) return null;
-  const latest = parseInt(latestHex, 16);
-  if (latest < PD_DEPLOY_BLOCK) return 0n;
-  const addrTopic = `0x${address.slice(2).toLowerCase().padStart(64, '0')}`;
-  let shares = 0n;
-  for (const t of [PD_TOPIC.ticket, PD_TOPIC.depositA, PD_TOPIC.depositB]) {
-    const logs = await scanWalletTopic(t, addrTopic, PD_DEPLOY_BLOCK, latest);
-    if (logs === null) return null;
-    for (const l of logs) {
-      const s = pdWord(l, 0);
-      if (s !== null) shares += BigInt(s);
-    }
-  }
-  return shares;
 }
 
 /* ================= AGENTS MINE engine state (Agent404Engine) ================= */
@@ -1421,8 +1137,7 @@ export function startLaunchpad() {
 
 /* ================= AGENT LAUNCHPAD activity feed (engine events) =================
  *
- * One stream across every launch's engine, IDB-backed like the
- * PASSDROP feed: rows carry the engine address, and the views resolve
+ * One stream across every launch's engine, IDB-backed like the other feeds: rows carry the engine address, and the views resolve
  * the launch (name / symbol) from the board store at render time.
  */
 

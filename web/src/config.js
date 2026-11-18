@@ -28,11 +28,6 @@ export const A = {
   funV1: '0x4F8c54645bbCDcfCEC3f100CB2438DAeDD83cf00',
   funV2: '0x320eaE47B443Bcf15eAf73B75B5e11656CB12315',
   agentlp: '0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0',
-  // PASSDROP #1 — live on BSC mainnet since 2026-11-06 (deploy record:
-  // PASSDROP1-MAINNET-DEPLOY.md). The PassDrop page's monitor reads this
-  // engine; the event token is GENESIS404 (G404).
-  passdrop: '0xCD2401b13d66A37D04a7356d776162154Eb11719',
-  g404: '0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8',
   // AGENTS MINE (Agent404ListingEngine) — LIVE on BSC mainnet since
   // 2026-11-12 (deploy tx 0xe2cb12406fbde7685e010445f6ecdfdd6cadc37655df2c1d295d16a64247476e,
   // block 133130463; activated the same day, chargeEnd 2026-11-26 08:48 UTC).
@@ -122,32 +117,6 @@ export const SEL = {
   parkedBonus: '0x554f011e',
   currentStreamRate: '0x5753bba0',
   getReserves: '0x0902f1ac',
-  // PassDropEventEngine views (PASSDROP #1 live monitor) — every selector
-  // verified against the deployed contract's ABI and live-read on
-  // 2026-11-06 (see PASSDROP1-MAINNET-DEPLOY.md).
-  pdActivated: '0x186601ca', // activated()
-  pdIgnited: '0x66092ea8', // ignited()
-  pdAborted: '0x80b62b70', // aborted()
-  pdCompleted: '0x9d9a7fe9', // completed()
-  pdChargeEnd: '0x33b28750', // chargeEnd()
-  pdCurrentRate: '0xf9f8bdb7', // currentRate() — live G404 reward per share
-  pdPair: '0xa8aa1b31', // pair() — zero address until ignition
-  pdTicketPrice: '0x1a95f15f', // TICKET_PRICE() — A404 per ticket share
-  pdSharePrice: '0x71a2fbfa', // SHARE_PRICE() — BNB per Mode A/B share
-  pdTargetShares: '0xe5864e8f', // targetShares()
-  pdLpReserve: '0xada29fa9', // lpReserve()
-  pdRewardReserve: '0xcab64bcd', // rewardReserve()
-  pdTailReserve: '0x0ea6bc47', // tailReserve()
-  pdRewardsOutstanding: '0xc5b5b2da', // rewardsOutstanding()
-  pdVaultA404: '0xaec62df2', // vaultA404()
-  pdTotalShares: '0x3a98ef39', // totalShares()
-  pdTotalAShares: '0x94f6a62e', // totalAShares()
-  pdTotalBShares: '0x54de3cce', // totalBShares()
-  pdTotalTicketPaid: '0x3c304496', // totalTicketPaid()
-  pdPolBNB: '0x6e60e760', // polBNB()
-  pdAbortVault: '0xc9dc31e6', // abortVault()
-  pdCoverageBps: '0x48ebfe9c', // coverageBps()
-  pdLiquidFracBps: '0xc65f0350', // liquidFractionBps()
   // Agent404Engine views (AGENTS MINE) — same view signatures as the
   // event engine family; selectors verified via cast sig 2026-11-09.
   mineActivated: '0x186601ca', // activated()
@@ -170,8 +139,7 @@ export const SEL = {
   // computed with `cast sig` from the lab-built contract sources and
   // cross-checked against the compiled ABIs (2026-11-10). NOTE:
   // lpSharePrice is sharePrice() (a state-variable getter on the
-  // launchpad engine), NOT the PassDrop engine's SHARE_PRICE()
-  // constant — different selector.
+  // launchpad engine), NOT a SHARE_PRICE() constant — different selector.
   lpCount: '0x63d0053d', // factory launchesCount()
   lpLaunchAt: '0x7f5780c4', // factory launchAt(uint256) -> (launcher, token, mirror, engine, vip, createdAt)
   lpIsActive: '0x4f681451', // factory isLaunchActive(uint256)
@@ -333,7 +301,7 @@ export const TOPIC = {
 };
 export const MKT_TOPICS = [TOPIC.listed, TOPIC.price, TOPIC.cancel, TOPIC.sold, TOPIC.cleaned];
 
-// PassDropEventEngine event topics (PASSDROP #1 activity feed) — computed
+// Event-engine topic family (shared with the Mine and Launchpad engines) — computed
 // from the deployed contract's event signatures and verified 2026-11-06.
 export const PD_TOPIC = {
   ticket: '0x3258c82e4d9b6128d8ec7da95e838a742b003d05eb7d48dc95cb9e5bd64b1773', // TicketBought(address,uint256,uint256,uint256,uint256)
@@ -349,16 +317,12 @@ export const PD_TOPIC = {
   deepen: '0xe04826debba40c93f52333ae918d9f54a0bf825709d579d20b9dcfaf0e96a905', // DeepenMainPool(uint256,uint256,uint256)
   aborted: '0x72c874aeff0b183a56e2b79c71b46e1aed4dee5e09862134b8821ba2fddbf8bf', // Aborted()
 };
-export const PD_TOPICS = Object.values(PD_TOPIC);
-// The engine was deployed at block 132001545 and activated at 132001644
-// (2026-11-06); the activity feed never scans below the deploy block.
-export const PD_DEPLOY_BLOCK = 132001545;
 
 // AgentLaunchpad factory + AgentLaunchpadEngine event topics — computed
 // with `cast sig-event` from the lab-built contract sources and
 // cross-checked against the compiled ABIs (2026-11-10). The engine
 // family shares several signatures (and therefore topics) with the
-// PASSDROP engine: DepositA / DepositB / ClaimA / WithdrawVested /
+// original event engine: DepositA / DepositB / ClaimA / WithdrawVested /
 // ClaimLP / Ignited / BuildPOL hash identically.
 export const LP_TOPIC = {
   created: '0xe0dea9351617a4b5d2570714484f9927223be5fbd34728e472b643aad2aab575', // factory LaunchCreated(uint256,address,address,address,uint8,string,string,string)

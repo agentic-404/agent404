@@ -154,14 +154,7 @@ button { font-family: inherit; }
 .hero p { color: var(--sub); font-size: 16.5px; max-width: 760px; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 8px; }
 .eco { font-size: 13px; }
-.passdropnote {
-  margin: 0 0 22px;
-  border: 1px solid var(--amber-dim); border-radius: 12px;
-  padding: 16px 18px;
-  background: linear-gradient(180deg, rgba(245, 179, 1, 0.06), rgba(245, 179, 1, 0.015));
-}
 .hero p + p { margin-top: 10px; }
-.hero p.passdropline { color: var(--text); margin: 0; }
 
 /* ---------- buttons ---------- */
 .btn {
@@ -309,7 +302,7 @@ button { font-family: inherit; }
 .expandbtn:hover { color: #ffc61a; }
 .copynote { padding: 10px 14px; border-top: 1px solid var(--line2); color: var(--sub); font-size: 13px; }
 
-/* ---------- passdrop: the one master block ---------- */
+/* ---------- the one master block ---------- */
 .copyblock.master {
   border: 2px solid var(--amber);
   background: linear-gradient(180deg, rgba(245, 179, 1, 0.08), rgba(245, 179, 1, 0.02));
@@ -323,12 +316,6 @@ button { font-family: inherit; }
 }
 .copyblock.master .code { background: transparent; }
 .copyblock.master .codefade { background: linear-gradient(rgba(10, 9, 4, 0), #0d0b04); }
-.jumpbtn { margin-top: 10px; }
-.postlabel {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-align: center;
-  color: var(--amber); border: 1px dashed var(--amber-dim); border-radius: 8px;
-  padding: 8px 12px; margin: 16px 0 0;
-}
 
 /* ---------- feed / tables ---------- */
 .feedwrap { margin-top: 18px; border: 1px solid rgba(245, 179, 1, 0.45); border-radius: 12px; overflow: hidden; }
@@ -589,8 +576,6 @@ tr:last-child td { border-bottom: none; }
 .listingpanel { position: relative; overflow: hidden; border: 2px solid var(--amber); border-radius: 12px; padding: 20px; margin-bottom: 14px; background: linear-gradient(180deg, rgba(245, 179, 1, 0.07), rgba(245, 179, 1, 0.015)); }
 .refundribbon { position: absolute; top: 30px; right: -48px; transform: rotate(38deg); background: var(--amber); color: #050505; font-family: var(--mono); font-size: 13px; font-weight: 800; letter-spacing: .16em; padding: 7px 56px; text-align: center; box-shadow: 0 3px 10px rgba(0, 0, 0, .5); z-index: 3; pointer-events: none; }
 .refundribbon small { display: block; font-size: 8.5px; letter-spacing: .2em; font-weight: 700; margin-top: 2px; }
-.sev .refundribbon { top: 24px; right: -42px; font-size: 11px; padding: 6px 46px; }
-.sev .refundribbon small { font-size: 7.5px; }
 .lhead { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .llogo { width: 76px; height: 76px; border-radius: 16px; border: 1px solid var(--line); display: block; background: #000; }
 .lname { font-size: 30px; font-weight: 800; line-height: 1.05; }
@@ -870,7 +855,7 @@ tr:last-child td { border-bottom: none; }
   .cta .btn { flex: 1 1 auto; }
 }
 
-/* Proof of Share funnel (PassDrop page) */
+/* Funnel steps */
 .fstep {
   border-top: 1px dashed #3a2f10;
   margin-top: 18px;
@@ -883,22 +868,7 @@ tr:last-child td { border-bottom: none; }
   color: #f5b301;
   margin-bottom: 10px;
 }
-.fbtnrow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
-.linkok {
-  color: #22c55e;
-}
 
-/* passdrop funnel — wallet approval fix note (351803) */
-.wfix{margin-top:18px;border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:12px;padding:14px 16px;background:var(--panel)}
-.wfixh{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--amber);margin-bottom:8px}
-.wfix p{margin:0 0 8px;font-size:13.5px}
-.wfix p:last-child{margin-bottom:0}
-.wfixsteps{line-height:1.75}
 
 /* swap page — markets index (stage 1, display only) */
 .mktpanel{margin-top:16px}
@@ -937,8 +907,6 @@ button.bcard{display:block;width:100%;text-align:left;font:inherit;color:var(--t
 button.bcard:hover{border-color:#3a3a3a}
 .bcard.sel{border-color:var(--amber)!important;box-shadow:0 0 0 1px var(--amber),0 10px 30px rgba(245,179,1,.08)}
 
-/* passdrop listing card — venue logo */
-.venuelogo{width:18px;height:18px;border-radius:50%;vertical-align:-3px;margin-right:2px}
 
 /* home post-close — mint-closed strip + unsold-pot panel */
 .closeline{display:block;border:1px solid #3a2f00;border-left:3px solid var(--amber);background:#0d0b00;border-radius:6px;padding:12px 14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;line-height:1.7;color:#c9c9c9;text-decoration:none}
@@ -995,36 +963,6 @@ button.bcard:hover{border-color:#3a3a3a}
 @media (max-width: 1100px){ .minecards{grid-template-columns:repeat(3,1fr)} .minetiles{grid-template-columns:repeat(2,1fr)} }
 @media (max-width: 700px){ .minecards{grid-template-columns:repeat(2,1fr)} .mh-big{font-size:52px} .mh-right{text-align:left} .doorflow{flex-direction:column} .farrow{transform:rotate(90deg);padding:4px 0} .mineticker{gap:12px;font-size:11px} }
 
-/* passdrop series list */
-.serieslede { color: var(--sub); font-size: 14.5px; line-height: 1.55; margin: 0 0 14px; max-width: 640px; }
-.sev { position: relative; border: 1px solid var(--line2); border-radius: 14px; background: var(--panel); padding: 20px 22px; margin-bottom: 26px; overflow: hidden; }
-.sev.live { border-color: var(--amber-dim); box-shadow: 0 0 0 1px rgba(245,179,1,.12), 0 10px 34px rgba(245,179,1,.05); }
-.sev.past { padding-right: 150px; }
-.sev.dim { opacity: .45; filter: saturate(.4); }
-.sev-head { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
-.sev-logo { width: 58px; height: 58px; border-radius: 50%; flex: none; border: 1px solid var(--line2); background: #101010; object-fit: cover; }
-.sev-num { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; color: var(--dim); }
-.sev-title { font-size: 24px; font-weight: 700; margin-top: 4px; }
-.sev-title span { color: var(--amber); }
-.sev-chip { margin-left: auto; font-family: var(--mono); font-size: 11px; letter-spacing: .18em; font-weight: 700; padding: 6px 12px; border-radius: 20px; background: var(--amber); color: #000; white-space: nowrap; }
-.sev-chip.ghost { background: transparent; border: 1px solid var(--amber-dim); color: var(--amber); }
-.sev-stamp { position: absolute; top: 18px; right: 18px; font-family: var(--mono); font-weight: 700; letter-spacing: .24em; font-size: 14px; padding: 7px 12px 7px 15px; border-radius: 6px; transform: rotate(4deg); }
-.sev-stamp.listed { color: #3fb96f; border: 2px solid #3fb96f; }
-.sev-stamp.fail { color: #c0453e; border: 2px solid #c0453e; }
-.sev-tick { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; font-family: var(--mono); font-size: 12.5px; letter-spacing: .08em; color: var(--sub); border: 1px solid var(--line); background: #080808; padding: 7px 12px; border-radius: 20px; }
-.sev-tick .pair { color: var(--amber); font-weight: 700; }
-.sev-tick .st { color: var(--dim); }
-.sev-venue { width: 19px; height: 19px; border-radius: 50%; }
-.sev-desc { color: var(--sub); font-size: 14px; line-height: 1.55; margin-top: 10px; max-width: 600px; }
-.sev-bar { height: 8px; background: #161616; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin-top: 16px; }
-.sev-bar i { display: block; height: 100%; background: var(--amber); }
-.sev-meta { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 12px; font-family: var(--mono); font-size: 12px; color: var(--sub); letter-spacing: .06em; }
-.sev-meta b { color: var(--txt); }
-.sev-open { display: inline-block; margin-top: 16px; background: var(--amber); color: #000; font-weight: 700; font-size: 13.5px; padding: 11px 18px; border: none; border-radius: 9px; letter-spacing: .04em; cursor: pointer; font-family: inherit; text-decoration: none; }
-.sev-actions { display: inline-flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
-.sev-ghost { display: inline-block; border: 1px solid var(--line2); background: transparent; color: var(--sub); font-size: 13px; padding: 10px 16px; border-radius: 9px; font-family: var(--mono); letter-spacing: .08em; cursor: pointer; text-decoration: none; }
-@media (max-width: 700px) { .sev.past { padding-right: 22px; } .sev-stamp { top: 14px; right: 14px; font-size: 12px; } }
-.sevmore { display: block; text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: .16em; color: var(--sub); border: 1px dashed var(--line2); border-radius: 10px; padding: 12px; }
 .claimcard { border: 1px solid var(--amber-dim); border-radius: 14px; background: var(--panel); padding: 20px; box-shadow: 0 0 0 1px rgba(245,179,1,.10), 0 10px 34px rgba(245,179,1,.05); display: flex; flex-direction: column; gap: 14px; }
 .claimcard .lanes { margin-bottom: 0; }
 .freeline { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; color: var(--sub); }
@@ -1051,11 +989,6 @@ button.bcard:hover{border-color:#3a3a3a}
 .gchip { border: 1px solid var(--amber); color: var(--amber); font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; padding: 4px 8px; }
 .gchip.grey { border-color: #3a3a3a; color: #c9c9c9; }
 
-/* Token identity spec plate inside the HOME event cards */
-.sev-spec { display: flex; flex-wrap: wrap; gap: 5px 16px; margin-top: 10px; padding: 8px 10px; border: 1px solid var(--line2); font-family: var(--mono); font-size: 10px; letter-spacing: .06em; }
-.sev-spec .k { color: var(--dim); margin-right: 6px; }
-.sev-spec .v { color: var(--text); }
-.sev-spec .v.amber { color: var(--amber); }
 
 /* ---- Swap desk token picker (verified list + contract import) ---- */
 .dexcard { position: relative; }
@@ -1085,7 +1018,7 @@ button.bcard:hover{border-color:#3a3a3a}
 .swpnote { color: var(--dim); font-size: 12px; line-height: 1.5; margin-top: 10px; }
 .dexcta:disabled { opacity: 0.55; cursor: not-allowed; }
 
-/* LIVE MONITOR (PassDrop) — radar-style tiles + activity feed */
+/* LIVE MONITOR — radar-style tiles + activity feed */
 .monitorpanel { margin-top: 18px; }
 .monhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .monhead .panelh { margin: 0; }
