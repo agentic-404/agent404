@@ -876,45 +876,59 @@ function MuseAdCarousel() {
 }
 
 // Home-only styles for the .sev card family (MineCard, DailyPoolCard,
-// LaunchpadCard). These classes have NO rules in the shared stylesheet,
-// so without this block the cards render unstyled: the refund ribbons
-// escape to the top of the page, the logo/venue images show at their
-// natural 256px, the spec and meta rows jam together with no gaps, and
-// the tranche bar is invisible. Scoped under .home-root, so no other
-// page is affected. Rendered only when Home mounts.
+// LaunchpadCard). RECOVERED ORIGINAL — the exact rules from the site's own
+// earlier built bundles (docs/assets/index-*.css), which still carry the
+// full .sev family; the current shared stylesheet lost them at some point,
+// and the first repair wave re-invented them from scratch and got the design
+// wrong (bunny pushed to the card edge, square logo, stacked specs,
+// text-link OPEN button). Restored here verbatim, scoped under .home-root
+// so no other page is affected. Rendered only when Home mounts.
+// Source of truth: workspace/agent404/passdrop-preview/tool/sev-original-recovered.css
+// (recovered from docs/assets/index-BLcMhGN8.css, the most complete old bundle).
 const HOME_CSS = `
-.home-root .sev { position: relative; overflow: hidden; background: var(--panel); border: 1px solid rgba(245, 179, 1, 0.45); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
-.home-root .sev-head { display: flex; align-items: center; gap: 14px; }
-.home-root .sev-logo { width: 56px; height: 56px; flex: none; border-radius: 10px; }
-.home-root .sev-num { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--dim); }
-.home-root .sev-title { font-size: 24px; font-weight: 800; line-height: 1.15; margin-top: 2px; }
-.home-root .sev-title span { color: var(--amber); }
-.home-root .sev-chip { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #050505; background: var(--amber); border-radius: 999px; padding: 5px 12px; }
-.home-root .sev-chip.ghost { background: transparent; color: var(--dim); border: 1px solid var(--line); }
-.home-root .sev-tick { display: flex; align-items: center; justify-content: flex-start; gap: 12px; margin-top: 14px; font-family: var(--mono); font-size: 13px; letter-spacing: .06em; }
-.home-root .sev-tick b.pair { color: var(--amber); font-weight: 700; }
-.home-root .sev-venue { height: 28px; width: auto; flex: none; border-radius: 6px; }
-.home-root .sev-spec { display: flex; flex-wrap: wrap; gap: 14px 24px; margin-top: 16px; }
-.home-root .sev-spec > span { display: flex; flex-direction: column; gap: 3px; flex: 1 1 40%; min-width: 130px; }
-.home-root .sev-spec .k { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--dim); display: block; }
-.home-root .sev-spec .v { font-family: var(--mono); font-size: 14px; font-weight: 700; line-height: 1.4; }
-.home-root .sev-desc { color: var(--sub); font-size: 14px; line-height: 1.6; margin: 14px 0 0; }
-.home-root .sev-bar { height: 6px; background: #1c1c1c; border-radius: 999px; overflow: hidden; margin-top: 14px; }
-.home-root .sev-bar i { display: block; height: 100%; background: var(--amber); border-radius: 999px; }
-.home-root .sev-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--dim); }
-.home-root .sev-meta b { color: var(--text); }
-.home-root .sev-open { display: block; text-align: center; margin-top: 16px; font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .14em; color: var(--amber); }
-.home-root .sev-actions { display: block; text-align: center; margin-top: 16px; }
-.home-root .sev-ghost { display: inline-block; background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 11px 18px; font-family: var(--mono); font-size: 12.5px; letter-spacing: .1em; text-align: center; }
-@media (max-width: 640px) {
-  .home-root .sev { padding: 14px; }
-  .home-root .sev-num { font-size: 10px; letter-spacing: .14em; }
-  .home-root .sev-title { font-size: 20px; }
-  .home-root .sev-logo { width: 48px; height: 48px; }
-  .home-root .refundribbon { top: 22px; right: -38px; transform: rotate(38deg); padding: 6px 46px; font-size: 11px; letter-spacing: .14em; }
-  .home-root .refundribbon small { display: block; margin: 2px 0 0; font-size: 8px; letter-spacing: .18em; }
-  .home-root .home-dp .sev-head { padding-right: 70px; }
-}
+.home-root .refundribbon{position:absolute;top:30px;right:-48px;transform:rotate(38deg);background:var(--amber);color:#050505;font-family:var(--mono);font-size:13px;font-weight:800;letter-spacing:.16em;padding:7px 56px;text-align:center;box-shadow:0 3px 10px #00000080;z-index:3;pointer-events:none}
+.home-root .refundribbon small{display:block;font-size:8.5px;letter-spacing:.2em;font-weight:700;margin-top:2px}
+.home-root .sev .refundribbon{top:24px;right:-42px;font-size:11px;padding:6px 46px}
+.home-root .sev .refundribbon small{font-size:7.5px}
+.home-root .sev{position:relative;border:1px solid var(--line2);border-radius:14px;background:var(--panel);padding:20px 22px;margin-bottom:26px;overflow:hidden}
+.home-root .sev.live{border-color:var(--amber-dim);box-shadow:0 0 0 1px #f5b3011f,0 10px 34px #f5b3010d}
+.home-root .sev.past{padding-right:150px}
+.home-root .sev.dim{opacity:.45;filter:saturate(.4)}
+.home-root .sev-head{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.home-root .sev-logo{width:58px;height:58px;border-radius:50%;flex:none;border:1px solid var(--line2);background:#101010;object-fit:cover}
+.home-root .sev-num{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--dim)}
+.home-root .sev-title{font-size:24px;font-weight:700;margin-top:4px}
+.home-root .sev-title span{color:var(--amber)}
+.home-root .sev-chip{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.18em;font-weight:700;padding:6px 12px;border-radius:20px;background:var(--amber);color:#000;white-space:nowrap}
+.home-root .sev-chip.ghost{background:transparent;border:1px solid var(--amber-dim);color:var(--amber)}
+.home-root .sev-stamp{position:absolute;top:18px;right:18px;font-family:var(--mono);font-weight:700;letter-spacing:.24em;font-size:14px;padding:7px 12px 7px 15px;border-radius:6px;transform:rotate(4deg)}
+.home-root .sev-stamp.listed{color:#3fb96f;border:2px solid #3fb96f}
+.home-root .sev-stamp.fail{color:#c0453e;border:2px solid #c0453e}
+.home-root .sev-tick{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;color:var(--sub);border:1px solid var(--line);background:#080808;padding:7px 12px;border-radius:20px}
+.home-root .sev-tick .pair{color:var(--amber);font-weight:700}
+.home-root .sev-tick .st{color:var(--dim)}
+.home-root .sev-venue{width:19px;height:19px;border-radius:50%}
+.home-root .sev-desc{color:var(--sub);font-size:14px;line-height:1.55;margin-top:10px;max-width:600px}
+.home-root .sev-bar{height:8px;background:#161616;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:16px}
+.home-root .sev-bar i{display:block;height:100%;background:var(--amber)}
+.home-root .sev-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--sub);letter-spacing:.06em}
+.home-root .sev-meta b{color:var(--txt)}
+.home-root .sev-open{display:inline-block;margin-top:16px;background:var(--amber);color:#000;font-weight:700;font-size:13.5px;padding:11px 18px;border:none;border-radius:9px;letter-spacing:.04em;cursor:pointer;font-family:inherit;text-decoration:none}
+.home-root .sev-actions{display:inline-flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.home-root .sev-ghost{display:inline-block;border:1px solid var(--line2);background:transparent;color:var(--sub);font-size:13px;padding:10px 16px;border-radius:9px;font-family:var(--mono);letter-spacing:.08em;cursor:pointer;text-decoration:none}
+@media (max-width: 700px){.home-root .sev.past{padding-right:22px}.home-root .sev-stamp{top:14px;right:14px;font-size:12px}}
+.home-root .sevmore{display:block;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--sub);border:1px dashed var(--line2);border-radius:10px;padding:12px}
+.home-root .sev-spec{display:flex;flex-wrap:wrap;gap:5px 16px;margin-top:10px;padding:8px 10px;border:1px solid var(--line2);font-family:var(--mono);font-size:10px;letter-spacing:.06em}
+.home-root .sev-spec .k{color:var(--dim);margin-right:6px}
+.home-root .sev-spec .v{color:var(--text)}
+.home-root .sev-spec .v.amber{color:var(--amber)}
+.home-root .home-dp .refundribbon{top:22px;right:-38px;font-size:11px;padding:6px 46px}
+/* NOTE: the original .home-dp ribbon sat at top:4px, which clips its own
+   "BNB REFUND" text on narrow cards (verified 360px + 540px) — the
+   top:22px position above is the fix dayu already approved ("cocok",
+   20:56 WIB) and live since commit 76e702c. Everything else is original. */
+.home-root .home-dp .sev-open{display:block;text-align:center}
+@media (max-width: 640px){.home-root .home-dp .sev-num{font-size:10px;letter-spacing:.14em}}
 `;
 
 export default function Home() {
