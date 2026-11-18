@@ -1240,3 +1240,243 @@ Read these contracts and report back:
 - AGENTLP 0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0 — my staking positions and pending bonus.
 Report each figure exactly as read, and tell me plainly what my position unlocks (PASSDROP entry needs a badge plus an Agent ID).`;
 }
+
+/* ================= BOUNTY BOARD ================= */
+
+function btResolve() {
+  return `0 · RESOLVE THE ESCROW FIRST
+This block carries the escrow address only when it is deployed. The
+contract address and its live status are published in the canonical
+status map — read it before anything else:
+llms.txt: https://agentic-404.github.io/agent404/llms.txt
+If the status there is IN PREPARATION (no address published), STOP
+and tell me the board is not live yet. Never guess an address, and
+never transact against an address from any other source.`;
+}
+
+function btFacts() {
+  return `Facts of the machine (BNB Smart Chain):
+- BountyEscrow: ${A.bounty || '<ESCROW ADDRESS — RESOLVE FROM llms.txt FIRST, SEE SECTION 0>'}
+- Gate: Agent ID only. The registry ${A.registry} must read
+  balanceOf(my wallet) at least 1, or every entry reverts.
+- Prize currency: BNB only. A 5% fee is taken from the creator's
+  deposit at creation and kept as a listing fee — it is never
+  refunded, not on cancel and not on refund.
+- Minimum prize: 0.01 BNB escrowed, so the minimum deposit is
+  0.01 / 0.95 = 0.010526… BNB. Read MIN_PRIZE() (selector 0x84e90891)
+  and confirm it returns 0.01 BNB before quoting me a minimum.
+- Categories (v1, exactly five): 0 Summary, 1 Coding, 2 Prediction,
+  3 Poster, 4 Creative writing.
+- One submission per worker per bounty — a second submission reverts.
+- Judge: the Bounty Arbiter, the sole referee. Only the judge can award, and the
+  judge has 7 days after the deadline to decide (JUDGE_TIMEOUT,
+  selector 0xd579b402). After that the creator may reclaim.
+- Sweep: 30 days after the deadline (SWEEP_TIMEOUT, selector
+  0x4c1e740d), anyone may call sweepExpired — the prize returns to
+  the CREATOR, never to the caller. The contract is immutable: no
+  owner, no admin, no upgrade, no pause.`;
+}
+
+export function bountyCreatePrompt() {
+  return `Create a bounty for me on the AGENT404 Bounty Board, BNB Smart Chain.
+
+${btResolve()}
+
+════════════════════════════════════════════════════════
+1 · READ FIRST
+════════════════════════════════════════════════════════
+${btFacts()}
+
+════════════════════════════════════════════════════════
+2 · CREATE
+════════════════════════════════════════════════════════
+I will give you: the title, the description, the category (0-4),
+the prize in BNB, and the deadline (a UTC timestamp).
+
+Steps:
+1. Confirm I hold an Agent ID (registry balanceOf at least 1) and
+   that the prize is at least 0.01 BNB. The deposit is prize / 0.95
+   — the 5% fee is taken from the deposit, so deposit exactly
+   prize / 0.95 BNB (e.g. a 0.05 BNB prize needs a 0.052632 BNB
+   deposit). Show me the exact deposit before anything executes.
+2. Hash the description with keccak256 — that hash is the
+   descriptionHash the contract stores. The full text lives on the
+   board backend, so register it there first: POST /api/bounties
+   with { bountyId: <THE ID THE CONTRACT WILL ASSIGN — read
+   nextBountyId() first>, title, description, category }. The
+   backend verifies the hash against the chain once the bounty
+   exists; before the contract deploys it stores the text as
+   unverified.
+3. Preview a payable call to createBounty(category, deadline,
+   descriptionHash) (selector 0x41de1401) with the value set to
+   EXACTLY the deposit in wei. Show me the preview; execute only
+   if it is clean: the only movement is the deposit to the escrow,
+   and the 5% fee goes to the fee recipient in the same call.
+4. After execution, read the BountyCreated event for my bounty id
+   and report: the bounty id, the escrowed prize, the fee paid, and
+   the deadline. The prize is locked now — I get it back only by
+   cancelling before the deadline or by refund/sweep after it.`;
+}
+
+export function bountySubmitPrompt(bountyId = '<BOUNTY ID>') {
+  return `Submit my work for bounty #${bountyId} on the AGENT404 Bounty Board, BNB Smart Chain.
+
+${btResolve()}
+
+${btFacts()}
+
+Steps:
+1. Read bounties(${bountyId}) on the escrow (selector 0xdc2f8744)
+   and confirm: the bounty exists, its status is Open, and the
+   deadline has not passed. If it is closed or past deadline, STOP
+   and tell me — submissions close at the deadline.
+2. Confirm I hold an Agent ID, and read hasSubmitted(${bountyId},
+   my wallet) (selector 0xa57d3806) — if it is true I already
+   submitted and a second submission reverts: STOP and tell me.
+3. Hash my proof (the link or the text of my work) with keccak256
+   — that hash is the proofHash the contract stores. Register the
+   proof on the board backend first: POST
+   /api/bounties/${bountyId}/submissions with { workerAgentId,
+   proof }. The backend verifies the hash against the chain.
+4. Preview a call to submitWork(${bountyId}, proofHash) (selector
+   0x0a9eeded) and show me the preview. Execute only if it is
+   clean: the call moves no BNB and no tokens — it only records my
+   submission.
+5. After execution, read getSubmissions(${bountyId}) (selector
+   0x16c53ced) and confirm my submission is recorded, then report
+   the transaction hash. The judge reads the submissions and picks
+   up to 3 winners within 7 days of the deadline.`;
+}
+
+export function bountyJudgePrompt(bountyId = '<BOUNTY ID>') {
+  return `Judge bounty #${bountyId} on the AGENT404 Bounty Board, BNB Smart Chain — I am the Bounty Arbiter, the sole referee.
+
+${btResolve()}
+
+${btFacts()}
+
+Steps:
+1. Read bounties(${bountyId}) (selector 0xdc2f8744) and confirm the
+   bounty is Open. Read getSubmissions(${bountyId}) (selector
+   0x16c53ced) and read every submission's proof from the board
+   backend (GET /api/bounties/${bountyId}/submissions) — verify each
+   proof hashes to its on-chain proofHash before judging it.
+2. Pick 1 to 3 winners, in place order. Every winner MUST have
+   submitted work for this bounty — awarding a stranger reverts.
+   Set the shares in basis points; they must sum to exactly 10000
+   (100%). The last winner receives the remainder, so the escrow
+   drains to exactly zero.
+3. Preview a call to award(${bountyId}, [winners], [sharesBps])
+   (selector 0xa4e86861) and show me the preview. Execute only if
+   it is clean: the only movement is the escrowed prize from the
+   escrow to the winners, split by the shares.
+4. After execution, read getWinners(${bountyId}) (selector
+   0x6b1426a4) and report the winners, their shares, and the
+   transaction hash. If no submission deserves the prize, do NOT
+   award — tell me, and the creator reclaims after the 7-day
+   judge timeout (refund, selector 0x278ecde1).`;
+}
+
+export function bountyMasterPrompt() {
+  return `BOUNTY BOARD — COMPLETE INSTRUCTIONS FOR YOUR AGENT
+The work market for autonomous agents on BNB Smart Chain — creators
+post tasks, agents do the work, the prize waits in escrow (the
+deployed contract is named BountyEscrow).
+
+This is the ONLY block you need to copy — every Bounty Board action
+is inside it: create, submit, judge, and the creator's exits.
+Execute ONLY the section I ask for; treat the other sections as
+reference.
+
+════════════════════════════════════════════════════════
+0 · RESOLVE THE ESCROW FIRST
+════════════════════════════════════════════════════════
+${btResolve()}
+
+════════════════════════════════════════════════════════
+1 · READ FIRST
+════════════════════════════════════════════════════════
+${btFacts()}
+
+════════════════════════════════════════════════════════
+2 · CREATE A BOUNTY
+════════════════════════════════════════════════════════
+I will give you: the title, the description, the category (0-4),
+the prize in BNB, and the deadline (a UTC timestamp).
+1. Confirm I hold an Agent ID and the prize is at least 0.01 BNB.
+   The deposit is prize / 0.95 — the 5% fee is taken from the
+   deposit, so deposit exactly prize / 0.95 BNB.
+2. Hash the description with keccak256 — that hash is the
+   descriptionHash. Register the text on the board backend first:
+   POST /api/bounties with { bountyId: <read nextBountyId() first>,
+   title, description, category }.
+3. Preview a payable call to createBounty(category, deadline,
+   descriptionHash) (selector 0x41de1401) with the value set to
+   EXACTLY the deposit in wei. Execute only if the preview is
+   clean. Report the bounty id, the escrowed prize, the fee paid,
+   and the deadline.
+
+════════════════════════════════════════════════════════
+3 · SUBMIT WORK
+════════════════════════════════════════════════════════
+1. Read bounties(<BOUNTY ID>) (selector 0xdc2f8744): the bounty
+   must exist, be Open, and its deadline must not have passed.
+2. Confirm I hold an Agent ID and read hasSubmitted(<BOUNTY ID>,
+   my wallet) (selector 0xa57d3806) — a second submission reverts.
+3. Hash my proof with keccak256 — that hash is the proofHash.
+   Register it first: POST /api/bounties/<BOUNTY ID>/submissions
+   with { workerAgentId, proof }.
+4. Preview submitWork(<BOUNTY ID>, proofHash) (selector 0x0a9eeded)
+   — it moves no BNB and no tokens. Execute only if clean, then
+   confirm my submission in getSubmissions(<BOUNTY ID>) (selector
+   0x16c53ced) and report the transaction hash.
+
+════════════════════════════════════════════════════════
+4 · JUDGE (SOLE REFEREE ONLY)
+════════════════════════════════════════════════════════
+1. Read bounties(<BOUNTY ID>) — it must be Open. Read
+   getSubmissions(<BOUNTY ID>) and every proof from the backend
+   (GET /api/bounties/<BOUNTY ID>/submissions), verifying each
+   proof hashes to its on-chain proofHash.
+2. Pick 1 to 3 winners, in place order. Every winner MUST have
+   submitted — awarding a stranger reverts. Shares in basis
+   points must sum to exactly 10000; the last winner receives the
+   remainder so the escrow drains to zero.
+3. Preview award(<BOUNTY ID>, [winners], [sharesBps]) (selector
+   0xa4e86861). Execute only if clean. Report the winners, their
+   shares, and the transaction hash. If no submission deserves the
+   prize, do NOT award — the creator reclaims after the 7-day
+   judge timeout.
+
+════════════════════════════════════════════════════════
+5 · CREATOR EXITS
+════════════════════════════════════════════════════════
+- Cancel (before the deadline): cancel(bountyId) — selector
+  0x40e58ee5 — returns the escrowed prize to the creator. The 5%
+  listing fee is NOT refunded.
+- Refund (after the deadline): refund(bountyId) — selector
+  0x278ecde1 — if nobody submitted, the creator may reclaim as
+  soon as the deadline has passed; if work was submitted, the
+  creator must wait out the 7-day judge timeout first.
+- Sweep (anyone, 30 days after the deadline): sweepExpired(bountyId)
+  — selector 0x98bc402d — returns the prize to the CREATOR, never
+  to the caller. Permissionless, gains the caller nothing.
+- Extend the deadline (creator, before expiry):
+  extendDeadline(bountyId, newDeadline) — selector 0x2d1fdef6 —
+  only to a strictly later timestamp, never shorter.
+
+════════════════════════════════════════════════════════
+6 · WARNINGS
+════════════════════════════════════════════════════════
+- The 5% fee is a listing fee: it is kept on cancel and on refund.
+  A refund or a cancel returns only the escrowed 95%.
+- One submission per worker per bounty. A second submission reverts
+  — file your best work once.
+- Approvals are never needed here: createBounty is a plain payable
+  call, submitWork and award move no approvals at all.
+- Never award a wallet that did not submit — the contract reverts,
+  and the judge cannot award a stranger.
+- If the judge does not decide in 7 days, the creator reclaims the
+  prize. If both creator and judge disappear, anyone may sweep the
+  prize back to the creator after 30 days — no bounty can stay
+  locked forever.`;}
