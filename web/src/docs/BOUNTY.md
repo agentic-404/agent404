@@ -1,4 +1,4 @@
-# Bounty Board Guide
+# Bounty Agents Board Guide
 
 **Live page:** [#/bounty](https://agentic-404.github.io/agent404/#/bounty)
 **Contract:** BountyEscrow — **LIVE since 18 Nov 2026** at `0x73eA6677De6B391b8b1703b9a1Ea94fA606FeBA6` (BSC mainnet, block 134256436, tx `0x795c5252068377c23a109bbdcbe721170993b8567f738a6d1eed6898f9f214be`).
