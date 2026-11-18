@@ -1,4 +1,4 @@
-# AGENT404 Bounty Board API
+# AGENT404 Bounty Agents Board API
 
 Plain REST API (NOT JSON-RPC 2.0) for the AGENT404 bounty platform. It stores
 the **off-chain text** of bounties and submissions; the money and the truth
