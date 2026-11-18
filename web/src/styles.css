@@ -1529,6 +1529,8 @@ button.bcard:hover{border-color:#3a3a3a}
 .muse-ad-card:hover { text-decoration: none; }
 .muse-ad-top { display: flex; gap: 14px; align-items: center; }
 .muse-ad-logo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 1px solid var(--amber-dim); flex: none; }
+.muse-ad-logo.bounty-mark { display: flex; align-items: center; justify-content: center; background: transparent; border: 0; }
+.muse-ad-logo.bounty-mark svg { width: 100%; height: 100%; display: block; }
 .muse-ad-logos { display: flex; flex: none; }
 .muse-ad-logos .muse-ad-logo + .muse-ad-logo { margin-left: -16px; }
 .muse-ad-eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--amber); margin-bottom: 4px; }
@@ -1590,3 +1592,67 @@ button.bcard:hover{border-color:#3a3a3a}
   .moonshot-grid { grid-template-columns: 1fr; }
   .moonshot-h1 { font-size: 26px; }
 }
+
+/* ---------- bounty ---------- */
+/* Bounty Agents Board (#/bounty) — page-scoped, copied from the approved demo
+   (~/workspace/agent404/bounty/demo-board.html). Nothing here touches
+   any other page: every rule lives under .bounty-board. */
+.bounty-board .sec-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.bounty-board .sec-h h2 { font-size: 34px; line-height: 1.05; letter-spacing: 0.01em; font-weight: 800; margin: 0; }
+.bounty-board .sec-h h2 em { color: var(--amber); font-style: normal; }
+.bounty-board .sec-h > span:last-child { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--dim); }
+.bounty-board h2.bh { font-size: 22px; font-weight: 800; margin: 28px 0 14px; }
+.bounty-board h2.bh em { color: var(--amber); font-style: normal; }
+.bounty-board .bstats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 22px 0 14px; }
+.bounty-board .bstat { background: #141416; border: 1px solid #26262b; border-radius: 12px; padding: 14px 12px; text-align: center; }
+.bounty-board .bstat .num { font-size: 22px; font-weight: 800; color: var(--amber); }
+.bounty-board .bstat .lbl { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-top: 4px; }
+.bounty-board .bcreate { display: block; width: 100%; background: var(--amber); color: #0a0a0b; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; margin-bottom: 18px; font-family: inherit; }
+.bounty-board .bfilters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.bounty-board .bf { background: #141416; border: 1px solid #26262b; color: #d6d6da; border-radius: 999px; padding: 7px 13px; font-size: 13px; cursor: pointer; font-family: inherit; }
+.bounty-board .bf.on { background: var(--amber); border-color: var(--amber); color: #0a0a0b; font-weight: 700; }
+.bounty-board .bcards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.bounty-board .bcard { background: #141416; border: 1px solid #26262b; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.bounty-board .bcard-top { display: flex; justify-content: space-between; align-items: center; }
+.bounty-board .bcat { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--amber); }
+.bounty-board .bstatus { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 999px; }
+.bounty-board .bstatus.open { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.bounty-board .bstatus.judging { background: rgba(240, 180, 41, 0.15); color: var(--amber); }
+.bounty-board .bstatus.done { background: rgba(154, 154, 160, 0.15); color: var(--sub); }
+.bounty-board .bcard h3 { font-size: 16px; line-height: 1.35; font-weight: 700; margin: 0; }
+.bounty-board .bprize { font-size: 26px; font-weight: 800; color: var(--amber); }
+.bounty-board .bprize small { font-size: 13px; font-weight: 600; color: var(--sub); }
+.bounty-board .bmeta { font-size: 13px; color: var(--sub); line-height: 1.6; }
+.bounty-board .bmeta b { color: #d6d6da; font-weight: 600; }
+.bounty-board .bcta { margin-top: auto; background: transparent; border: 1px solid var(--amber); color: var(--amber); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.bounty-board .bwinners { font-size: 13px; color: var(--sub); line-height: 1.7; }
+.bounty-board .bwinners code { color: var(--text); }
+.bounty-board .bpaid { display: flex; flex-direction: column; gap: 8px; }
+.bounty-board .bpaid-row { background: #141416; border: 1px solid #26262b; border-radius: 12px; padding: 13px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.bounty-board .bpaid-row .pt { font-size: 14px; font-weight: 700; line-height: 1.35; }
+.bounty-board .bpaid-row .pw { font-size: 12px; color: var(--sub); margin-top: 3px; }
+.bounty-board .bpaid-row .pa { text-align: right; flex-shrink: 0; }
+.bounty-board .bpaid-row .pa .amt { font-size: 16px; font-weight: 800; color: var(--amber); }
+.bounty-board .bpaid-row .pa .dt { font-size: 12px; color: var(--sub); margin-top: 3px; }
+.bounty-board .bagents { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.bounty-board .bagent { background: #141416; border: 1px solid #26262b; border-radius: 12px; padding: 13px 12px; }
+.bounty-board .bagent .an { font-size: 13px; font-weight: 700; word-break: break-all; }
+.bounty-board .bagent .aa { font-size: 12px; color: var(--sub); line-height: 1.55; margin-top: 4px; }
+.bounty-board .bagent .aa b { color: #4ade80; font-weight: 600; }
+.bounty-board .bsteps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.bounty-board .bstep { background: #141416; border: 1px solid #26262b; border-radius: 12px; padding: 14px 12px; }
+.bounty-board .bstep .n { font-size: 20px; font-weight: 800; color: var(--amber); }
+.bounty-board .bstep .t { font-size: 13px; font-weight: 700; margin-top: 6px; }
+.bounty-board .bstep .d { font-size: 12px; color: var(--sub); line-height: 1.5; margin-top: 3px; }
+.bounty-board .bempty { color: var(--sub); font-size: 14px; }
+.bounty-board .bempty-panel { background: #141416; border: 1px solid #26262b; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+.bounty-board .bempty-panel p { color: var(--sub); margin: 0; }
+.bounty-board .bcontracts { margin-top: 28px; border-top: 1px solid #26262b; padding-top: 14px; font-size: 12px; color: var(--sub); line-height: 1.7; }
+@media (max-width: 560px) {
+  .bounty-board .bstats { grid-template-columns: repeat(2, 1fr); }
+  .bounty-board .bcards { grid-template-columns: 1fr; }
+  .bounty-board .bagents { grid-template-columns: repeat(2, 1fr); }
+  .bounty-board .bsteps { grid-template-columns: repeat(2, 1fr); }
+  .bounty-board .sec-h h2 { font-size: 29px; }
+}
+
