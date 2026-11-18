@@ -57,7 +57,7 @@ function MineCard({ paid, mine }) {
   const mined = live && mine.totalShares !== null && mine.totalShares !== undefined ? Number(mine.totalShares) : 0;
   const tranchePct = live ? (mined % 1000) / 10 : 0;
   return (
-    <div className="sev live">
+    <div className="sev live home-mine">
       {live ? (
         <div className="refundribbon" aria-hidden="true">
           BNB REFUND<small>BACK IN 24H</small>
@@ -924,6 +924,7 @@ const HOME_CSS = `
 .home-root .sev-spec .v.amber{color:var(--amber)}
 .home-root .home-dp .refundribbon{top:22px;right:-38px;font-size:11px;padding:6px 46px}
 .home-root .home-dp .sev-head{padding-right:70px}
+.home-root .home-mine .sev-head{padding-right:70px}
 /* NOTE: the original .home-dp ribbon sat at top:4px, which clips its own
    "BNB REFUND" text on narrow cards (verified 360px + 540px) — the
    top:22px position above is the fix dayu already approved ("cocok",
