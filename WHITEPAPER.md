@@ -52,7 +52,7 @@ Distribution was entirely to the community, in two lanes, both gated by one rule
 
 There was no presale, no whitelist, no team allocation, and no creator allocation. The addresses that deployed the contracts hold no privileged position in the system they created.
 
-The swept remainder is allocated in full, and the allocation is public: the great part funds the listing envelope of Section 8; the balance funds the reserves described in Section 11. Phase 1 participation remains the standing credential of this system: every badge issued in distribution is recorded on-chain and is the key that admits its holder to the PASSDROP event series of Section 13. The distribution was the invitation. What follows is the machine it was always pointing at.
+The swept remainder is allocated in full, and the allocation is public: the great part funds the listing envelope of Section 8; the balance funds the reserves described in Section 11. Phase 1 participation remains the standing credential of this system: every badge issued in distribution is recorded on-chain and is the key that admits its holder to the badge-gated machines that follow. The distribution was the invitation. What follows is the machine it was always pointing at.
 
 ## 5. The Badge Market
 
@@ -73,7 +73,7 @@ This gives A404 a continuing function beyond its own distribution: it is the tol
 
 ## 7. The ListingEngine Standard: One Machine for Every Listing
 
-An ecosystem of events, each with its own bespoke contract, is an ecosystem of bespoke risks. AGENT404 therefore runs every listing on **one standard machine — the ListingEngine standard** — and varies only the parameters. The project's own token listing (Section 8), third-party launches on the Agents Launchpad (Section 9), and the PASSDROP event series (Section 13) all run on this standard or on its direct ancestors.
+An ecosystem of events, each with its own bespoke contract, is an ecosystem of bespoke risks. AGENT404 therefore runs every listing on **one standard machine — the ListingEngine standard** — and varies only the parameters. The project's own token listing (Section 8), third-party launches on the Agents Launchpad (Section 9), and badge-gated events all run on this standard or on its direct ancestors.
 
 **Four doors.** Every event is assembled from the same four doors, each switched on or off per event: **FREE FCFS** — free shares, first-come-first-served, rationed daily per Agent ID; **PAID** — a BNB deposit at a fixed price announced openly from day one; **TICKET** — payment in an ecosystem token, for communities that already hold an internal currency; and **MINE** — the door that stays open after ignition, feeding a standing mine.
 
@@ -153,21 +153,6 @@ AGENT404's supply is fixed at 404,404 and can never increase — the token contr
 
 Nothing in this section is a promise about price. It is a statement about arithmetic: the reachable float is designed to shrink whenever the ecosystem is used — and to shrink fastest exactly when the ecosystem is busiest.
 
-## 13. PASSDROP: The Event Series
-
-Distribution gave the community an asset and a pass. PASSDROP is what the pass is for: the project's AGENTS LAUNCHPOOL — a series of numbered events, each gated to pass holders on at least one lane, each powered by its own event token, each running an ownerless machine: a charge window, a target, an ignition, and a pool the machine builds itself.
-
-**PASSDROP #1 is live.** Its event token is GENESIS404 (G404), a plain fixed-supply ERC-20: 1,000,000,000 minted once and held in full by the event engine, split at activation into 55% rewards, 40% LP reserve, and a 5% tail. The event offers 1,000 shares inside a 14-day charge window that ends **20 November 2026, 11:35 UTC**. Every share carries a reward entitlement of 550,000 G404.
-
-Two doors lead in, both gated by the pass — a badge in the wallet and a Binance Agent ID, checked by the contract on every entry:
-
-- **The ticket.** 100 A404 per share. Half is burned on the spot; half enters a vault that, after ignition, deepens the main A404/WBNB pool, its LP burned.
-- **Mode A.** A refundable deposit of 0.0045 BNB per share. A 20% ratchet is skimmed to the engine's protocol-owned-liquidity bucket at deposit; after 24 hours the claim returns 97% of the remainder, and the 3% residue joins the same bucket. What stays — 22.4% of every deposit — is pool material, permanently. The refund always pays; the reward leg pays part liquid at claim and the rest vesting over 30 days, throttled by a coverage governor that adjusts only the split, never the totals.
-
-When the thousandth share lands, charging closes and anyone may ignite the event: the engine pairs the accumulated bucket BNB with its own token reserve and creates the G404/WBNB pool itself. **The pool's LP is burned — minted directly to the dead address at ignition and on every later pool build.** Ignition also opens Mode B, a pool-builder lane whose participants market-buy the event token and pair it as LP under a published schedule. If the window ends below the target, the event aborts by rule: rewards are void, ticket buyers reclaim the vault half of their A404 pro-rata, and Mode A refunds remain claimable on their original terms. The machine's exits never depend on its success. PASSDROP #1 predates the unified standard; its successor does not.
-
-**PASSDROP #2 — EXODUS404 — follows.** It is designed on the ListingEngine standard, and its first correction is the gate: the BNB lane opens to **every Binance Agent ID holder**, no badge required — the pass becomes the privileged lane (a larger daily quota) rather than the only door — while the ticket lane stays pass-only. Its engine is lab-built and undeployed; it runs after PASSDROP #1 has completed its course.
-
 ## 14. AGENTLP: The Community Liquidity Machine
 
 Distribution puts the token in the community's hands. It does not, by itself, give the token a market that lasts. Liquidity that arrives in a day can leave in an hour — unless holding it in place is itself rewarded, permanently, by the system's own flows. That is the problem AGENTLP exists to solve.
@@ -237,8 +222,6 @@ The experiment does not need belief. It needs only to be run, in public, exactly
 | Badge market | `0x076Ea27B59aC73738b8c970d727aCCb4f77685A7` |
 | AgentFun factory V2 (bonding curve) | `0x320eaE47B443Bcf15eAf73B75B5e11656CB12315` |
 | AGENTLP — community LP staking for the A404/WBNB pair | `0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0` |
-| GENESIS404 (G404) — PASSDROP #1 event token | `0xb6Ad15244d9c4b259D5080BE4900fba07fe5D8e8` |
-| PassDropEventEngine — PASSDROP #1 | `0xCD2401b13d66A37D04a7356d776162154Eb11719` |
 | Agent404ListingEngine — A404/WBNB NATIVE TOKEN LISTING | `0x7d8e34cBbf5d171391f43154cc5B5334f40667c1` |
 | AgentLaunchpad (factory) | `0x85B758B716C2077fdda25248F8a663eCe29776eF` |
 | MoonshotFactory — the bonding curve lane | `0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0` |
