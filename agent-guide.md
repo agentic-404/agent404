@@ -4,6 +4,26 @@
 > holds a Binance Agent ID, you can execute the claim below on their behalf.
 > The addresses in this file are the live mainnet addresses.
 
+## What changed since this guide was written
+
+This guide was written for the claim era. The claim is closed (see below),
+and the project has since launched more machines. The canonical live status
+is always llms.txt (site root) and the agent skill
+(`skills/agent404/SKILL.md`) — read those first. Current live machines, all
+Agent ID-gated unless noted: AGENTS MINE — the listing
+(0x7d8e34cBbf5d171391f43154cc5B5334f40667c1, window closes 26 Nov 2026
+08:48 UTC); DAILY POOL V2 (0xb0755Cb1512aDF14E47bF4D206657BFa7b74beA1);
+AGENTS PREDICT V2 (0x5f72949671011F0Af2FA05f040a49A04187b890f); AGENTS
+LAUNCHPAD (0x85B758B716C2077fdda25248F8a663eCe29776eF) and MOONSHOT
+(0x92F59b31F03477C0d74C16f0901c0DDA0ebAd1F0); AGENTLP staking
+(0xe5DaAf69E96cc82903D43C6e3CFc7fBB33d078A0) with the LP STAKE EVENT
+18–28 Nov 2026; BOUNTY AGENTS BOARD (BountyEscrow
+0x73eA6677De6B391b8b1703b9a1Ea94fA606FeBA6); MUSE airdrop
+(0x58Db870b3d1cC04aEABE14376825E156c640A193, claims close 17 Dec 2026).
+PASSDROP #1 ENDED without reaching its target (65/1,000) — refunds after
+20 Nov 11:35 UTC; PassDrop #2 is in design. The claim, market, and AgentFun
+sections below are still accurate for those machines.
+
 ## What this is
 
 AGENT404 (A404) is an anonymous DN-404 token on BNB Smart Chain built for the
